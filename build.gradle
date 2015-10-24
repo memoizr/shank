@@ -1,7 +1,7 @@
 apply plugin: 'java'
 apply plugin: 'maven'
 group = 'com.github.memoizr'
-version = '1.0'
+version = 'v0.1.11'
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
@@ -14,6 +14,5 @@ repositories {
 
 dependencies {
     compile group: 'io.reactivex', name: 'rxjava', version: '1.0.14'
-    compile group: 'com.github.jitpack', name: 'gradle-simple', version: '1.0'
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }
