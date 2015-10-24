@@ -64,7 +64,7 @@ final class AppModule implements ShankModule {
 
 Module initialization:
 ```
-ShankModuleRegister.registerModules(
+ShankModuleInitializer.initializeModules(
         new AppModule(),
         new DataModule(),
         new LoginModule()
@@ -89,6 +89,6 @@ repositories {
 Step 2: add the dependency.
 ```
 dependencies {
-    compile 'com.github.memoizr:shank:v0.1.12'
+    compile 'com.github.memoizr:shank:v0.2.2'
 }
 ```
