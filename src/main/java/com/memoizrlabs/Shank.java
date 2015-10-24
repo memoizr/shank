@@ -21,18 +21,14 @@ public class Shank {
     private static final Map<Class, Map<Class, Object>> scopedCache = new HashMap<>();
 
     /**
-     * Provides the desired object.
+     * Provides the desired object. The object  returned will be created the
+     * first time this method is called, and all subsequent calls will return a
+     * cached instance of the same  object. Throws a NoFactoryException if no
+     * factory is registered for the class of the desired object.
      *
-     * The object  returned will be created the first time this method
-     * is called, and all subsequent calls will return a cached instance of
-     * the same  object.
-     *
-     * Throws a NoFactoryException if no factory
-     * is registered for the class of the desired object.
-     *
-     * @param desiredObjectClass is the class of the desired object
-     * @return an instance of the desired object as provided by the
-     * registered factory.
+     * @param desiredObjectClass is the class of the desired object.
+     * @return an instance of the desired object as provided by the registered
+     * factory.
      */
     @SuppressWarnings("unchecked")
     public static <T> T provide(Class<T> desiredObjectClass) {
@@ -56,19 +52,17 @@ public class Shank {
 
     /**
      * Provides the desired object associated to the specified string
+     * identifier. The object  returned will be created the first time this
+     * method is called, and all subsequent calls will return a cached instance
+     * of the same  object. Throws a NoFactoryException if no factory is
+     * registered for the class of the desired object with the specified string
      * identifier.
      *
-     * The object  returned will be created the first time this method
-     * is called, and all subsequent calls will return a cached instance of
-     * the same  object.
-     *
-     * Throws a NoFactoryException if no factory is registered for the class of
-     * the desired object with the specified string identifier.
-     *
-     * @param desiredObjectClass is the class of the desired object
-     * @param name               is the string identifier associated to a particular factory
-     * @return an instance of the desired object as provided by the
-     * registered factory.
+     * @param desiredObjectClass is the class of the desired object.
+     * @param name               is the string identifier associated to a
+     *                           particular factory.
+     * @return an instance of the desired object as provided by the registered
+     * factory.
      */
     @SuppressWarnings("unchecked")
     public static <T> T provideNamed(Class<T> desiredObjectClass, String name) {
@@ -108,24 +102,24 @@ public class Shank {
     }
 
     /**
-     * Registers a factory for the specified class of object
+     * Registers a factory for the specified class of object.
      *
-     * @param objectClass is the class of the object that will be produced
+     * @param objectClass is the class of the object that will be produced.
      * @param factory     is a factory method that will provide an instance of
-     *                    the object
+     *                    the object.
      */
     public static <T> void registerFactory(Class<T> objectClass, Func0<T> factory) {
         factoryRegister.put(objectClass, factory);
     }
 
     /**
-     * Registers a factory for the specified class of object using the
-     * specified string identifier
+     * Registers a factory for the specified class of object using the specified
+     * string identifier.
      *
-     * @param objectClass is the class of the object that will be produced
-     * @param factoryName is the string identifier associated to this factory
+     * @param objectClass is the class of the object that will be produced.
+     * @param factoryName is the string identifier associated to this factory.
      * @param factory     is a factory method that will provide an instance of
-     *                    the object
+     *                    the object.
      */
     public static <T> void registerNamedFactory(Class<T> objectClass, String factoryName, Func0<T> factory) {
         final Map<String, Func0> factoryMap = namedFactoryRegister.get(objectClass);
@@ -139,7 +133,7 @@ public class Shank {
     }
 
     /**
-     * Clears the entire cache
+     * Clears the entire cache.
      */
     public static void clearAll() {
         unscopedCache.clear();
@@ -147,41 +141,41 @@ public class Shank {
     }
 
     /**
-     * Clears the scope associated to a scoped class
+     * Clears the scope associated to a scoped class.
      *
-     * @param objectClass is the class associated to a scope
+     * @param objectClass is the class associated to a scope.
      */
     private static void clearScope(Class objectClass) {
         scopedCache.remove(objectClass);
     }
 
     /**
-     * Clears the scope associated to an unscoped class
+     * Clears the scope associated to an unscoped class.
      *
-     * @param objectClass is the class of the object
+     * @param objectClass is the class of the object.
      */
     public static <T> void clearUnscoped(Class<T> objectClass) {
         unscopedCache.remove(objectClass);
     }
 
     /**
-     * Create a builder to associate a scope to a class
+     * Create a builder to associate a scope to a class.
      *
-     * @param objectClass the class associated to a scope
-     * @return a ScopedCache builder
+     * @param objectClass the class associated to a scope.
+     * @return a ScopedCache builder.
      */
     public static <T> ScopedCache withScope(Class<T> objectClass) {
         return new ScopedCache(objectClass);
     }
 
     /**
-     * Create a builder to associate a scope to a class, lifetime bound
+     * Create a builder to associate a scope to a class, lifetime bound.
      *
-     * @param objectClass         the class associated to a scope
-     * @param whenLifetimeExpires an observable which is expected to fire
-     *                            when the lifetime of the object the cache
-     *                            is bound to expires
-     * @return a ScopedCache builder
+     * @param objectClass         the class associated to a scope.
+     * @param whenLifetimeExpires an observable which is expected to fire when
+     *                            the lifetime of the object the cache is bound
+     *                            to expires.
+     * @return a ScopedCache builder.
      */
     public static <T> ScopedCache withBoundScope(Class<T> objectClass,
                                                  Observable<Object> whenLifetimeExpires) {
@@ -214,16 +208,16 @@ public class Shank {
         }
 
         /**
-         * Provides the desired object. Throws a NoFactoryException if no factory
-         * is registered for the class of the desired object. The object
+         * Provides the desired object. Throws a NoFactoryException if no
+         * factory is registered for the class of the desired object. The object
          * returned will be created the first time this method is called, and
          * all subsequent calls will return a cached instance of the same
-         * object. When the lifetime observable emits an item, the object
-         * will be removed from cache, and the next time this method is
-         * called a new instance will be returned, which will also be cached
-         * unti the observable fires again.
+         * object. When the lifetime observable emits an item, the object will
+         * be removed from cache, and the next time this method is called a new
+         * instance will be returned, which will also be cached unti the
+         * observable fires again.
          *
-         * @param desiredObjectClass is the class of the desired object
+         * @param desiredObjectClass is the class of the desired object.
          * @return an instance of the desired object as provided by the
          * registered factory.
          */
