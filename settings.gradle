@@ -1,2 +1,2 @@
-include 'Shank'
+rootProject.name = 'Shank'
 
