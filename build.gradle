@@ -3,7 +3,7 @@ apply plugin: 'maven'
 group = 'com.github.memoizr'
 version = '1.0'
 
-sourceCompatibility = 1.7 // java 8
+sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
 repositories {
