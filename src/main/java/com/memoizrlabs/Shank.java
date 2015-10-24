@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import rx.Observable;
+import rx.functions.Action1;
 import rx.functions.Func0;
 
 public class Shank {
@@ -128,7 +129,12 @@ public class Shank {
             this.scope = scope;
             this.whenLifetimeEnds = whenLifetimeEnds;
             if (this.whenLifetimeEnds != null) {
-                this.whenLifetimeEnds.take(1).subscribe(s -> clearScope(this.scope));
+                this.whenLifetimeEnds.take(1).subscribe(new Action1<Object>() {
+                    @Override
+                    public void call(Object s) {
+                        clearScope(ScopedCache.this.scope);
+                    }
+                });
             }
         }
 

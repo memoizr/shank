@@ -2,7 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f4c15c1e-403d-453b-a898-caa9a7319b70" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.1/taskArtifacts/cache.properties.lock" afterPath="$PROJECT_DIR$/.gradle/2.1/taskArtifacts/cache.properties.lock" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.1/taskArtifacts/fileHashes.bin" afterPath="$PROJECT_DIR$/.gradle/2.1/taskArtifacts/fileHashes.bin" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.1/taskArtifacts/fileSnapshots.bin" afterPath="$PROJECT_DIR$/.gradle/2.1/taskArtifacts/fileSnapshots.bin" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.1/taskArtifacts/outputFileStates.bin" afterPath="$PROJECT_DIR$/.gradle/2.1/taskArtifacts/outputFileStates.bin" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.1/taskArtifacts/taskArtifacts.bin" afterPath="$PROJECT_DIR$/.gradle/2.1/taskArtifacts/taskArtifacts.bin" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/memoizrlabs/Shank.java" afterPath="$PROJECT_DIR$/src/main/java/com/memoizrlabs/Shank.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/com.memoizrlabs/ShankTest.java" afterPath="$PROJECT_DIR$/src/test/java/com.memoizrlabs/ShankTest.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build.gradle" afterPath="$PROJECT_DIR$/build.gradle" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Shank.iws" />
@@ -32,12 +40,15 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="build.gradle" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/build.gradle">
+      <file leaf-file-name="ShankTest.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/test/java/com.memoizrlabs/ShankTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.3181818" vertical-offset="0" max-vertical-offset="462">
-              <caret line="10" column="1" selection-start-line="10" selection-start-column="1" selection-end-line="10" selection-end-column="1" />
-              <folding />
+            <state vertical-scroll-proportion="0.82758623" vertical-offset="42" max-vertical-offset="1792">
+              <caret line="36" column="64" selection-start-line="36" selection-start-column="64" selection-end-line="36" selection-end-column="64" />
+              <folding>
+                <element signature="e#465#613#0" expanded="true" />
+                <element signature="e#612#613#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -51,7 +62,26 @@
     <option name="tasksExpandState">
       <map>
         <entry key="" value="true" />
+        <entry key="Shank/" value="true" />
       </map>
+    </option>
+    <option name="recentTasks">
+      <list>
+        <ExternalTaskExecutionInfo>
+          <option name="executorId" value="Run" />
+          <option name="settings">
+            <ExternalSystemSettings>
+              <option name="externalProjectPath" value="$PROJECT_DIR$" />
+              <option name="externalSystemIdString" value="GRADLE" />
+              <option name="taskNames">
+                <list>
+                  <option value="build" />
+                </list>
+              </option>
+            </ExternalSystemSettings>
+          </option>
+        </ExternalTaskExecutionInfo>
+      </list>
     </option>
     <option name="availableProjects">
       <map>
@@ -84,10 +114,6 @@
                 <option name="name" value="classes" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="compileRetrolambdaTest" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
                 <option name="description" value="Generates Javadoc API documentation for the main source code." />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="javadoc" />
@@ -106,10 +132,6 @@
                 <option name="description" value="Deletes the build directory." />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="clean" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="compileRetrolambdaMain" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Processes resources 'main:resources'." />
@@ -173,7 +195,7 @@
     </option>
     <option name="modificationStamps">
       <map>
-        <entry key="$PROJECT_DIR$" value="2891369382571" />
+        <entry key="$PROJECT_DIR$" value="2891371570387" />
       </map>
     </option>
     <option name="projectBuildClasspath">
@@ -193,8 +215,6 @@
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.jitpack/gradle-simple/1.0/874f5d81e354c18eacbfc645b974b6c6ac3b958e/gradle-simple-1.0.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.guava/guava/18.0/ad97fe8faaf01a3d3faacecd58e8fa6e78a973ca/guava-18.0-sources.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.guava/guava/18.0/cce0823396aa693798f8882e64213b1772032b09/guava-18.0.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/gradle.plugin.me.tatarka/gradle-retrolambda/3.2.3/a8b57e1853f004af7ae1aef540d561a6bc99bdcd/gradle-retrolambda-3.2.3-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/gradle.plugin.me.tatarka/gradle-retrolambda/3.2.3/f8c72225ddc48f40ec671a985e796256c809e92/gradle-retrolambda-3.2.3.jar" />
                           </list>
                         </option>
                         <option name="path" value="$PROJECT_DIR$" />
@@ -325,11 +345,12 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/Shank.iml" />
-        <option value="$PROJECT_DIR$/src/main/java/com/memoizrlabs/Shank.java" />
         <option value="$PROJECT_DIR$/settings.gradle" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/.idea/workspace.xml" />
         <option value="$PROJECT_DIR$/build.gradle" />
+        <option value="$PROJECT_DIR$/src/main/java/com/memoizrlabs/Shank.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com.memoizrlabs/ShankTest.java" />
       </list>
     </option>
   </component>
@@ -458,8 +479,8 @@
     <property name="Downloaded.Files.Path.Enabled" value="false" />
     <property name="Repository.Attach.JavaDocs" value="false" />
     <property name="Repository.Attach.Sources" value="false" />
-    <property name="project.structure.last.edited" value="Libraries" />
-    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
   </component>
   <component name="RecentsManager">
@@ -467,7 +488,7 @@
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.ShankTest">
+  <component name="RunManager" selected="Gradle.Shank [build]">
     <configuration default="false" name="build" type="GroovyScriptRunConfiguration" factoryName="Groovy" temporary="true">
       <module name="Shank" />
       <setting name="path" value="file://$PROJECT_DIR$/build.gradle" />
@@ -513,6 +534,26 @@
       <patterns />
       <RunnerSettings RunnerId="Run" />
       <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
+    <configuration default="false" name="Shank [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="build" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <RunnerSettings RunnerId="ExternalSystemTaskRunner" />
+      <ConfigurationWrapper RunnerId="ExternalSystemTaskRunner" />
       <method />
     </configuration>
     <configuration default="true" type="JUnit" factoryName="JUnit">
@@ -725,14 +766,16 @@
       <envs />
       <method />
     </configuration>
-    <list size="2">
+    <list size="3">
       <item index="0" class="java.lang.String" itemvalue="Groovy.build" />
       <item index="1" class="java.lang.String" itemvalue="JUnit.ShankTest" />
+      <item index="2" class="java.lang.String" itemvalue="Gradle.Shank [build]" />
     </list>
     <recent_temporary>
-      <list size="2">
-        <item index="0" class="java.lang.String" itemvalue="JUnit.ShankTest" />
-        <item index="1" class="java.lang.String" itemvalue="Groovy.build" />
+      <list size="3">
+        <item index="0" class="java.lang.String" itemvalue="Gradle.Shank [build]" />
+        <item index="1" class="java.lang.String" itemvalue="JUnit.ShankTest" />
+        <item index="2" class="java.lang.String" itemvalue="Groovy.build" />
       </list>
     </recent_temporary>
   </component>
@@ -764,11 +807,13 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3988183" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3293944" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3293944" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.34859675" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.34859675" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24960998" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3400936" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -778,8 +823,6 @@
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -990,57 +1033,114 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="11956">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <marker date="1445688552860" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1445688552860" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1445688552860" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1445688552860" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1445688552860" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1445688552860" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1445688552860" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1445688552860" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1445688552860" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1445688552860" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1445688552860" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1445688552860" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1445688552860" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1445688552860" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1445688552860" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1445688552860" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1445688552860" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1445688552860" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1445688552860" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1445688552860" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1445688552860" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1445688552860" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1445688552860" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1445688552860" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1445688552860" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1445688552860" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1445688552860" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1445688552860" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1445688552860" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1445688552860" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1445688552860" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1445688552860" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1445688552860" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1445688552860" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1445688552860" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1445688552860" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1445688552860" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1445688552860" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1445688552860" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1445688552860" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1445688552860" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1445688552860" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1445688552860" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1445688552860" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1445689388432" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1445689388432" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1445689388432" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1445689388432" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1445689388432" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1445689388432" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1445689388432" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1445689388432" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1445689388432" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1445689388432" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1445689388432" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1445689388432" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1445689388432" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1445689388432" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1445689388432" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1445689388432" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1445689388432" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1445689388432" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1445689388432" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1445689388432" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1445689388432" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1445689388432" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1445689388432" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1445689388432" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1445689388432" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1445689388432" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1445689388432" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1445689388432" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1445689388432" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1445689388432" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1445689388432" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1445689388432" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1445689388432" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1445689388432" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1445689388432" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1445689388432" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1445689388432" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1445689388432" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1445689388432" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1445689388432" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1445689388432" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1445689388432" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1445689388432" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1445689388432" expanded="true" signature="-1:-1" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="440">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <marker date="1445689282140" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1445689282140" expanded="true" signature="-1:-1" placeholder="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/memoizrlabs/ShankModule.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.061810154" vertical-offset="0" max-vertical-offset="453">
+          <caret line="2" column="17" selection-start-line="2" selection-start-column="17" selection-end-line="2" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/memoizrlabs/Shank.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.95454544" vertical-offset="1806" max-vertical-offset="2324">
+          <caret line="170" column="0" selection-start-line="170" selection-start-column="0" selection-end-line="170" selection-end-column="0" />
+          <folding>
+            <marker date="1445689494460" expanded="false" signature="-1:-1" placeholder="..." />
+            <marker date="1445689494460" expanded="false" signature="-1:-1" placeholder="/unchecked/" />
+            <marker date="1445689494460" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1445689494460" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1445689494460" expanded="false" signature="-1:-1" placeholder="/unchecked/" />
+            <marker date="1445689494460" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1445689494460" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1445689494460" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1445689494460" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1445689494460" expanded="false" signature="-1:-1" placeholder=" { " />
+            <marker date="1445689494460" expanded="false" signature="-1:-1" placeholder=" }" />
+            <marker date="1445689494460" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1445689494460" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1445689494460" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1445689494460" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1445689494460" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1445689494460" expanded="false" signature="-1:-1" placeholder=" { " />
+            <marker date="1445689494460" expanded="false" signature="-1:-1" placeholder=" }" />
+            <marker date="1445689494460" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1445689494460" expanded="false" signature="-1:-1" placeholder=" { " />
+            <marker date="1445689494460" expanded="false" signature="-1:-1" placeholder=" }" />
+            <marker date="1445689494460" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1445689494460" expanded="true" signature="-1:-1" placeholder="(Action1) (s) → {" />
+            <marker date="1445689494460" expanded="true" signature="-1:-1" placeholder="}" />
+            <marker date="1445689494460" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1445689494460" expanded="true" signature="-1:-1" placeholder="/unchecked/" />
+            <marker date="1445689494460" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1445689494460" expanded="true" signature="-1:-1" placeholder="/unchecked/" />
+            <marker date="1445689494460" expanded="true" signature="-1:-1" placeholder="{...}" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/memoizrlabs/ShankModuleRegister.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.06363636" vertical-offset="0" max-vertical-offset="440">
+        <state vertical-scroll-proportion="0.061810154" vertical-offset="0" max-vertical-offset="453">
           <caret line="2" column="19" selection-start-line="2" selection-start-column="19" selection-end-line="2" selection-end-column="19" />
           <folding>
             <marker date="1445344253000" expanded="true" signature="-1:-1" placeholder="{...}" />
@@ -1048,80 +1148,14 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/memoizrlabs/Shank.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.8196721" vertical-offset="1008" max-vertical-offset="2254">
-          <caret line="103" column="13" selection-start-line="103" selection-start-column="13" selection-end-line="103" selection-end-column="13" />
-          <folding>
-            <marker date="1445677793796" expanded="false" signature="-1:-1" placeholder="..." />
-            <marker date="1445677793796" expanded="false" signature="-1:-1" placeholder="/unchecked/" />
-            <marker date="1445677793796" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1445677793796" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1445677793796" expanded="false" signature="-1:-1" placeholder="/unchecked/" />
-            <marker date="1445677793796" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1445677793796" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1445677793796" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1445677793796" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1445677793796" expanded="false" signature="-1:-1" placeholder=" { " />
-            <marker date="1445677793796" expanded="false" signature="-1:-1" placeholder=" }" />
-            <marker date="1445677793796" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1445677793796" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1445677793796" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1445677793796" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1445677793796" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1445677793796" expanded="false" signature="-1:-1" placeholder=" { " />
-            <marker date="1445677793796" expanded="false" signature="-1:-1" placeholder=" }" />
-            <marker date="1445677793796" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1445677793796" expanded="false" signature="-1:-1" placeholder=" { " />
-            <marker date="1445677793796" expanded="false" signature="-1:-1" placeholder=" }" />
-            <marker date="1445677793796" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1445677793796" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1445677793796" expanded="false" signature="-1:-1" placeholder="/unchecked/" />
-            <marker date="1445677793796" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1445677793796" expanded="false" signature="-1:-1" placeholder="/unchecked/" />
-            <marker date="1445677793796" expanded="true" signature="-1:-1" placeholder="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/com.memoizrlabs/ShankTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.66818184" vertical-offset="0" max-vertical-offset="1722">
-          <caret line="29" column="36" selection-start-line="29" selection-start-column="36" selection-end-line="29" selection-end-column="36" />
+        <state vertical-scroll-proportion="0.82758623" vertical-offset="42" max-vertical-offset="1792">
+          <caret line="36" column="64" selection-start-line="36" selection-start-column="64" selection-end-line="36" selection-end-column="64" />
           <folding>
-            <marker date="1445186691000" expanded="false" signature="-1:-1" placeholder="..." />
-            <marker date="1445186691000" expanded="false" signature="-1:-1" placeholder=" { " />
-            <marker date="1445186691000" expanded="false" signature="-1:-1" placeholder=" }" />
-            <marker date="1445186691000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1445186691000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1445186691000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1445186691000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1445186691000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1445186691000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1445186691000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1445186691000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1445186691000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1445186691000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1445186691000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1445186691000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1445186691000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <element signature="e#465#613#0" expanded="true" />
+            <element signature="e#612#613#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/memoizrlabs/ShankModule.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.06363636" vertical-offset="0" max-vertical-offset="440">
-          <caret line="2" column="17" selection-start-line="2" selection-start-column="17" selection-end-line="2" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3181818" vertical-offset="0" max-vertical-offset="462">
-          <caret line="10" column="1" selection-start-line="10" selection-start-column="1" selection-end-line="10" selection-end-column="1" />
-          <folding />
         </state>
       </provider>
     </entry>
