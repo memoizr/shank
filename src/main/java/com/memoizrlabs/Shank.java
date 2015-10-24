@@ -10,7 +10,7 @@ import java.util.Map;
  * This class will cache items provided by factories, and provide them to the
  * user according to specified scope, naming and lifetime constraints.
  */
-public class Shank {
+public final class Shank {
 
     private static final Map<Class, Object> unscopedCache = new HashMap<>();
     private static final Map<Class, Map<String, Object>> unscopedNamedCache = new HashMap<>();
@@ -19,6 +19,9 @@ public class Shank {
     private static final Map<Class, Map<String, Func0>> namedFactoryRegister = new HashMap<>();
 
     private static final Map<Class, Map<Class, Object>> scopedCache = new HashMap<>();
+
+    private Shank() {
+    }
 
     /**
      * Provides the desired object. The object  returned will be created the
@@ -188,7 +191,7 @@ public class Shank {
         }
     }
 
-    public static class ScopedCache {
+    public static final class ScopedCache {
 
         private final Class scope;
         private final Observable<Object> whenLifetimeEnds;

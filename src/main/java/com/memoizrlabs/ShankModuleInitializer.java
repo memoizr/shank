@@ -5,6 +5,9 @@ package com.memoizrlabs;
  */
 public final class ShankModuleInitializer {
 
+    private ShankModuleInitializer() {
+    }
+
     /**
      * Iterates through the ShankModules provided as parameters and registers
      * the factories specified within them.
