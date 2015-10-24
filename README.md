@@ -1,5 +1,5 @@
 # Shank
-Shank is a lightweight, simple and performant dependency injection framework for Java. It is conceptually based on the Service Locator Pattern (Gamma 1994), and Typesafe Etherogeneous Containers (Bloch 2008). The API has been very loosely inspired by Dagger.
+Shank is a lightweight, simple and performant dependency injection framework for Java (1.7 and up). It is conceptually based on the Service Locator Pattern (Gamma 1994), and Typesafe Etherogeneous Containers (Bloch 2008). The API has been very loosely inspired by Dagger.
 
 ####Main features
 - Scoped singletons
