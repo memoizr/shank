@@ -18,12 +18,7 @@ public class ShankTest {
 
     @Test
     public void provide_whenObjectHasFactory_providesRightObject() {
-        Shank.registerFactory(FooObject.class, new Func0<FooObject>() {
-            @Override
-            public FooObject call() {
-                return new FooObject();
-            }
-        });
+        Shank.registerFactory(FooObject.class, FooObject::new);
 
         final Object provided = Shank.provide(FooObject.class);
 
@@ -33,18 +28,8 @@ public class ShankTest {
 
     @Test
     public void provide_whenObjectHasNamedFactory_providesRightObject() {
-        Shank.registerNamedFactory(FooObject.class, "first", new Func0<FooObject>() {
-            @Override
-            public FooObject call() {
-                return new ChildFooObject();
-            }
-        });
-        Shank.registerNamedFactory(FooObject.class, "second", new Func0<FooObject>() {
-            @Override
-            public FooObject call() {
-                return new OtherChildFooObject();
-            }
-        });
+        Shank.registerNamedFactory(FooObject.class, "first", ChildFooObject::new);
+        Shank.registerNamedFactory(FooObject.class, "second", OtherChildFooObject::new);
 
         final Object first = Shank.provideNamed(FooObject.class, "first");
         final Object second = Shank.provideNamed(FooObject.class, "second");
@@ -58,12 +43,7 @@ public class ShankTest {
 
     @Test
     public void provide_whenObjectHasFactory_providesPolymorphicObject() {
-        Shank.registerFactory(FooObject.class, new Func0<FooObject>() {
-            @Override
-            public FooObject call() {
-                return new ChildFooObject();
-            }
-        });
+        Shank.registerFactory(FooObject.class, ChildFooObject::new);
 
         final FooObject provided = Shank.provide(FooObject.class);
 
@@ -73,12 +53,7 @@ public class ShankTest {
 
     @Test
     public void provide_whenObjectHasFactory_and_provideIsCalledMultipleTimes_providesSameInstance() {
-        Shank.registerFactory(FooObject.class, new Func0<FooObject>() {
-            @Override
-            public FooObject call() {
-                return new FooObject();
-            }
-        });
+        Shank.registerFactory(FooObject.class, FooObject::new);
 
         final FooObject provided = Shank.provide(FooObject.class);
         final FooObject secondProvided = Shank.provide(FooObject.class);
@@ -88,12 +63,7 @@ public class ShankTest {
 
     @Test
     public void clear_whenObjectIsRemoved_providesNewInstance() {
-        Shank.registerFactory(FooObject.class, new Func0<FooObject>() {
-            @Override
-            public FooObject call() {
-                return new FooObject();
-            }
-        });
+        Shank.registerFactory(FooObject.class, FooObject::new);
 
         final FooObject provided = Shank.provide(FooObject.class);
 
@@ -106,12 +76,7 @@ public class ShankTest {
 
     @Test
     public void withScope_returnsObjectForScope() {
-        Shank.registerFactory(FooObject.class, new Func0<FooObject>() {
-            @Override
-            public FooObject call() {
-                return new FooObject();
-            }
-        });
+        Shank.registerFactory(FooObject.class, FooObject::new);
 
         final FooObject provided = Shank.withScope(OtherFooObject.class).provide(FooObject.class);
 
@@ -120,12 +85,7 @@ public class ShankTest {
 
     @Test
     public void withScope_whenCalledMultipleTimes_returnsSameObjectForScope() {
-        Shank.registerFactory(FooObject.class, new Func0<FooObject>() {
-            @Override
-            public FooObject call() {
-                return new FooObject();
-            }
-        });
+        Shank.registerFactory(FooObject.class, FooObject::new);
 
         final FooObject provided = Shank.withScope(OtherFooObject.class).provide(FooObject.class);
         final FooObject otherProvided = Shank.withScope(OtherFooObject.class).provide(FooObject.class);
@@ -135,12 +95,7 @@ public class ShankTest {
 
     @Test
     public void withScope_andWithClearObservable_whenCalledMultipleTimes_returnsDifferentObjectForScope() {
-        Shank.registerFactory(FooObject.class, new Func0<FooObject>() {
-            @Override
-            public FooObject call() {
-                return new FooObject();
-            }
-        });
+        Shank.registerFactory(FooObject.class, FooObject::new);
         PublishSubject<Object> remove = PublishSubject.create();
 
         final FooObject provided = Shank.withBoundScope(OtherFooObject.class, remove).provide(FooObject.class);
