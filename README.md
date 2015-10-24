@@ -6,13 +6,76 @@ Shank is a lightweight, simple and performant dependency injection framework for
 - Bounded scoped singletons
 - Named singletons
 - Bounded named singletons
+- No upfront object graph creation
+- Lazy object instatiation
 
-####Some advantages over other frameworks:
+####Some advantages over other frameworks
 - No reflection
 - No code generation (no magic!)
 - Plain old Java
-- Lazy object creation
-- Easy to test
+
+####Usage
+Plain object: 
+returns a `StringFormatter` instance provided by the factory.
+```      
+Shank.provide(StringFormatter.class);
+```
+
+Plain object by name: 
+returns a `Scheduler` instance associated to a string identifier "io" provided by the factory.
+```      
+Shank.provideNamed(Scheduler.class, "io");
+```
+
+Scoped singleton: 
+returns the same `StreamPresenter` instance provided by the factory every time a `StreamActivity` asks for it.
+```      
+Shank.withScope(StreamActivity.class).provide(StreamPresenter.class);
+```
+
+Bound Scoped singleton: 
+returns the same `StreamPresenter` instance provided by the factory every time a `StreamActivity` asks for it, until `endOfLifeObservable` emits an item. After that the cached object is removed from the cache.
+```      
+Shank.withBoundScope(StreamActivity.class, endOfLifeObservable).provide(StreamPresenter.class);
+```
+
+Anonymous factory:
+```
+Shank.registerFactory(SessionHandler.class, SessionHandler::new);
+```
+
+Named factory:
+```
+Shank.registerNamedFactory(Scheduler.class, "ui", AndroidSchedulers::mainThread);
+```
+
+Modules:
+```
+final class AppModule implements ShankModule {
+    @Override
+    public void registerFactories() {
+        Shank.registerFactory(SessionHandler.class, DefaultSessionHandler::new);
+        Shank.registerFactory(ApiFactory.class, ApiFactory::new);
+
+        Shank.registerNamedFactory(Scheduler.class, "ui", AndroidSchedulers::mainThread);
+        Shank.registerNamedFactory(Scheduler.class, "io", Schedulers::io);
+    }
+}
+```
+
+Module initialization:
+```
+ShankModuleRegister.registerModules(
+        new AppModule(),
+        new DataModule(),
+        new LaunchModule(),
+        new LoginModule(),
+        new StreamModule(),
+        new TweetCreationModule()
+);
+```
+
+
 
 ####Motivation
 Dependency injection (DI) is a pattern, a way of building software, it's not a particular framework. However, there are advantages in defining a standard way of going about doing DI, so a framework can help define those standards. The typical way of injecting dependencies in Java is to pass them through a constructor. Unfortunately this is not always possible to do, for example in the case of Android Activities and Fragments, where the constructor is used exclusively by the Framework and the user of those classes has no control over their instatiation. Again, a DI framework can be of great help.
