@@ -35,8 +35,8 @@ public final class Shank {
      */
     @SuppressWarnings("unchecked")
     public static <T> T provide(Class<T> desiredObjectClass) {
-
         T desiredObject = (T) unscopedCache.get(desiredObjectClass);
+
         if (desiredObject == null) {
             Func0 objectFactory = getFactory(desiredObjectClass);
             desiredObject = (T) objectFactory.call();
@@ -47,6 +47,7 @@ public final class Shank {
 
     private static <T> Func0 getFactory(Class<T> desiredObjectClass) {
         final Func0 objectFactory = factoryRegister.get(desiredObjectClass);
+
         if (objectFactory == null) {
             throw new NoFactoryException("There is no factory for " + desiredObjectClass.getCanonicalName());
         }
@@ -126,6 +127,7 @@ public final class Shank {
      */
     public static <T> void registerNamedFactory(Class<T> objectClass, String factoryName, Func0<T> factory) {
         final Map<String, Func0> factoryMap = namedFactoryRegister.get(objectClass);
+
         if (factoryMap == null) {
             final Map<String, Func0> map = new HashMap<>();
             map.put(factoryName, factory);
@@ -239,14 +241,17 @@ public final class Shank {
         private <V> V createObjectAndScope(Class<V> desiredObjectClass, Func0 objectFactory) {
             final Map<Class, Object> resultMap = new HashMap<>();
             final Object desiredObject = objectFactory.call();
+
             resultMap.put(desiredObjectClass, desiredObject);
             scopedCache.put(scope, resultMap);
+
             return (V) desiredObject;
         }
 
         @SuppressWarnings("unchecked")
         private <V> V getObjectOrCreateIfNull(Class<V> desiredObjectClass, Map<Class, Object> currentScopeMap, Func0 objectFactory) {
             Object desiredObject = currentScopeMap.get(desiredObjectClass);
+
             if (desiredObject == null) {
                 desiredObject = objectFactory.call();
                 currentScopeMap.put(desiredObjectClass, desiredObject);
