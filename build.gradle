@@ -2,16 +2,20 @@ plugins {
     id "me.tatarka.retrolambda" version "3.2.3"
 }
 
-apply plugin: 'java'
-apply plugin: 'maven'
-group = 'com.github.memoizr'
-version = '1.0'
 
 retrolambda {
     jdk '/usr/lib/jvm/java-8-oracle'
     oldJdk '/usr/lib/jvm/java-7-oracle'
     javaVersion JavaVersion.VERSION_1_7
 }
+
+apply plugin: 'java'
+apply plugin: 'maven'
+group = 'com.github.memoizr'
+version = '1.0'
+
+sourceCompatibility = 1.7 // java 8
+targetCompatibility = 1.7
 
 repositories {
     mavenCentral()
