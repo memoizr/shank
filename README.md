@@ -55,7 +55,6 @@ final class AppModule implements ShankModule {
     @Override
     public void registerFactories() {
         Shank.registerFactory(SessionHandler.class, DefaultSessionHandler::new);
-        Shank.registerFactory(ApiFactory.class, ApiFactory::new);
 
         Shank.registerNamedFactory(Scheduler.class, "ui", AndroidSchedulers::mainThread);
         Shank.registerNamedFactory(Scheduler.class, "io", Schedulers::io);
@@ -68,10 +67,7 @@ Module initialization:
 ShankModuleRegister.registerModules(
         new AppModule(),
         new DataModule(),
-        new LaunchModule(),
-        new LoginModule(),
-        new StreamModule(),
-        new TweetCreationModule()
+        new LoginModule()
 );
 ```
 
