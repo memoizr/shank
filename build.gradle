@@ -6,12 +6,14 @@ apply plugin: 'java'
 apply plugin: 'maven'
 group = 'com.github.memoizr'
 
+sourceCompatibility = 1.8 // java 8
+targetCompatibility = 1.7
 version = '1.0'
 
-
 retrolambda {
-    jdk '/usr/lib/jvm/java-8-oracle/jre'
-    oldJdk '/usr/lib/jvm/java-7-oracle/jre'
+    jdk '/usr/lib/jvm/java-8-oracle'
+    oldJdk '/usr/lib/jvm/java-7-oracle'
+    javaVersion JavaVersion.VERSION_1_7
 }
 
 repositories {
