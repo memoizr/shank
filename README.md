@@ -64,7 +64,7 @@ final class AppModule implements ShankModule {
 
 Module initialization:
 ```
-ShankModuleRegister.registerModules(
+ShankModuleInitializer.initializeModules(
         new AppModule(),
         new DataModule(),
         new LoginModule()
@@ -78,6 +78,9 @@ Dependency injection (DI) is a pattern, a way of building software, it's not a p
 
 Guice is a very popular solution, but it does not always meet the performance requirements of some low-power devices. Dagger arose as a more performant and extremely compelling alternative, but it too has a few disadvantages: the building of the Object Graph, the relationship between all the different components and modules, for example are somewhat conceptually hard to understand. In my experience I found that in large teams and complex projects it becomes problematic to ensure everyone is on board and fully competent in using Dagger. There might be room for a simpler framework which could solve much of the same problems, while trying to avoid the conceptual overhead of complex graphs. Shank is an attempt at filling that need. Shank is like a much less sophisticated Dagger. But it still gets the job done.
 
+####Samples
+https://github.com/memoizr/shank-samples
+
 ####Gradle
 Step 1: add the repository.
 ```
@@ -89,6 +92,6 @@ repositories {
 Step 2: add the dependency.
 ```
 dependencies {
-    compile 'com.github.memoizr:shank:v0.1.12'
+    compile 'com.github.memoizr:shank:v0.2.2'
 }
 ```
