@@ -17,40 +17,40 @@ Shank is a lightweight, simple and performant dependency injection framework for
 ####Usage
 Plain object: 
 returns a `StringFormatter` instance provided by the factory.
-```      
+```java
 Shank.provide(StringFormatter.class);
 ```
 
 Plain object by name: 
 returns a `Scheduler` instance associated to a string identifier "io" provided by the factory.
-```      
+```java
 Shank.provideNamed(Scheduler.class, "io");
 ```
 
 Scoped singleton: 
 returns the same `StreamPresenter` instance provided by the factory every time a `StreamActivity` asks for it.
-```      
+```java
 Shank.withScope(StreamActivity.class).provide(StreamPresenter.class);
 ```
 
 Bound Scoped singleton: 
 returns the same `StreamPresenter` instance provided by the factory every time a `StreamActivity` asks for it, until `endOfLifeObservable` emits an item. After that the cached object is removed from the cache.
-```      
+```java
 Shank.withBoundScope(StreamActivity.class, endOfLifeObservable).provide(StreamPresenter.class);
 ```
 
 Anonymous factory:
-```
+```java
 Shank.registerFactory(SessionHandler.class, SessionHandler::new);
 ```
 
 Named factory:
-```
+```java
 Shank.registerNamedFactory(Scheduler.class, "ui", AndroidSchedulers::mainThread);
 ```
 
 Modules:
-```
+```java
 final class AppModule implements ShankModule {
     @Override
     public void registerFactories() {
@@ -63,7 +63,7 @@ final class AppModule implements ShankModule {
 ```
 
 Module initialization:
-```
+```java
 ShankModuleInitializer.initializeModules(
         new AppModule(),
         new DataModule(),
@@ -83,14 +83,14 @@ https://github.com/memoizr/shank-samples
 
 ####Gradle
 Step 1: add the repository.
-```
+```groovy
 repositories {
     // ...
     maven { url "https://jitpack.io" }
 }
 ```
 Step 2: add the dependency.
-```
+```groovy
 dependencies {
     compile 'com.github.memoizr:shank:v0.2.2'
 }
