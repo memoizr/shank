@@ -80,6 +80,7 @@ Guice is a very popular solution, but it does not always meet the performance re
 
 ####Samples
 https://github.com/memoizr/shank-samples
+https://github.com/memoizr/twitter-demo
 
 ####Gradle
 Step 1: add the repository.
