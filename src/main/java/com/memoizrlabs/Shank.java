@@ -19,6 +19,7 @@ public final class Shank {
     private static final Map<Class, Map<String, Func0>> namedFactoryRegister = new HashMap<>();
 
     private static final Map<Class, Map<Class, Object>> scopedCache = new HashMap<>();
+    private static final Map<Class, Map<Class, Map<String, Object>>> scopedNamedCache = new HashMap<>();
 
     private Shank() {
     }
@@ -183,7 +184,7 @@ public final class Shank {
      * @return a ScopedCache builder.
      */
     public static <T> ScopedCache withBoundScope(Class<T> objectClass,
-                                                 Observable<Object> whenLifetimeExpires) {
+        Observable<Object> whenLifetimeExpires) {
         return new ScopedCache(objectClass, whenLifetimeExpires);
     }
 
@@ -206,9 +207,10 @@ public final class Shank {
             this.scope = scope;
             this.whenLifetimeEnds = whenLifetimeEnds;
             if (this.whenLifetimeEnds != null) {
-                this.whenLifetimeEnds.take(1).subscribe(s -> {
-                    clearScope(ScopedCache.this.scope);
-                });
+                this.whenLifetimeEnds.take(1)
+                    .subscribe(s -> {
+                        clearScope(ScopedCache.this.scope);
+                    });
             }
         }
 
@@ -235,6 +237,32 @@ public final class Shank {
             } else {
                 return getObjectOrCreateIfNull(desiredObjectClass, currentScopeMap, objectFactory);
             }
+        }
+
+        public <V> V provideNamed(Class<V> desiredObjectClass, String name) {
+            final Map<Class, Map<String, Object>> currentScopeMap = scopedNamedCache.get(scope);
+            final Func0 objectFactory = getNamedFactory(desiredObjectClass, name);
+
+            V desiredObject;
+            if (currentScopeMap == null) {
+                final Map<Class, Map<String, Object>> scopedMap = new HashMap<>();
+                final Map<String, Object> namedMap = new HashMap<>();
+                desiredObject = (V) objectFactory.call();
+                namedMap.put(name, desiredObject);
+                scopedMap.put(desiredObjectClass, namedMap);
+                scopedNamedCache.put(scope, scopedMap);
+            } else {
+                Map<String, Object> stringObjectMap = currentScopeMap.get(desiredObjectClass);
+                Object o = stringObjectMap.get(name);
+                if (o != null) {
+                    desiredObject = (V) o;
+                } else {
+                    desiredObject = (V) objectFactory.call();
+                    stringObjectMap.put(name, desiredObject);
+                }
+            }
+
+            return desiredObject;
         }
 
         @SuppressWarnings("unchecked")

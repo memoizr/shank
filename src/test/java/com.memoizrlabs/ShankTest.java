@@ -2,12 +2,11 @@ package com.memoizrlabs;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import rx.functions.Func0;
 import rx.subjects.PublishSubject;
 
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 public class ShankTest {
 
@@ -105,6 +104,36 @@ public class ShankTest {
         assertTrue(provided != otherProvided);
         assertNotNull(provided);
         assertNotNull(otherProvided);
+    }
+
+    @Test
+    public void withScope_whenHasNamedFactory_returnsObjectForNameAndScope() {
+        Shank.registerNamedFactory(ChildFooObject.class, "first", ChildFooObject::new);
+        Shank.registerNamedFactory(OtherChildFooObject.class, "second", OtherChildFooObject::new);
+
+        FooObject first = Shank.withScope(OtherFooObject.class).provideNamed(FooObject.class, "first");
+        FooObject second = Shank.withScope(OtherFooObject.class).provideNamed(FooObject.class, "second");
+
+        assertTrue(first != null);
+        assertTrue(second != null);
+        assertTrue(second != first);
+        assertTrue(first instanceof ChildFooObject);
+        assertTrue(second instanceof OtherChildFooObject);
+    }
+
+    @Test
+    public void withScope_whenHasNamedFactory__calledMultipleTimes_returnsSameObjectForNameAndScope() {
+        Shank.registerNamedFactory(ChildFooObject.class, "first", ChildFooObject::new);
+        Shank.registerNamedFactory(OtherChildFooObject.class, "second", OtherChildFooObject::new);
+
+        FooObject first = Shank.withScope(OtherFooObject.class).provideNamed(FooObject.class, "first");
+        FooObject second = Shank.withScope(OtherFooObject.class).provideNamed(FooObject.class, "second");
+
+        FooObject otherFirst = Shank.withScope(OtherFooObject.class).provideNamed(FooObject.class, "first");
+        FooObject otherSecond = Shank.withScope(OtherFooObject.class).provideNamed(FooObject.class, "second");
+
+        assertEquals(first, otherFirst);
+        assertEquals(second, otherSecond);
     }
 
     @Test(expected = Shank.NoFactoryException.class)

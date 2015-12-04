@@ -16,6 +16,7 @@
       <scope value="GLOBAL" />
       <destination value="FILE" />
       <format value="EXCEL" />
+      <charset value="UTF-8" />
     </export-instructions>
   </component>
   <component name="DBNavigator.Project.DatabaseBrowserManager">
@@ -34,6 +35,10 @@
   </component>
   <component name="DBNavigator.Project.ObjectDependencyManager">
     <last-used-dependency-type value="INCOMING" />
+  </component>
+  <component name="DBNavigator.Project.ObjectQuickFilterManager">
+    <last-used-operator value="EQUAL" />
+    <filters />
   </component>
   <component name="DBNavigator.Project.ScriptExecutionManager" clear-outputs="true">
     <recently-used-interfaces />
@@ -149,6 +154,7 @@
         <convert-empty-strings-to-null value="true" />
         <select-content-on-cell-edit value="true" />
         <large-value-preview-active value="true" />
+        <load-view-data-active value="false" />
       </general>
       <filters>
         <prompt-filter-dialog value="true" />
@@ -344,16 +350,18 @@
       <statement-execution>
         <fetch-block-size value="100" />
         <execution-timeout value="20" />
-        <focus-result value="false" />
+        <debug-execution-timeout value="600" />
+        <prompt-execution value="false" />
       </statement-execution>
       <script-execution>
         <command-line-interfaces />
+        <execution-timeout value="300" />
       </script-execution>
-      <statement-execution>
-        <execution-timeout value="20" />
+      <method-execution>
+        <execution-timeout value="30" />
         <debug-execution-timeout value="600" />
         <parameter-history-size value="10" />
-      </statement-execution>
+      </method-execution>
     </execution-engine-settings>
     <operation-settings>
       <transactions>
@@ -377,6 +385,10 @@
         <compile-dependencies value="ASK" />
         <always-show-controls value="false" />
       </compiler>
+      <debugger>
+        <debugger-type value="JDWP" />
+        <use-generic-runners value="true" />
+      </debugger>
     </operation-settings>
     <ddl-file-settings>
       <extensions>
