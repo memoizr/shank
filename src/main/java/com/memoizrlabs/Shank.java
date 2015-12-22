@@ -1,10 +1,10 @@
 package com.memoizrlabs;
 
-import rx.Observable;
-import rx.functions.Func0;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import rx.Observable;
+import rx.functions.Func0;
 
 /**
  * This class will cache items provided by factories, and provide them to the
@@ -155,6 +155,10 @@ public final class Shank {
         scopedCache.remove(objectClass);
     }
 
+    private static void clearNamedScope(Class objectClass) {
+        scopedNamedCache.remove(objectClass);
+    }
+
     /**
      * Clears the scope associated to an unscoped class.
      *
@@ -198,6 +202,7 @@ public final class Shank {
 
         private final Class scope;
         private final Observable<Object> whenLifetimeEnds;
+        private boolean named;
 
         ScopedCache(Class scope) {
             this(scope, null);
@@ -209,7 +214,11 @@ public final class Shank {
             if (this.whenLifetimeEnds != null) {
                 this.whenLifetimeEnds.take(1)
                     .subscribe(s -> {
-                        clearScope(ScopedCache.this.scope);
+                        if (named) {
+                            clearNamedScope(ScopedCache.this.scope);
+                        } else {
+                            clearScope(ScopedCache.this.scope);
+                        }
                     });
             }
         }
@@ -240,6 +249,7 @@ public final class Shank {
         }
 
         public <V> V provideNamed(Class<V> desiredObjectClass, String name) {
+            named = true;
             final Map<Class, Map<String, Object>> currentScopeMap = scopedNamedCache.get(scope);
             final Func0 objectFactory = getNamedFactory(desiredObjectClass, name);
 
