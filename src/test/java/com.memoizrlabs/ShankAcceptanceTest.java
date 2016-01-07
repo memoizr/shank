@@ -225,6 +225,16 @@ public class ShankAcceptanceTest {
     }
 
     @Test
+    public void withObjectScope_whenCalledMultipleTimes_returnsSameObjectForScope() {
+        Shank.registerFactory(FooObject.class, FooObject::new);
+
+        final FooObject provided = Shank.withScope("foo").provide(FooObject.class);
+        final FooObject otherProvided = Shank.withScope("foo").provide(FooObject.class);
+
+        assertTrue(provided == otherProvided);
+    }
+
+    @Test
     public void withScope_andWithClearObservable_whenCalledMultipleTimes_returnsDifferentObjectForScope() {
         Shank.registerFactory(FooObject.class, FooObject::new);
         PublishSubject<Object> remove = PublishSubject.create();

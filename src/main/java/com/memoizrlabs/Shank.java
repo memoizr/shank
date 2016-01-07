@@ -25,8 +25,8 @@ public final class Shank {
     private static final Map<Class, Function> factoryRegister = new HashMap<>();
     private static final Map<Class, Map<String, Function>> namedFactoryRegister = new HashMap<>();
 
-    private static final Map<Class, Map<Class, Object>> scopedCache = new HashMap<>();
-    private static final Map<Class, Map<Class, Map<String, Object>>> scopedNamedCache = new HashMap<>();
+    private static final Map<Object, Map<Class, Object>> scopedCache = new HashMap<>();
+    private static final Map<Object, Map<Class, Map<String, Object>>> scopedNamedCache = new HashMap<>();
 
     private Shank() {
     }
@@ -254,14 +254,14 @@ public final class Shank {
     /**
      * Clears the scope associated to a scoped class.
      *
-     * @param objectClass is the class associated to a scope.
+     * @param scope is the class associated to a scope.
      */
-    private static void clearScope(Class objectClass) {
-        scopedCache.remove(objectClass);
+    private static void clearScope(Object scope) {
+        scopedCache.remove(scope);
     }
 
-    private static void clearNamedScope(Class objectClass) {
-        scopedNamedCache.remove(objectClass);
+    private static void clearNamedScope(Object scope) {
+        scopedNamedCache.remove(scope);
     }
 
     /**
@@ -276,11 +276,11 @@ public final class Shank {
     /**
      * Create a builder to associate a scope to a class.
      *
-     * @param objectClass the class associated to a scope.
+     * @param scope the class associated to a scope.
      * @return a ScopedCache builder.
      */
-    public static <T> ScopedCache withScope(Class<T> objectClass) {
-        return new ScopedCache(objectClass);
+    public static <T> ScopedCache withScope(Object scope) {
+        return new ScopedCache(scope);
     }
 
     /**
@@ -306,15 +306,15 @@ public final class Shank {
 
     public static final class ScopedCache {
 
-        private final Class scope;
+        private final Object scope;
         private final Observable<Object> whenLifetimeEnds;
         private boolean named;
 
-        ScopedCache(Class scope) {
+        ScopedCache(Object scope) {
             this(scope, null);
         }
 
-        ScopedCache(Class scope, Observable<Object> whenLifetimeEnds) {
+        ScopedCache(Object scope, Observable<Object> whenLifetimeEnds) {
             this.scope = scope;
             this.whenLifetimeEnds = whenLifetimeEnds;
             if (this.whenLifetimeEnds != null) {
