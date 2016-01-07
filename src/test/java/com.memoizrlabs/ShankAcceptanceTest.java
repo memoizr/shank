@@ -57,7 +57,7 @@ public class ShankAcceptanceTest {
 
     @Test
     public void provide_whenObjectHasFactoryWith2Parameter_providesRightObject() {
-        Shank.registerFactory(List.class, (a, b) -> asList(a, b));
+        Shank.registerFactory(List.class, (String a, String b) -> asList(a, b));
 
         final List provided = Shank.provide(List.class, "a", "b");
 
@@ -83,6 +83,18 @@ public class ShankAcceptanceTest {
 
         assertTrue(provided != null);
         assertThat(provided, is(asList("a", "b", "c", "d")));
+    }
+
+    @Test
+    public void provide_whenObjectHasFactoryWithParametersOfDifferentType_providesRightObject() {
+        Shank.registerFactory(ClassWithConstructorParameters.class, (String aString, Integer anInteger) ->
+                new ClassWithConstructorParameters(aString, anInteger));
+
+        final ClassWithConstructorParameters provided = Shank.provide(ClassWithConstructorParameters.class, "a", 1);
+
+        assertTrue(provided != null);
+        assertThat(provided.a, is("a"));
+        assertThat(provided.b, is(1));
     }
 
     @Test
@@ -344,12 +356,27 @@ public class ShankAcceptanceTest {
         assertThat(second, is(otherSecond));
     }
 
-    @Test(expected = Shank.NoFactoryException.class)
+    @Test(expected = NoFactoryException.class)
     public void provide_whenObjectHasNoFactory_throwsException() throws Exception {
         Shank.provide(OtherFooObject.class);
     }
 
     static class FooObject {
+
+        FooObject() {
+        }
+
+    }
+
+    static class ClassWithConstructorParameters {
+
+        private String a;
+        private Integer b;
+
+        ClassWithConstructorParameters(String a, Integer b) {
+            this.a = a;
+            this.b = b;
+        }
     }
 
     static class ChildFooObject extends FooObject {
