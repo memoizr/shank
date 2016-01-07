@@ -315,6 +315,21 @@ public class ShankAcceptanceTest {
     }
 
     @Test
+    public void withBoundObjectScope_whenHasNamedFactory_andScopeIsCleared_returnsDifferentObjects() {
+        Shank.registerNamedFactory(FooObject.class, "object", FooObject::new);
+
+        PublishSubject<Object> remove = PublishSubject.create();
+
+        FooObject first = Shank.withBoundScope("foo", remove).provideNamed(FooObject.class, "object");
+        remove.onNext(null);
+        FooObject other = Shank.withBoundScope("foo", remove).provideNamed(FooObject.class, "object");
+
+        assertTrue(first != null);
+        assertTrue(other != null);
+        assertTrue(other != first);
+    }
+
+    @Test
     public void withScope_whenHasNamedFactory__calledMultipleTimes_returnsSameObjectForNameAndScope() {
         Shank.registerNamedFactory(FooObject.class, "first", ChildFooObject::new);
         Shank.registerNamedFactory(FooObject.class, "second", OtherChildFooObject::new);

@@ -286,15 +286,15 @@ public final class Shank {
     /**
      * Create a builder to associate a scope to a class, lifetime bound.
      *
-     * @param objectClass         the class associated to a scope.
+     * @param scopeObject         the class associated to a scope.
      * @param whenLifetimeExpires an observable which is expected to fire when
      *                            the lifetime of the object the cache is bound
      *                            to expires.
      * @return a ScopedCache builder.
      */
-    public static <T> ScopedCache withBoundScope(Class<T> objectClass,
+    public static <T> ScopedCache withBoundScope(Object scopeObject,
             Observable<Object> whenLifetimeExpires) {
-        return new ScopedCache(objectClass, whenLifetimeExpires);
+        return new ScopedCache(scopeObject, whenLifetimeExpires);
     }
 
     static class NoFactoryException extends RuntimeException {
