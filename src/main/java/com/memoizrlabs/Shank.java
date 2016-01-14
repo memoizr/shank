@@ -71,6 +71,207 @@ public final class Shank {
     }
 
     /**
+     * @see Shank#provideNewInstance(Class, Object, Object, Object, Object)
+     */
+    public static <T> T provideNewInstance(Class<T> desiredObjectClass) {
+        return (T) createProvider(getFactory(desiredObjectClass)).call();
+    }
+
+    /**
+     * @see Shank#provideNewInstance(Class, Object, Object, Object, Object)
+     */
+    public static <A, T> T provideNewInstance(Class<T> desiredObjectClass, A a) {
+        return (T) createProvider(getFactory(desiredObjectClass), a).call();
+    }
+
+    /**
+     * @see Shank#provideNewInstance(Class, Object, Object, Object, Object)
+     */
+    public static <A, B, T> T provideNewInstance(Class<T> desiredObjectClass, A a, B b) {
+        return (T) createProvider(getFactory(desiredObjectClass), a, b).call();
+    }
+
+    /**
+     * @see Shank#provideNewInstance(Class, Object, Object, Object, Object)
+     */
+    public static <A, B, C, T> T provideNewInstance(Class<T> desiredObjectClass, A a, B b, C c) {
+        return (T) createProvider(getFactory(desiredObjectClass), a, b, c).call();
+    }
+
+    /**
+     * Provides the desired object. The object  returned will be created the
+     * first time this method is called, and all subsequent calls will return a
+     * cached instance of the same  object. Throws a NoFactoryException if no
+     * factory is registered for the class of the desired object. Throws an
+     * IllegalArgumentException when no factory is registered with the same
+     * number of arguments.
+     *
+     * @param desiredObjectClass is the class of the desired object.
+     * @param a is the first parameter to be passed to the registered factory.
+     * @param b is the second parameter to be passed to the registered factory.
+     * @param c is the third parameter to be passed to the registered factory.
+     * @param d is the fourth parameter to be passed to the registered factory.
+     *
+     * @return an instance of the desired object as provideSingletond by the registered factory.
+     */
+    public static <A, B, C, D, T> T provideNewInstance(Class<T> desiredObjectClass, A a, B b, C c, D d) {
+        return (T) createProvider(getFactory(desiredObjectClass), a, b, c, d).call();
+    }
+
+    /**
+     * @see Shank#provideNamedNewInstance(Class, String, Object, Object, Object, Object)
+     */
+    public static <T> T provideNamedNewInstance(Class<T> desiredObjectClass, String name) {
+        return (T) createProvider(getNamedFactory(desiredObjectClass, name)).call();
+    }
+
+    /**
+     * @see Shank#provideNamedNewInstance(Class, String, Object, Object, Object, Object)
+     */
+    public static <A, T> T provideNamedNewInstance(Class<T> desiredObjectClass, String name, A a) {
+        return (T) createProvider(getNamedFactory(desiredObjectClass, name), a).call();
+    }
+
+    /**
+     * @see Shank#provideNamedNewInstance(Class, String, Object, Object, Object, Object)
+     */
+    public static <A, B, T> T provideNamedNewInstance(Class<T> desiredObjectClass, String name, A a, B b) {
+        return (T) createProvider(getNamedFactory(desiredObjectClass, name), a, b).call();
+    }
+
+    /**
+     * @see Shank#provideNamedNewInstance(Class, String, Object, Object, Object, Object)
+     */
+    public static <A, B, C, T> T provideNamedNewInstance(Class<T> desiredObjectClass, String name, A a, B b, C c) {
+        return (T) createProvider(getNamedFactory(desiredObjectClass, name), a, b, c).call();
+    }
+
+    /**
+     * Provides the desired object. The object  returned will be created the
+     * first time this method is called, and all subsequent calls will return a
+     * cached instance of the same  object. Throws a NoFactoryException if no
+     * factory is registered for the class of the desired object. Throws an
+     * IllegalArgumentException when no factory is registered with the same
+     * number of arguments.
+     *
+     * @param desiredObjectClass is the class of the desired object.
+     * @param a is the first parameter to be passed to the registered factory.
+     * @param b is the second parameter to be passed to the registered factory.
+     * @param c is the third parameter to be passed to the registered factory.
+     * @param d is the fourth parameter to be passed to the registered factory.
+     *
+     * @return an instance of the desired object as provideSingletond by the registered factory.
+     */
+    public static <A, B, C, D, T> T provideNamedNewInstance(Class<T> desiredObjectClass, String name, A a, B b, C c, D d) {
+        return (T) createProvider(getNamedFactory(desiredObjectClass, name), a, b, c, d).call();
+    }
+
+
+    // Singleton providers
+
+    /**
+     * @see Shank#provideSingleton(Class, Object, Object, Object, Object)
+     */
+    public static <T> T provideSingleton(Class<T> desiredObjectClass) {
+        return providerHelper(desiredObjectClass, createProvider(getFactory(desiredObjectClass)));
+    }
+
+    /**
+     * @see Shank#provideSingleton(Class, Object, Object, Object, Object)
+     */
+    public static <A, T> T provideSingleton(Class<T> desiredObjectClass, A a) {
+        return providerHelper(desiredObjectClass, createProvider(getFactory(desiredObjectClass), a));
+    }
+
+    /**
+     * @see Shank#provideSingleton(Class, Object, Object, Object, Object)
+     */
+    public static <A, B, T> T provideSingleton(Class<T> desiredObjectClass, A a, B b) {
+        return providerHelper(desiredObjectClass, createProvider(getFactory(desiredObjectClass), a, b));
+    }
+
+    /**
+     * @see Shank#provideSingleton(Class, Object, Object, Object, Object)
+     */
+    public static <A, B, C, T> T provideSingleton(Class<T> desiredObjectClass, A a, B b, C c) {
+        return providerHelper(desiredObjectClass, createProvider(getFactory(desiredObjectClass), a, b, c));
+    }
+
+    /**
+     * Provides the desired object. The object  returned will be created the
+     * first time this method is called, and all subsequent calls will return a
+     * cached instance of the same  object. Throws a NoFactoryException if no
+     * factory is registered for the class of the desired object. Throws an
+     * IllegalArgumentException when no factory is registered with the same
+     * number of arguments.
+     *
+     * @param desiredObjectClass is the class of the desired object.
+     * @param a is the first parameter to be passed to the registered factory.
+     * @param b is the second parameter to be passed to the registered factory.
+     * @param c is the third parameter to be passed to the registered factory.
+     * @param d is the fourth parameter to be passed to the registered factory.
+     *
+     * @return an instance of the desired object as provideSingletond by the registered factory.
+     */
+    public static <A, B, C, D, T> T provideSingleton(Class<T> desiredObjectClass, A a, B b, C c, D d) {
+        return providerHelper(desiredObjectClass, createProvider(getFactory(desiredObjectClass), a, b, c, d));
+    }
+
+    /**
+     * @see Shank#provideNamed(Class, String, Object, Object, Object, Object)
+     */
+    public static <T> T provideSingletonNamed(Class<T> desiredObjectClass, String name) {
+        return namedProviderHelper(desiredObjectClass, name, createProvider(getNamedFactory(desiredObjectClass, name)));
+    }
+
+    /**
+     * @see Shank#provideSingletonNamed(Class, String, Object, Object, Object, Object)
+     */
+    public static <A, T> T provideSingletonNamed(Class<T> desiredObjectClass, String name, A a) {
+        return namedProviderHelper(desiredObjectClass, name,
+                createProvider(getNamedFactory(desiredObjectClass, name), a));
+    }
+
+    /**
+     * @see Shank#provideSingletonNamed(Class, String, Object, Object, Object, Object)
+     */
+    public static <A, B, T> T provideSingletonNamed(Class<T> desiredObjectClass, String name, A a, B b) {
+        return namedProviderHelper(desiredObjectClass, name,
+                createProvider(getNamedFactory(desiredObjectClass, name), a, b));
+    }
+
+    /**
+     * @see Shank#provideSingletonNamed(Class, String, Object, Object, Object, Object)
+     */
+    public static <A, B, C, T> T provideSingletonNamed(Class<T> desiredObjectClass, String name, A a, B b, C c) {
+        return namedProviderHelper(desiredObjectClass, name,
+                createProvider(getNamedFactory(desiredObjectClass, name), a, b, c));
+    }
+
+    /**
+     * Provides the desired object associated to the specified string
+     * identifier. The object  returned will be created the first time this
+     * method is called, and all subsequent calls will return a cached instance
+     * of the same  object. Throws a NoFactoryException if no factory is
+     * registered for the class of the desired object with the specified string
+     * identifier.
+     *
+     * @param desiredObjectClass is the class of the desired object.
+     * @param name               is the string identifier associated to a
+     *                           particular factory.
+     * @param a is the first parameter to be passed to the registered factory.
+     * @param b is the second parameter to be passed to the registered factory.
+     * @param c is the third parameter to be passed to the registered factory.
+     * @param d is the fourth parameter to be passed to the registered factory.
+     * @return an instance of the desired object as provideSingletond by the registered
+     * factory.
+     */
+    public static <A, B, C, D, T> T provideSingletonNamed(Class<T> desiredObjectClass, String name, A a, B b, C c, D d) {
+        return namedProviderHelper(desiredObjectClass, name,
+                createProvider(getNamedFactory(desiredObjectClass, name), a, b, c, d));
+    }
+
+    /**
      * @see Shank#provide(Class, Object, Object, Object, Object)
      */
     public static <T> T provide(Class<T> desiredObjectClass) {
@@ -128,21 +329,21 @@ public final class Shank {
     /**
      * @see Shank#registerNamedFactory(Class, String, Func4)
      */
-    public static <T> void registerNamedFactory(Class<T> objectClass, String factoryName, Func1 factory) {
+    public static <A, T> void registerNamedFactory(Class<T> objectClass, String factoryName, Func1<A, T> factory) {
         registerNamedFactoryRaw(objectClass, factoryName, factory);
     }
 
     /**
      * @see Shank#registerNamedFactory(Class, String, Func4)
      */
-    public static <T> void registerNamedFactory(Class<T> objectClass, String factoryName, Func2 factory) {
+    public static <A, B, T> void registerNamedFactory(Class<T> objectClass, String factoryName, Func2<A, B, T> factory) {
         registerNamedFactoryRaw(objectClass, factoryName, factory);
     }
 
     /**
      * @see Shank#registerNamedFactory(Class, String, Func4)
      */
-    public static <T> void registerNamedFactory(Class<T> objectClass, String factoryName, Func3 factory) {
+    public static <A, B, C, T> void registerNamedFactory(Class<T> objectClass, String factoryName, Func3<A, B, C, T> factory) {
         registerNamedFactoryRaw(objectClass, factoryName, factory);
     }
 
@@ -155,7 +356,7 @@ public final class Shank {
      * @param factory     is a factory method that will provide an instance of
      *                    the object.
      */
-    public static <T> void registerNamedFactory(Class<T> objectClass, String factoryName, Func4 factory) {
+    public static <A, B, C, D, T> void registerNamedFactory(Class<T> objectClass, String factoryName, Func4<A, B, C, D, T> factory) {
         registerNamedFactoryRaw(objectClass, factoryName, factory);
     }
 
