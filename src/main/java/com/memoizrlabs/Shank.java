@@ -71,30 +71,30 @@ public final class Shank {
     }
 
     /**
-     * @see Shank#provideNewInstance(Class, Object, Object, Object, Object)
+     * @see Shank#provideNew(Class, Object, Object, Object, Object)
      */
-    public static <T> T provideNewInstance(Class<T> desiredObjectClass) {
+    public static <T> T provideNew(Class<T> desiredObjectClass) {
         return (T) createProvider(getFactory(desiredObjectClass)).call();
     }
 
     /**
-     * @see Shank#provideNewInstance(Class, Object, Object, Object, Object)
+     * @see Shank#provideNew(Class, Object, Object, Object, Object)
      */
-    public static <A, T> T provideNewInstance(Class<T> desiredObjectClass, A a) {
+    public static <A, T> T provideNew(Class<T> desiredObjectClass, A a) {
         return (T) createProvider(getFactory(desiredObjectClass), a).call();
     }
 
     /**
-     * @see Shank#provideNewInstance(Class, Object, Object, Object, Object)
+     * @see Shank#provideNew(Class, Object, Object, Object, Object)
      */
-    public static <A, B, T> T provideNewInstance(Class<T> desiredObjectClass, A a, B b) {
+    public static <A, B, T> T provideNew(Class<T> desiredObjectClass, A a, B b) {
         return (T) createProvider(getFactory(desiredObjectClass), a, b).call();
     }
 
     /**
-     * @see Shank#provideNewInstance(Class, Object, Object, Object, Object)
+     * @see Shank#provideNew(Class, Object, Object, Object, Object)
      */
-    public static <A, B, C, T> T provideNewInstance(Class<T> desiredObjectClass, A a, B b, C c) {
+    public static <A, B, C, T> T provideNew(Class<T> desiredObjectClass, A a, B b, C c) {
         return (T) createProvider(getFactory(desiredObjectClass), a, b, c).call();
     }
 
@@ -114,35 +114,35 @@ public final class Shank {
      *
      * @return an instance of the desired object as provideSingletond by the registered factory.
      */
-    public static <A, B, C, D, T> T provideNewInstance(Class<T> desiredObjectClass, A a, B b, C c, D d) {
+    public static <A, B, C, D, T> T provideNew(Class<T> desiredObjectClass, A a, B b, C c, D d) {
         return (T) createProvider(getFactory(desiredObjectClass), a, b, c, d).call();
     }
 
     /**
-     * @see Shank#provideNamedNewInstance(Class, String, Object, Object, Object, Object)
+     * @see Shank#provideNamedNew(Class, String, Object, Object, Object, Object)
      */
-    public static <T> T provideNamedNewInstance(Class<T> desiredObjectClass, String name) {
+    public static <T> T provideNamedNew(Class<T> desiredObjectClass, String name) {
         return (T) createProvider(getNamedFactory(desiredObjectClass, name)).call();
     }
 
     /**
-     * @see Shank#provideNamedNewInstance(Class, String, Object, Object, Object, Object)
+     * @see Shank#provideNamedNew(Class, String, Object, Object, Object, Object)
      */
-    public static <A, T> T provideNamedNewInstance(Class<T> desiredObjectClass, String name, A a) {
+    public static <A, T> T provideNamedNew(Class<T> desiredObjectClass, String name, A a) {
         return (T) createProvider(getNamedFactory(desiredObjectClass, name), a).call();
     }
 
     /**
-     * @see Shank#provideNamedNewInstance(Class, String, Object, Object, Object, Object)
+     * @see Shank#provideNamedNew(Class, String, Object, Object, Object, Object)
      */
-    public static <A, B, T> T provideNamedNewInstance(Class<T> desiredObjectClass, String name, A a, B b) {
+    public static <A, B, T> T provideNamedNew(Class<T> desiredObjectClass, String name, A a, B b) {
         return (T) createProvider(getNamedFactory(desiredObjectClass, name), a, b).call();
     }
 
     /**
-     * @see Shank#provideNamedNewInstance(Class, String, Object, Object, Object, Object)
+     * @see Shank#provideNamedNew(Class, String, Object, Object, Object, Object)
      */
-    public static <A, B, C, T> T provideNamedNewInstance(Class<T> desiredObjectClass, String name, A a, B b, C c) {
+    public static <A, B, C, T> T provideNamedNew(Class<T> desiredObjectClass, String name, A a, B b, C c) {
         return (T) createProvider(getNamedFactory(desiredObjectClass, name), a, b, c).call();
     }
 
@@ -162,7 +162,7 @@ public final class Shank {
      *
      * @return an instance of the desired object as provideSingletond by the registered factory.
      */
-    public static <A, B, C, D, T> T provideNamedNewInstance(Class<T> desiredObjectClass, String name, A a, B b, C c, D d) {
+    public static <A, B, C, D, T> T provideNamedNew(Class<T> desiredObjectClass, String name, A a, B b, C c, D d) {
         return (T) createProvider(getNamedFactory(desiredObjectClass, name), a, b, c, d).call();
     }
 
@@ -274,6 +274,7 @@ public final class Shank {
     /**
      * @see Shank#provide(Class, Object, Object, Object, Object)
      */
+    @Deprecated
     public static <T> T provide(Class<T> desiredObjectClass) {
         return providerHelper(desiredObjectClass, createProvider(getFactory(desiredObjectClass)));
     }
@@ -281,6 +282,7 @@ public final class Shank {
     /**
      * @see Shank#provide(Class, Object, Object, Object, Object)
      */
+    @Deprecated
     public static <A, T> T provide(Class<T> desiredObjectClass, A a) {
         return providerHelper(desiredObjectClass, createProvider(getFactory(desiredObjectClass), a));
     }
@@ -288,6 +290,7 @@ public final class Shank {
     /**
      * @see Shank#provide(Class, Object, Object, Object, Object)
      */
+    @Deprecated
     public static <A, B, T> T provide(Class<T> desiredObjectClass, A a, B b) {
         return providerHelper(desiredObjectClass, createProvider(getFactory(desiredObjectClass), a, b));
     }
@@ -295,6 +298,7 @@ public final class Shank {
     /**
      * @see Shank#provide(Class, Object, Object, Object, Object)
      */
+    @Deprecated
     public static <A, B, C, T> T provide(Class<T> desiredObjectClass, A a, B b, C c) {
         return providerHelper(desiredObjectClass, createProvider(getFactory(desiredObjectClass), a, b, c));
     }
@@ -315,6 +319,7 @@ public final class Shank {
      *
      * @return an instance of the desired object as provided by the registered factory.
      */
+    @Deprecated
     public static <A, B, C, D, T> T provide(Class<T> desiredObjectClass, A a, B b, C c, D d) {
         return providerHelper(desiredObjectClass, createProvider(getFactory(desiredObjectClass), a, b, c, d));
     }

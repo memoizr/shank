@@ -33,8 +33,8 @@ public class ShankAcceptanceTest {
     public void provideNewInstanceProvides_whenObjectHasFactoryWithNoArgs_provideNewInstanceEveryTime() {
         Shank.registerFactory(ArrayList.class, () -> new ArrayList<>());
 
-        final Object providedNewInstance = Shank.provideNewInstance(FooObject.class);
-        final Object otherProvidedNewInstance = Shank.provideNewInstance(FooObject.class);
+        final Object providedNewInstance = Shank.provideNew(FooObject.class);
+        final Object otherProvidedNewInstance = Shank.provideNew(FooObject.class);
 
         assertTrue(providedNewInstance != null);
         assertTrue(otherProvidedNewInstance != null);
@@ -47,8 +47,8 @@ public class ShankAcceptanceTest {
     public void provideNewInstanceProvides_whenObjectHasFactoryWith_1_Args_provideNewInstanceEveryTime() {
         Shank.registerFactory(List.class, Collections::singletonList);
 
-        final Object providedNewInstance = Shank.provideNewInstance(List.class, "a");
-        final Object otherProvidedNewInstance = Shank.provideNewInstance(List.class, "a");
+        final Object providedNewInstance = Shank.provideNew(List.class, "a");
+        final Object otherProvidedNewInstance = Shank.provideNew(List.class, "a");
 
         assertTrue(providedNewInstance != null);
         assertTrue(otherProvidedNewInstance != null);
@@ -62,8 +62,8 @@ public class ShankAcceptanceTest {
     public void provideNewInstanceProvides_whenObjectHasFactoryWith_2_Args_provideNewInstanceEveryTime() {
         Shank.registerFactory(List.class, (a, b) -> asList(a, b));
 
-        final Object providedNewInstance = Shank.provideNewInstance(List.class, "a", "b");
-        final Object otherProvidedNewInstance = Shank.provideNewInstance(List.class, "a", "b");
+        final Object providedNewInstance = Shank.provideNew(List.class, "a", "b");
+        final Object otherProvidedNewInstance = Shank.provideNew(List.class, "a", "b");
 
         assertTrue(providedNewInstance != null);
         assertTrue(otherProvidedNewInstance != null);
@@ -76,8 +76,8 @@ public class ShankAcceptanceTest {
     public void provideNewInstanceProvides_whenObjectHasFactoryWith_3_Args_provideNewInstanceEveryTime() {
         Shank.registerFactory(List.class, (a, b, c) -> asList(a, b, c));
 
-        final Object providedNewInstance = Shank.provideNewInstance(List.class, "a", "b", "c");
-        final Object otherProvidedNewInstance = Shank.provideNewInstance(List.class, "a", "b", "c");
+        final Object providedNewInstance = Shank.provideNew(List.class, "a", "b", "c");
+        final Object otherProvidedNewInstance = Shank.provideNew(List.class, "a", "b", "c");
 
         assertTrue(providedNewInstance != null);
         assertTrue(otherProvidedNewInstance != null);
@@ -90,8 +90,8 @@ public class ShankAcceptanceTest {
     public void provideNewInstanceProvides_whenObjectHasFactoryWith_4_Args_provideNewInstanceEveryTime() {
         Shank.registerFactory(List.class, (a, b, c, d) -> asList(a, b, c, d));
 
-        final Object providedNewInstance = Shank.provideNewInstance(List.class, "a", "b", "c", "d");
-        final Object otherProvidedNewInstance = Shank.provideNewInstance(List.class, "a", "b", "c", "d");
+        final Object providedNewInstance = Shank.provideNew(List.class, "a", "b", "c", "d");
+        final Object otherProvidedNewInstance = Shank.provideNew(List.class, "a", "b", "c", "d");
 
         assertTrue(providedNewInstance != null);
         assertTrue(otherProvidedNewInstance != null);
@@ -105,11 +105,11 @@ public class ShankAcceptanceTest {
         Shank.registerNamedFactory(List.class, "one", () -> new ArrayList<>());
         Shank.registerNamedFactory(List.class, "two", () -> new LinkedList<>());
 
-        final Object firstProvidedNewInstance = Shank.provideNamedNewInstance(List.class, "one");
-        final Object secondProvidedNewInstance = Shank.provideNamedNewInstance(List.class, "one");
+        final Object firstProvidedNewInstance = Shank.provideNamedNew(List.class, "one");
+        final Object secondProvidedNewInstance = Shank.provideNamedNew(List.class, "one");
 
-        final Object firstOtherProvidedNewInstance = Shank.provideNamedNewInstance(List.class, "two");
-        final Object secondOtherProvidedNewInstance = Shank.provideNamedNewInstance(List.class, "two");
+        final Object firstOtherProvidedNewInstance = Shank.provideNamedNew(List.class, "two");
+        final Object secondOtherProvidedNewInstance = Shank.provideNamedNew(List.class, "two");
 
         assertTrue(firstProvidedNewInstance != null);
         assertTrue(firstOtherProvidedNewInstance != null);
@@ -129,11 +129,11 @@ public class ShankAcceptanceTest {
         Shank.registerNamedFactory(List.class, "one", (String a) -> new ArrayList<String>(){{add(a);}});
         Shank.registerNamedFactory(List.class, "two", (String a) -> new LinkedList<String>(){{add(a);}});
 
-        final Object firstProvidedNewInstance = Shank.provideNamedNewInstance(List.class, "one", "a");
-        final Object secondProvidedNewInstance = Shank.provideNamedNewInstance(List.class, "one", "a");
+        final Object firstProvidedNewInstance = Shank.provideNamedNew(List.class, "one", "a");
+        final Object secondProvidedNewInstance = Shank.provideNamedNew(List.class, "one", "a");
 
-        final Object firstOtherProvidedNewInstance = Shank.provideNamedNewInstance(List.class, "two", "a");
-        final Object secondOtherProvidedNewInstance = Shank.provideNamedNewInstance(List.class, "two", "a");
+        final Object firstOtherProvidedNewInstance = Shank.provideNamedNew(List.class, "two", "a");
+        final Object secondOtherProvidedNewInstance = Shank.provideNamedNew(List.class, "two", "a");
 
         assertTrue(firstProvidedNewInstance != null);
         assertTrue(firstOtherProvidedNewInstance != null);
@@ -153,11 +153,11 @@ public class ShankAcceptanceTest {
         Shank.registerNamedFactory(List.class, "one", (String a, String b) -> new ArrayList<String>(){{add(a); add(b);}});
         Shank.registerNamedFactory(List.class, "two", (String a, String b) -> new LinkedList<String>(){{add(a); add(b);}});
 
-        final Object firstProvidedNewInstance = Shank.provideNamedNewInstance(List.class, "one", "a", "b");
-        final Object secondProvidedNewInstance = Shank.provideNamedNewInstance(List.class, "one", "a", "b");
+        final Object firstProvidedNewInstance = Shank.provideNamedNew(List.class, "one", "a", "b");
+        final Object secondProvidedNewInstance = Shank.provideNamedNew(List.class, "one", "a", "b");
 
-        final Object firstOtherProvidedNewInstance = Shank.provideNamedNewInstance(List.class, "two", "a", "b");
-        final Object secondOtherProvidedNewInstance = Shank.provideNamedNewInstance(List.class, "two", "a", "b");
+        final Object firstOtherProvidedNewInstance = Shank.provideNamedNew(List.class, "two", "a", "b");
+        final Object secondOtherProvidedNewInstance = Shank.provideNamedNew(List.class, "two", "a", "b");
 
         assertTrue(firstProvidedNewInstance != null);
         assertTrue(firstOtherProvidedNewInstance != null);
@@ -177,11 +177,11 @@ public class ShankAcceptanceTest {
         Shank.registerNamedFactory(List.class, "one", (String a, String b, String c) -> new ArrayList<String>(){{add(a); add(b); add(c);}});
         Shank.registerNamedFactory(List.class, "two", (String a, String b, String c) -> new LinkedList<String>(){{add(a); add(b); add(c);}});
 
-        final Object firstProvidedNewInstance = Shank.provideNamedNewInstance(List.class, "one", "a", "b", "c");
-        final Object secondProvidedNewInstance = Shank.provideNamedNewInstance(List.class, "one", "a", "b", "c");
+        final Object firstProvidedNewInstance = Shank.provideNamedNew(List.class, "one", "a", "b", "c");
+        final Object secondProvidedNewInstance = Shank.provideNamedNew(List.class, "one", "a", "b", "c");
 
-        final Object firstOtherProvidedNewInstance = Shank.provideNamedNewInstance(List.class, "two", "a", "b", "c");
-        final Object secondOtherProvidedNewInstance = Shank.provideNamedNewInstance(List.class, "two", "a", "b", "c");
+        final Object firstOtherProvidedNewInstance = Shank.provideNamedNew(List.class, "two", "a", "b", "c");
+        final Object secondOtherProvidedNewInstance = Shank.provideNamedNew(List.class, "two", "a", "b", "c");
 
         assertTrue(firstProvidedNewInstance != null);
         assertTrue(firstOtherProvidedNewInstance != null);
@@ -201,11 +201,11 @@ public class ShankAcceptanceTest {
         Shank.registerNamedFactory(List.class, "one", (String a, String b, String c, String d) -> new ArrayList<String>(){{add(a); add(b); add(c); add(d);}});
         Shank.registerNamedFactory(List.class, "two", (String a, String b, String c, String d) -> new LinkedList<String>(){{add(a); add(b); add(c); add(d);}});
 
-        final Object firstProvidedNewInstance = Shank.provideNamedNewInstance(List.class, "one", "a", "b", "c", "d");
-        final Object secondProvidedNewInstance = Shank.provideNamedNewInstance(List.class, "one", "a", "b", "c", "d");
+        final Object firstProvidedNewInstance = Shank.provideNamedNew(List.class, "one", "a", "b", "c", "d");
+        final Object secondProvidedNewInstance = Shank.provideNamedNew(List.class, "one", "a", "b", "c", "d");
 
-        final Object firstOtherProvidedNewInstance = Shank.provideNamedNewInstance(List.class, "two", "a", "b", "c", "d");
-        final Object secondOtherProvidedNewInstance = Shank.provideNamedNewInstance(List.class, "two", "a", "b", "c", "d");
+        final Object firstOtherProvidedNewInstance = Shank.provideNamedNew(List.class, "two", "a", "b", "c", "d");
+        final Object secondOtherProvidedNewInstance = Shank.provideNamedNew(List.class, "two", "a", "b", "c", "d");
 
         assertTrue(firstProvidedNewInstance != null);
         assertTrue(firstOtherProvidedNewInstance != null);
