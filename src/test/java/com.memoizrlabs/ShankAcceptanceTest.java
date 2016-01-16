@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.memoizrlabs.Shank.Scope.scope;
+import static com.memoizrlabs.Scope.scope;
 import static java.util.Arrays.asList;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertNotNull;
@@ -104,11 +104,11 @@ public class ShankAcceptanceTest {
         Shank.registerNamedFactory(List.class, "one", () -> new ArrayList<>());
         Shank.registerNamedFactory(List.class, "two", () -> new LinkedList<>());
 
-        final Object firstProvidedNewInstance = Shank.provideNamedNew(List.class, "one");
-        final Object secondProvidedNewInstance = Shank.provideNamedNew(List.class, "one");
+        final Object firstProvidedNewInstance = Shank.named("one").provideNew(List.class);
+        final Object secondProvidedNewInstance = Shank.named("one").provideNew(List.class);
 
-        final Object firstOtherProvidedNewInstance = Shank.provideNamedNew(List.class, "two");
-        final Object secondOtherProvidedNewInstance = Shank.provideNamedNew(List.class, "two");
+        final Object firstOtherProvidedNewInstance = Shank.named("two").provideNew(List.class);
+        final Object secondOtherProvidedNewInstance = Shank.named("two").provideNew(List.class);
 
         assertTrue(firstProvidedNewInstance != null);
         assertTrue(firstOtherProvidedNewInstance != null);
@@ -128,11 +128,11 @@ public class ShankAcceptanceTest {
         Shank.registerNamedFactory(List.class, "one", (String a) -> new ArrayList<String>(){{add(a);}});
         Shank.registerNamedFactory(List.class, "two", (String a) -> new LinkedList<String>(){{add(a);}});
 
-        final Object firstProvidedNewInstance = Shank.provideNamedNew(List.class, "one", "a");
-        final Object secondProvidedNewInstance = Shank.provideNamedNew(List.class, "one", "a");
+        final Object firstProvidedNewInstance = Shank.named("one").provideNew(List.class, "a");
+        final Object secondProvidedNewInstance = Shank.named("one").provideNew(List.class, "a");
 
-        final Object firstOtherProvidedNewInstance = Shank.provideNamedNew(List.class, "two", "a");
-        final Object secondOtherProvidedNewInstance = Shank.provideNamedNew(List.class, "two", "a");
+        final Object firstOtherProvidedNewInstance = Shank.named("two").provideNew(List.class, "a");
+        final Object secondOtherProvidedNewInstance = Shank.named("two").provideNew(List.class, "a");
 
         assertTrue(firstProvidedNewInstance != null);
         assertTrue(firstOtherProvidedNewInstance != null);
@@ -152,11 +152,11 @@ public class ShankAcceptanceTest {
         Shank.registerNamedFactory(List.class, "one", (String a, String b) -> new ArrayList<String>(){{add(a); add(b);}});
         Shank.registerNamedFactory(List.class, "two", (String a, String b) -> new LinkedList<String>(){{add(a); add(b);}});
 
-        final Object firstProvidedNewInstance = Shank.provideNamedNew(List.class, "one", "a", "b");
-        final Object secondProvidedNewInstance = Shank.provideNamedNew(List.class, "one", "a", "b");
+        final Object firstProvidedNewInstance = Shank.named("one").provideNew(List.class, "a", "b");
+        final Object secondProvidedNewInstance = Shank.named("one").provideNew(List.class, "a", "b");
 
-        final Object firstOtherProvidedNewInstance = Shank.provideNamedNew(List.class, "two", "a", "b");
-        final Object secondOtherProvidedNewInstance = Shank.provideNamedNew(List.class, "two", "a", "b");
+        final Object firstOtherProvidedNewInstance = Shank.named("two").provideNew(List.class, "a", "b");
+        final Object secondOtherProvidedNewInstance = Shank.named("two").provideNew(List.class, "a", "b");
 
         assertTrue(firstProvidedNewInstance != null);
         assertTrue(firstOtherProvidedNewInstance != null);
@@ -176,11 +176,11 @@ public class ShankAcceptanceTest {
         Shank.registerNamedFactory(List.class, "one", (String a, String b, String c) -> new ArrayList<String>(){{add(a); add(b); add(c);}});
         Shank.registerNamedFactory(List.class, "two", (String a, String b, String c) -> new LinkedList<String>(){{add(a); add(b); add(c);}});
 
-        final Object firstProvidedNewInstance = Shank.provideNamedNew(List.class, "one", "a", "b", "c");
-        final Object secondProvidedNewInstance = Shank.provideNamedNew(List.class, "one", "a", "b", "c");
+        final Object firstProvidedNewInstance = Shank.named("one").provideNew(List.class, "a", "b", "c");
+        final Object secondProvidedNewInstance = Shank.named("one").provideNew(List.class, "a", "b", "c");
 
-        final Object firstOtherProvidedNewInstance = Shank.provideNamedNew(List.class, "two", "a", "b", "c");
-        final Object secondOtherProvidedNewInstance = Shank.provideNamedNew(List.class, "two", "a", "b", "c");
+        final Object firstOtherProvidedNewInstance = Shank.named("two").provideNew(List.class, "a", "b", "c");
+        final Object secondOtherProvidedNewInstance = Shank.named("two").provideNew(List.class, "a", "b", "c");
 
         assertTrue(firstProvidedNewInstance != null);
         assertTrue(firstOtherProvidedNewInstance != null);
@@ -200,11 +200,11 @@ public class ShankAcceptanceTest {
         Shank.registerNamedFactory(List.class, "one", (String a, String b, String c, String d) -> new ArrayList<String>(){{add(a); add(b); add(c); add(d);}});
         Shank.registerNamedFactory(List.class, "two", (String a, String b, String c, String d) -> new LinkedList<String>(){{add(a); add(b); add(c); add(d);}});
 
-        final Object firstProvidedNewInstance = Shank.provideNamedNew(List.class, "one", "a", "b", "c", "d");
-        final Object secondProvidedNewInstance = Shank.provideNamedNew(List.class, "one", "a", "b", "c", "d");
+        final Object firstProvidedNewInstance = Shank.named("one").provideNew(List.class, "a", "b", "c", "d");
+        final Object secondProvidedNewInstance = Shank.named("one").provideNew(List.class, "a", "b", "c", "d");
 
-        final Object firstOtherProvidedNewInstance = Shank.provideNamedNew(List.class, "two", "a", "b", "c", "d");
-        final Object secondOtherProvidedNewInstance = Shank.provideNamedNew(List.class, "two", "a", "b", "c", "d");
+        final Object firstOtherProvidedNewInstance = Shank.named("two").provideNew(List.class, "a", "b", "c", "d");
+        final Object secondOtherProvidedNewInstance = Shank.named("two").provideNew(List.class, "a", "b", "c", "d");
 
         assertTrue(firstProvidedNewInstance != null);
         assertTrue(firstOtherProvidedNewInstance != null);
@@ -297,8 +297,8 @@ public class ShankAcceptanceTest {
         Shank.registerNamedFactory(FooObject.class, "first", ChildFooObject::new);
         Shank.registerNamedFactory(FooObject.class, "second", OtherChildFooObject::new);
 
-        final Object first = Shank.provideNamedSingleton(FooObject.class, "first");
-        final Object second = Shank.provideNamedSingleton(FooObject.class, "second");
+        final Object first = Shank.named("first").provide(FooObject.class);
+        final Object second = Shank.named("second").provide(FooObject.class);
 
         assertTrue(first != null);
         assertTrue(second != null);
@@ -311,7 +311,7 @@ public class ShankAcceptanceTest {
     public void provideSingleton_whenObjectHasNamedFactoryWith1Arguments_provideSingletonsRightObject() {
         Shank.registerNamedFactory(List.class, "name", (a) -> asList("a"));
 
-        final List provideSingletond = Shank.provideNamedSingleton(List.class, "name", "a");
+        final List provideSingletond = Shank.named("name").provide(List.class, "a");
         assertThat(provideSingletond, is(Collections.singletonList("a")));
     }
 
@@ -319,7 +319,7 @@ public class ShankAcceptanceTest {
     public void provideSingleton_whenObjectHasNamedFactoryWith2Arguments_provideSingletonsRightObject() {
         Shank.registerNamedFactory(List.class, "name", (a, b) -> asList(a, b));
 
-        final List provideSingletond = Shank.provideNamedSingleton(List.class, "name", "a", "b");
+        final List provideSingletond = Shank.named("name").provide(List.class, "a", "b");
         assertThat(provideSingletond, is(asList("a", "b")));
     }
 
@@ -327,7 +327,7 @@ public class ShankAcceptanceTest {
     public void provideSingleton_whenObjectHasNamedFactoryWith3Arguments_provideSingletonsRightObject() {
         Shank.registerNamedFactory(List.class, "name", (a, b, c) -> asList(a, b, c));
 
-        final List provideSingletond = Shank.provideNamedSingleton(List.class, "name", "a", "b", "c");
+        final List provideSingletond = Shank.named("name").provide(List.class, "a", "b", "c");
         assertThat(provideSingletond, is(asList("a", "b", "c")));
     }
 
@@ -335,7 +335,7 @@ public class ShankAcceptanceTest {
     public void provideSingleton_whenObjectHasNamedFactoryWith4Arguments_provideSingletonsRightObject() {
         Shank.registerNamedFactory(List.class, "name", (a, b, c, d) -> asList(a, b, c, d));
 
-        final List provideSingletond = Shank.provideNamedSingleton(List.class, "name", "a", "b", "c", "d");
+        final List provideSingletond = Shank.named("name").provide(List.class, "a", "b", "c", "d");
         assertThat(provideSingletond, is(asList("a", "b", "c", "d")));
     }
 
@@ -444,7 +444,7 @@ public class ShankAcceptanceTest {
     @Test
     public void withScope_andWithClearScope_whenCalledMultipleTimes_returnsDifferentObjectForScope() {
         Shank.registerFactory(FooObject.class, FooObject::new);
-        Shank.Scope scope = scope(OtherChildFooObject.class);
+        Scope scope = scope(OtherChildFooObject.class);
 
         final FooObject provided = Shank.with(scope).provide(FooObject.class);
         scope.clear();
@@ -472,15 +472,30 @@ public class ShankAcceptanceTest {
         assertTrue(second instanceof OtherChildFooObject);
     }
 
-//    @Test
-//    public void withScope_whenHasNamedFactory_returnsObjectForNameAndScope_with_1_arguments() {
-//        Shank.registerNamedFactory(List.class, "list", (a) -> asList(a));
-//        List provided = Shank.with(scope("a scope")).provideNamed(List.class, "list", "a");
-//
-//        assertTrue(provided != null);
-//        assertThat(provided, is(asList("a")));
-//    }
-//
+    @Test
+    public void withScope_invertedBuilder_whenHasNamedFactory_returnsObjectForNameAndScope_with_0_arguments() {
+        Shank.registerNamedFactory(FooObject.class, "first", ChildFooObject::new);
+        Shank.registerNamedFactory(FooObject.class, "second", OtherChildFooObject::new);
+
+        FooObject first = Shank.named("first").with(scope(OtherFooObject.class)).provide(FooObject.class);
+        FooObject second = Shank.named("second").with(scope(OtherFooObject.class)).provide(FooObject.class);
+
+        assertTrue(first != null);
+        assertTrue(second != null);
+        assertTrue(second != first);
+        assertTrue(first instanceof ChildFooObject);
+        assertTrue(second instanceof OtherChildFooObject);
+    }
+
+    @Test
+    public void withScope_whenHasNamedFactory_returnsObjectForNameAndScope_with_1_arguments() {
+        Shank.registerNamedFactory(List.class, "list", (a) -> asList(a));
+        List provided = Shank.with(scope("a scope")).named("list").provide(List.class, "a");
+
+        assertTrue(provided != null);
+        assertThat(provided, is(asList("a")));
+    }
+
     @Test
     public void withScope_whenHasNamedFactory_returnsObjectForNameAndScope_with_2_arguments() {
         Shank.registerNamedFactory(List.class, "list", (a, b) -> asList(a, b));
@@ -511,7 +526,7 @@ public class ShankAcceptanceTest {
     @Test
     public void withScope_whenHasNamedFactory_andScopeIsCleared_returnsDifferentObjects() {
         Shank.registerNamedFactory(FooObject.class, "object", FooObject::new);
-        final Shank.Scope scope = scope(OtherFooObject.class);
+        final Scope scope = scope(OtherFooObject.class);
         FooObject first = Shank.with(scope).named("object").provide(FooObject.class);
 
         scope.clear();
@@ -526,7 +541,7 @@ public class ShankAcceptanceTest {
     public void withObjectScope_whenHasNamedFactory_andScopeIsCleared_returnsDifferentObjects() {
         Shank.registerNamedFactory(FooObject.class, "object", FooObject::new);
 
-        final Shank.Scope scope = scope("foo");
+        final Scope scope = scope("foo");
         FooObject first = Shank.with(scope).named("object").provide(FooObject.class);
         scope.clear();
         FooObject other = Shank.with(scope).named("object").provide(FooObject.class);
