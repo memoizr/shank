@@ -19,14 +19,9 @@ import static com.memoizrlabs.Provider.createProvider;
  */
 public final class Shank {
 
-    private static final Map<Class, Object> unscopedCache = new HashMap<>();
-    private static final Map<Class, Map<String, Object>> unscopedNamedCache = new HashMap<>();
-
-    private static final Map<Class, Function> factoryRegister = new HashMap<>();
+    private static final Map<Class, Map<String, Object>> unscopedCache = new HashMap<>();
     private static final Map<Class, Map<String, Function>> namedFactoryRegister = new HashMap<>();
-
-    private static final Map<Object, Map<Class, Object>> scopedCache = new HashMap<>();
-    private static final Map<Object, Map<Class, Map<String, Object>>> scopedNamedCache = new HashMap<>();
+    private static final Map<Object, Map<Class, Map<String, Object>>> scopedCache = new HashMap<>();
 
     private Shank() {
     }
@@ -35,28 +30,28 @@ public final class Shank {
      * @see Shank#registerFactory(Class, Func4)
      */
     public static <T> void registerFactory(Class<T> objectClass, Func0<T> factory) {
-        registerFactoryRaw(objectClass, factory);
+        registerNamedFactory(objectClass, "", factory);
     }
 
     /**
      * @see Shank#registerFactory(Class, Func4)
      */
     public static <A, T> void registerFactory(Class<T> objectClass, Func1<A, T> factory) {
-        registerFactoryRaw(objectClass, factory);
+        registerNamedFactory(objectClass, "", factory);
     }
 
     /**
      * @see Shank#registerFactory(Class, Func4)
      */
     public static <A, B, T> void registerFactory(Class<T> objectClass, Func2<A, B, T> factory) {
-        registerFactoryRaw(objectClass, factory);
+        registerNamedFactory(objectClass, "", factory);
     }
 
     /**
      * @see Shank#registerFactory(Class, Func4)
      */
     public static <A, B, C, T> void registerFactory(Class<T> objectClass, Func3<A, B, C, T> factory) {
-        registerFactoryRaw(objectClass, factory);
+        registerNamedFactory(objectClass, "", factory);
     }
 
     /**
@@ -67,35 +62,39 @@ public final class Shank {
      *                    the object.
      */
     public static <A, B, C, D, T> void registerFactory(Class<T> objectClass, Func4<A, B, C, D, T> factory) {
-        registerFactoryRaw(objectClass, factory);
+        registerNamedFactory(objectClass, "", factory);
     }
 
     /**
      * @see Shank#provideNew(Class, Object, Object, Object, Object)
      */
+    @SuppressWarnings("unchecked")
     public static <T> T provideNew(Class<T> desiredObjectClass) {
-        return (T) createProvider(getFactory(desiredObjectClass)).call();
+        return (T) createProvider(getFactory(desiredObjectClass, "")).call();
     }
 
     /**
      * @see Shank#provideNew(Class, Object, Object, Object, Object)
      */
+    @SuppressWarnings("unchecked")
     public static <A, T> T provideNew(Class<T> desiredObjectClass, A a) {
-        return (T) createProvider(getFactory(desiredObjectClass), a).call();
+        return (T) createProvider(getFactory(desiredObjectClass, ""), a).call();
     }
 
     /**
      * @see Shank#provideNew(Class, Object, Object, Object, Object)
      */
+    @SuppressWarnings("unchecked")
     public static <A, B, T> T provideNew(Class<T> desiredObjectClass, A a, B b) {
-        return (T) createProvider(getFactory(desiredObjectClass), a, b).call();
+        return (T) createProvider(getFactory(desiredObjectClass, ""), a, b).call();
     }
 
     /**
      * @see Shank#provideNew(Class, Object, Object, Object, Object)
      */
+    @SuppressWarnings("unchecked")
     public static <A, B, C, T> T provideNew(Class<T> desiredObjectClass, A a, B b, C c) {
-        return (T) createProvider(getFactory(desiredObjectClass), a, b, c).call();
+        return (T) createProvider(getFactory(desiredObjectClass, ""), a, b, c).call();
     }
 
     /**
@@ -113,36 +112,41 @@ public final class Shank {
      * @param d                  is the fourth parameter to be passed to the registered factory.
      * @return an instance of the desired object as provideSingletond by the registered factory.
      */
+    @SuppressWarnings("unchecked")
     public static <A, B, C, D, T> T provideNew(Class<T> desiredObjectClass, A a, B b, C c, D d) {
-        return (T) createProvider(getFactory(desiredObjectClass), a, b, c, d).call();
+        return (T) createProvider(getFactory(desiredObjectClass, ""), a, b, c, d).call();
     }
 
     /**
      * @see Shank#provideNamedNew(Class, String, Object, Object, Object, Object)
      */
+    @SuppressWarnings("unchecked")
     public static <T> T provideNamedNew(Class<T> desiredObjectClass, String name) {
-        return (T) createProvider(getNamedFactory(desiredObjectClass, name)).call();
+        return (T) createProvider(getFactory(desiredObjectClass, name)).call();
     }
 
     /**
      * @see Shank#provideNamedNew(Class, String, Object, Object, Object, Object)
      */
+    @SuppressWarnings("unchecked")
     public static <A, T> T provideNamedNew(Class<T> desiredObjectClass, String name, A a) {
-        return (T) createProvider(getNamedFactory(desiredObjectClass, name), a).call();
+        return (T) createProvider(getFactory(desiredObjectClass, name), a).call();
     }
 
     /**
      * @see Shank#provideNamedNew(Class, String, Object, Object, Object, Object)
      */
+    @SuppressWarnings("unchecked")
     public static <A, B, T> T provideNamedNew(Class<T> desiredObjectClass, String name, A a, B b) {
-        return (T) createProvider(getNamedFactory(desiredObjectClass, name), a, b).call();
+        return (T) createProvider(getFactory(desiredObjectClass, name), a, b).call();
     }
 
     /**
      * @see Shank#provideNamedNew(Class, String, Object, Object, Object, Object)
      */
+    @SuppressWarnings("unchecked")
     public static <A, B, C, T> T provideNamedNew(Class<T> desiredObjectClass, String name, A a, B b, C c) {
-        return (T) createProvider(getNamedFactory(desiredObjectClass, name), a, b, c).call();
+        return (T) createProvider(getFactory(desiredObjectClass, name), a, b, c).call();
     }
 
     /**
@@ -160,8 +164,9 @@ public final class Shank {
      * @param d                  is the fourth parameter to be passed to the registered factory.
      * @return an instance of the desired object as provideSingletond by the registered factory.
      */
+    @SuppressWarnings("unchecked")
     public static <A, B, C, D, T> T provideNamedNew(Class<T> desiredObjectClass, String name, A a, B b, C c, D d) {
-        return (T) createProvider(getNamedFactory(desiredObjectClass, name), a, b, c, d).call();
+        return (T) createProvider(getFactory(desiredObjectClass, name), a, b, c, d).call();
     }
 
     // Singleton providers
@@ -214,10 +219,10 @@ public final class Shank {
     }
 
     /**
-     * @see Shank#provideNamed(Class, String, Object, Object, Object, Object)
+     * @see Shank#provideNamedSingleton(Class, String, Object, Object, Object, Object)
      */
     public static <T> T provideNamedSingleton(Class<T> desiredObjectClass, String name) {
-        return namedProviderHelper(desiredObjectClass, name, createProvider(getNamedFactory(desiredObjectClass, name)));
+        return namedProviderHelper(desiredObjectClass, name, createProvider(getFactory(desiredObjectClass, name)));
     }
 
     /**
@@ -225,7 +230,7 @@ public final class Shank {
      */
     public static <A, T> T provideNamedSingleton(Class<T> desiredObjectClass, String name, A a) {
         return namedProviderHelper(desiredObjectClass, name,
-                createProvider(getNamedFactory(desiredObjectClass, name), a));
+                createProvider(getFactory(desiredObjectClass, name), a));
     }
 
     /**
@@ -233,7 +238,7 @@ public final class Shank {
      */
     public static <A, B, T> T provideNamedSingleton(Class<T> desiredObjectClass, String name, A a, B b) {
         return namedProviderHelper(desiredObjectClass, name,
-                createProvider(getNamedFactory(desiredObjectClass, name), a, b));
+                createProvider(getFactory(desiredObjectClass, name), a, b));
     }
 
     /**
@@ -241,7 +246,7 @@ public final class Shank {
      */
     public static <A, B, C, T> T provideNamedSingleton(Class<T> desiredObjectClass, String name, A a, B b, C c) {
         return namedProviderHelper(desiredObjectClass, name,
-                createProvider(getNamedFactory(desiredObjectClass, name), a, b, c));
+                createProvider(getFactory(desiredObjectClass, name), a, b, c));
     }
 
     /**
@@ -265,7 +270,7 @@ public final class Shank {
     public static <A, B, C, D, T> T provideNamedSingleton(Class<T> desiredObjectClass, String name, A a, B b, C c,
             D d) {
         return namedProviderHelper(desiredObjectClass, name,
-                createProvider(getNamedFactory(desiredObjectClass, name), a, b, c, d));
+                createProvider(getFactory(desiredObjectClass, name), a, b, c, d));
     }
 
     /**
@@ -313,67 +318,11 @@ public final class Shank {
     }
 
     /**
-     * @see Shank#provideNamed(Class, String, Object, Object, Object, Object)
-     */
-    public static <T> T provideNamed(Class<T> desiredObjectClass, String name) {
-        return namedProviderHelper(desiredObjectClass, name, createProvider(getNamedFactory(desiredObjectClass, name)));
-    }
-
-    /**
-     * @see Shank#provideNamed(Class, String, Object, Object, Object, Object)
-     */
-    public static <A, T> T provideNamed(Class<T> desiredObjectClass, String name, A a) {
-        return namedProviderHelper(desiredObjectClass, name,
-                createProvider(getNamedFactory(desiredObjectClass, name), a));
-    }
-
-    /**
-     * @see Shank#provideNamed(Class, String, Object, Object, Object, Object)
-     */
-    public static <A, B, T> T provideNamed(Class<T> desiredObjectClass, String name, A a, B b) {
-        return namedProviderHelper(desiredObjectClass, name,
-                createProvider(getNamedFactory(desiredObjectClass, name), a, b));
-    }
-
-    /**
-     * @see Shank#provideNamed(Class, String, Object, Object, Object, Object)
-     */
-    public static <A, B, C, T> T provideNamed(Class<T> desiredObjectClass, String name, A a, B b, C c) {
-        return namedProviderHelper(desiredObjectClass, name,
-                createProvider(getNamedFactory(desiredObjectClass, name), a, b, c));
-    }
-
-    /**
-     * Provides the desired object associated to the specified string
-     * identifier. The object  returned will be created the first time this
-     * method is called, and all subsequent calls will return a cached instance
-     * of the same  object. Throws a NoFactoryException if no factory is
-     * registered for the class of the desired object with the specified string
-     * identifier.
-     *
-     * @param desiredObjectClass is the class of the desired object.
-     * @param name               is the string identifier associated to a
-     *                           particular factory.
-     * @param a                  is the first parameter to be passed to the registered factory.
-     * @param b                  is the second parameter to be passed to the registered factory.
-     * @param c                  is the third parameter to be passed to the registered factory.
-     * @param d                  is the fourth parameter to be passed to the registered factory.
-     * @return an instance of the desired object as provided by the registered
-     * factory.
-     */
-    public static <A, B, C, D, T> T provideNamed(Class<T> desiredObjectClass, String name, A a, B b, C c, D d) {
-        return namedProviderHelper(desiredObjectClass, name,
-                createProvider(getNamedFactory(desiredObjectClass, name), a, b, c, d));
-    }
-
-    /**
      * Clears the entire cache.
      */
     public static void clearAll() {
         unscopedCache.clear();
         scopedCache.clear();
-        unscopedNamedCache.clear();
-        scopedNamedCache.clear();
     }
 
     /**
@@ -395,32 +344,18 @@ public final class Shank {
         return new ScopedCache(scope);
     }
 
-    private static void clearScope(Object scope) {
-        scopedCache.remove(scope);
-    }
-
     private static void clearNamedScope(Object scope) {
-        scopedNamedCache.remove(scope);
+        scopedCache.remove(scope);
     }
 
     @SuppressWarnings("unchecked")
     private static <T> T providerHelper(Class<T> desiredObjectClass, Provider provider) {
-        T desiredObject = (T) unscopedCache.get(desiredObjectClass);
-
-        if (desiredObject == null) {
-            try {
-                desiredObject = (T) provider.call();
-                unscopedCache.put(desiredObjectClass, desiredObject);
-            } catch (ClassCastException e) {
-                throw new IllegalArgumentException(getErrorMessage(desiredObjectClass, provider));
-            }
-        }
-        return desiredObject;
+        return namedProviderHelper(desiredObjectClass, "", provider);
     }
 
     @SuppressWarnings("unchecked")
     private static <T> T namedProviderHelper(Class<T> desiredObjectClass, String name, Provider provider) {
-        final Map<String, Object> desiredObjectMap = unscopedNamedCache.get(desiredObjectClass);
+        final Map<String, Object> desiredObjectMap = unscopedCache.get(desiredObjectClass);
 
         T desiredObject;
         try {
@@ -428,7 +363,7 @@ public final class Shank {
                 final Map<String, Object> map = new HashMap<>();
                 desiredObject = (T) provider.call();
                 map.put(name, desiredObject);
-                unscopedNamedCache.put(desiredObjectClass, map);
+                unscopedCache.put(desiredObjectClass, map);
             } else {
                 desiredObject = (T) desiredObjectMap.get(name);
                 if (desiredObject == null) {
@@ -446,10 +381,6 @@ public final class Shank {
                 .getSimpleName();
     }
 
-    private static <T> void registerFactoryRaw(Class<T> objectClass, Function factory) {
-        factoryRegister.put(objectClass, factory);
-    }
-
     private static <T> void registerNamedFactoryRaw(Class<T> objectClass, String factoryName, Function factory) {
         final Map<String, Function> factoryMap = namedFactoryRegister.get(objectClass);
 
@@ -463,15 +394,10 @@ public final class Shank {
     }
 
     private static <T> Function getFactory(Class<T> desiredObjectClass) {
-        final Function objectFactory = factoryRegister.get(desiredObjectClass);
-
-        if (objectFactory == null) {
-            throw new NoFactoryException("There is no factory for " + desiredObjectClass.getCanonicalName());
-        }
-        return objectFactory;
+        return getFactory(desiredObjectClass, "");
     }
 
-    private static <T> Function getNamedFactory(Class<T> desiredObjectClass, String name) {
+    private static <T> Function getFactory(Class<T> desiredObjectClass, String name) {
         final Map<String, Function> namedFactoryMap = namedFactoryRegister.get(desiredObjectClass);
 
         if (namedFactoryMap == null) {
@@ -534,45 +460,44 @@ public final class Shank {
     public static final class ScopedCache {
 
         private final Scope scope;
-        private boolean named;
+        private String name = "";
 
         private ScopedCache(Scope scope) {
             this.scope = scope;
-            this.scope.subscribe(() -> {
-                if (named) {
-                    clearNamedScope(ScopedCache.this.scope);
-                } else {
-                    clearScope(ScopedCache.this.scope);
-                }
-            });
+            this.scope.subscribe(() -> clearNamedScope(ScopedCache.this.scope));
+        }
+
+        public ScopedCache named(String name) {
+            this.name = name;
+            return this;
         }
 
         /**
          * @see ScopedCache#provide(Class, Object, Object, Object, Object)
          */
         public <V> V provide(Class<V> desiredObjectClass) {
-            return providerHelper(desiredObjectClass, createProvider(getFactory(desiredObjectClass)));
+            return providerHelper(desiredObjectClass, createProvider(getFactory(desiredObjectClass, name)));
         }
 
         /**
          * @see ScopedCache#provide(Class, Object, Object, Object, Object)
          */
         public <A, V> V provide(Class<V> desiredObjectClass, A a) {
-            return providerHelper(desiredObjectClass, createProvider(getFactory(desiredObjectClass), a));
+            return providerHelper(desiredObjectClass, createProvider(getFactory(desiredObjectClass, name), a));
         }
 
         /**
          * @see ScopedCache#provide(Class, Object, Object, Object, Object)
          */
         public <A, B, V> V provide(Class<V> desiredObjectClass, A a, B b) {
-            return providerHelper(desiredObjectClass, createProvider(getFactory(desiredObjectClass), a, b));
+            return providerHelper(desiredObjectClass, createProvider(getFactory(desiredObjectClass, name), a, b));
         }
 
         /**
          * @see ScopedCache#provide(Class, Object, Object, Object, Object)
          */
         public <A, B, C, V> V provide(Class<V> desiredObjectClass, A a, B b, C c) {
-            return providerHelper(desiredObjectClass, createProvider(getFactory(desiredObjectClass), a, b, c));
+            return providerHelper(desiredObjectClass, createProvider(getFactory(desiredObjectClass, name), a, b, c));
         }
 
         /**
@@ -594,91 +519,41 @@ public final class Shank {
          * registered factory.
          */
         public <A, B, C, D, V> V provide(Class<V> desiredObjectClass, A a, B b, C c, D d) {
-            return providerHelper(desiredObjectClass, createProvider(getFactory(desiredObjectClass), a, b, c, d));
+            return providerHelper(desiredObjectClass, createProvider(getFactory(desiredObjectClass, name), a, b, c, d));
         }
 
-        public <V> V provideNamed(Class<V> desiredObjectClass, String name) {
-            return namedProviderHelper(desiredObjectClass, name,
-                    createProvider(getNamedFactory(desiredObjectClass, name)));
-        }
-
-        public <A, V> V provideNamed(Class<V> desiredObjectClass, String name, A a) {
-            return namedProviderHelper(desiredObjectClass, name,
-                    createProvider(getNamedFactory(desiredObjectClass, name), a));
-        }
-
-        public <A, B, V> V provideNamed(Class<V> desiredObjectClass, String name, A a, B b) {
-            return namedProviderHelper(desiredObjectClass, name,
-                    createProvider(getNamedFactory(desiredObjectClass, name), a, b));
-        }
-
-        public <A, B, C, V> V provideNamed(Class<V> desiredObjectClass, String name, A a, B b, C c) {
-            return namedProviderHelper(desiredObjectClass, name,
-                    createProvider(getNamedFactory(desiredObjectClass, name), a, b, c));
-        }
-
-        public <A, B, C, D, V> V provideNamed(Class<V> desiredObjectClass, String name, A a, B b, C c, D d) {
-            return namedProviderHelper(desiredObjectClass, name,
-                    createProvider(getNamedFactory(desiredObjectClass, name), a, b, c, d));
-        }
-
-        private <T> T providerHelper(Class<T> desiredObjectClass, Provider provider) {
-            final Map<Class, Object> currentScopeMap = scopedCache.get(scope);
-
-            if (currentScopeMap == null) {
-                return createObjectAndScope(desiredObjectClass, provider);
-            } else {
-                return getObjectOrCreateIfNull(desiredObjectClass, currentScopeMap, provider);
-            }
-        }
-
-        private <V> V namedProviderHelper(Class<V> desiredObjectClass, String name, Provider provider) {
-            named = true;
-            final Map<Class, Map<String, Object>> currentScopeMap = scopedNamedCache.get(scope);
+        @SuppressWarnings("unchecked")
+        private <V> V providerHelper(Class<V> desiredObjectClass, Provider provider) {
+            final Map<Class, Map<String, Object>> currentScopeMap = scopedCache.get(scope);
 
             V desiredObject;
             if (currentScopeMap == null) {
                 final Map<Class, Map<String, Object>> scopedMap = new HashMap<>();
                 final Map<String, Object> namedMap = new HashMap<>();
-                desiredObject = (V) provider.call();
+                try {
+                    desiredObject = (V) provider.call();
+                } catch (ClassCastException e) {
+                    throw new IllegalArgumentException(getErrorMessage(desiredObjectClass, provider));
+                }
                 namedMap.put(name, desiredObject);
                 scopedMap.put(desiredObjectClass, namedMap);
-                scopedNamedCache.put(scope, scopedMap);
+                scopedCache.put(scope, scopedMap);
             } else {
                 Map<String, Object> stringObjectMap = currentScopeMap.get(desiredObjectClass);
                 Object o = stringObjectMap.get(name);
                 if (o != null) {
                     desiredObject = (V) o;
                 } else {
-                    desiredObject = (V) provider.call();
+                    try {
+                        desiredObject = (V) provider.call();
+                    } catch (ClassCastException e) {
+                        throw new IllegalArgumentException(getErrorMessage(desiredObjectClass, provider));
+                    }
                     stringObjectMap.put(name, desiredObject);
                 }
             }
 
             return desiredObject;
-        }
-
-        @SuppressWarnings("unchecked")
-        private <V> V createObjectAndScope(Class<V> desiredObjectClass, Provider objectFactory) {
-            final Map<Class, Object> resultMap = new HashMap<>();
-            final Object desiredObject = objectFactory.call();
-
-            resultMap.put(desiredObjectClass, desiredObject);
-            scopedCache.put(scope, resultMap);
-
-            return (V) desiredObject;
-        }
-
-        @SuppressWarnings("unchecked")
-        private <V> V getObjectOrCreateIfNull(Class<V> desiredObjectClass, Map<Class, Object> currentScopeMap,
-                Provider objectFactory) {
-            Object desiredObject = currentScopeMap.get(desiredObjectClass);
-
-            if (desiredObject == null) {
-                desiredObject = objectFactory.call();
-                currentScopeMap.put(desiredObjectClass, desiredObject);
-            }
-            return (V) desiredObject;
         }
     }
 }
