@@ -96,16 +96,27 @@ public class ScopedCache {
             Shank.scopedCache.put(scope, scopedMap);
         } else {
             Map<String, Object> stringObjectMap = currentScopeMap.get(desiredObjectClass);
-            Object o = stringObjectMap.get(name);
-            if (o != null) {
-                desiredObject = (V) o;
-            } else {
+            if (stringObjectMap == null) {
+                final Map<String, Object> namedMap = new HashMap<>();
                 try {
                     desiredObject = (V) provider.call();
                 } catch (ClassCastException e) {
                     throw new IllegalArgumentException(Shank.getErrorMessage(desiredObjectClass, provider));
                 }
-                stringObjectMap.put(name, desiredObject);
+                namedMap.put(name, desiredObject);
+                currentScopeMap.put(desiredObjectClass, namedMap);
+            } else {
+                Object o = stringObjectMap.get(name);
+                if (o != null) {
+                    desiredObject = (V) o;
+                } else {
+                    try {
+                        desiredObject = (V) provider.call();
+                    } catch (ClassCastException e) {
+                        throw new IllegalArgumentException(Shank.getErrorMessage(desiredObjectClass, provider));
+                    }
+                    stringObjectMap.put(name, desiredObject);
+                }
             }
         }
 

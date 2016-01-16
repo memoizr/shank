@@ -566,6 +566,20 @@ public class ShankAcceptanceTest {
         assertThat(second, is(otherSecond));
     }
 
+    @Test
+    public void withScope_afterRegisteringFirstOpbject_secondObjectIsAlsoProvided() {
+        Shank.registerFactory(FooObject.class, ChildFooObject::new);
+        Shank.registerNamedFactory(OtherFooObject.class, "second", OtherFooObject::new);
+
+        final Scope scope = scope(OtherFooObject.class);
+        FooObject first = Shank.with(scope).provide(FooObject.class);
+
+        OtherFooObject second = Shank.with(scope).named("second").provide(OtherFooObject.class);
+
+        assertNotNull(first);
+        assertNotNull(second);
+    }
+
     @Test(expected = NoFactoryException.class)
     public void provide_whenObjectHasNoFactory_throwsException() throws Exception {
         Shank.provideNew(OtherFooObject.class);
