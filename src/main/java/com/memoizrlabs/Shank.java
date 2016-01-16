@@ -3,7 +3,7 @@ package com.memoizrlabs;
 import java.util.HashMap;
 import java.util.Map;
 
-import rx.Observable;
+import rx.functions.Action0;
 import rx.functions.Func0;
 import rx.functions.Func1;
 import rx.functions.Func2;
@@ -107,11 +107,10 @@ public final class Shank {
      * number of arguments.
      *
      * @param desiredObjectClass is the class of the desired object.
-     * @param a is the first parameter to be passed to the registered factory.
-     * @param b is the second parameter to be passed to the registered factory.
-     * @param c is the third parameter to be passed to the registered factory.
-     * @param d is the fourth parameter to be passed to the registered factory.
-     *
+     * @param a                  is the first parameter to be passed to the registered factory.
+     * @param b                  is the second parameter to be passed to the registered factory.
+     * @param c                  is the third parameter to be passed to the registered factory.
+     * @param d                  is the fourth parameter to be passed to the registered factory.
      * @return an instance of the desired object as provideSingletond by the registered factory.
      */
     public static <A, B, C, D, T> T provideNew(Class<T> desiredObjectClass, A a, B b, C c, D d) {
@@ -155,17 +154,15 @@ public final class Shank {
      * number of arguments.
      *
      * @param desiredObjectClass is the class of the desired object.
-     * @param a is the first parameter to be passed to the registered factory.
-     * @param b is the second parameter to be passed to the registered factory.
-     * @param c is the third parameter to be passed to the registered factory.
-     * @param d is the fourth parameter to be passed to the registered factory.
-     *
+     * @param a                  is the first parameter to be passed to the registered factory.
+     * @param b                  is the second parameter to be passed to the registered factory.
+     * @param c                  is the third parameter to be passed to the registered factory.
+     * @param d                  is the fourth parameter to be passed to the registered factory.
      * @return an instance of the desired object as provideSingletond by the registered factory.
      */
     public static <A, B, C, D, T> T provideNamedNew(Class<T> desiredObjectClass, String name, A a, B b, C c, D d) {
         return (T) createProvider(getNamedFactory(desiredObjectClass, name), a, b, c, d).call();
     }
-
 
     // Singleton providers
 
@@ -206,11 +203,10 @@ public final class Shank {
      * number of arguments.
      *
      * @param desiredObjectClass is the class of the desired object.
-     * @param a is the first parameter to be passed to the registered factory.
-     * @param b is the second parameter to be passed to the registered factory.
-     * @param c is the third parameter to be passed to the registered factory.
-     * @param d is the fourth parameter to be passed to the registered factory.
-     *
+     * @param a                  is the first parameter to be passed to the registered factory.
+     * @param b                  is the second parameter to be passed to the registered factory.
+     * @param c                  is the third parameter to be passed to the registered factory.
+     * @param d                  is the fourth parameter to be passed to the registered factory.
      * @return an instance of the desired object as provideSingletond by the registered factory.
      */
     public static <A, B, C, D, T> T provideSingleton(Class<T> desiredObjectClass, A a, B b, C c, D d) {
@@ -220,30 +216,30 @@ public final class Shank {
     /**
      * @see Shank#provideNamed(Class, String, Object, Object, Object, Object)
      */
-    public static <T> T provideSingletonNamed(Class<T> desiredObjectClass, String name) {
+    public static <T> T provideNamedSingleton(Class<T> desiredObjectClass, String name) {
         return namedProviderHelper(desiredObjectClass, name, createProvider(getNamedFactory(desiredObjectClass, name)));
     }
 
     /**
-     * @see Shank#provideSingletonNamed(Class, String, Object, Object, Object, Object)
+     * @see Shank#provideNamedSingleton(Class, String, Object, Object, Object, Object)
      */
-    public static <A, T> T provideSingletonNamed(Class<T> desiredObjectClass, String name, A a) {
+    public static <A, T> T provideNamedSingleton(Class<T> desiredObjectClass, String name, A a) {
         return namedProviderHelper(desiredObjectClass, name,
                 createProvider(getNamedFactory(desiredObjectClass, name), a));
     }
 
     /**
-     * @see Shank#provideSingletonNamed(Class, String, Object, Object, Object, Object)
+     * @see Shank#provideNamedSingleton(Class, String, Object, Object, Object, Object)
      */
-    public static <A, B, T> T provideSingletonNamed(Class<T> desiredObjectClass, String name, A a, B b) {
+    public static <A, B, T> T provideNamedSingleton(Class<T> desiredObjectClass, String name, A a, B b) {
         return namedProviderHelper(desiredObjectClass, name,
                 createProvider(getNamedFactory(desiredObjectClass, name), a, b));
     }
 
     /**
-     * @see Shank#provideSingletonNamed(Class, String, Object, Object, Object, Object)
+     * @see Shank#provideNamedSingleton(Class, String, Object, Object, Object, Object)
      */
-    public static <A, B, C, T> T provideSingletonNamed(Class<T> desiredObjectClass, String name, A a, B b, C c) {
+    public static <A, B, C, T> T provideNamedSingleton(Class<T> desiredObjectClass, String name, A a, B b, C c) {
         return namedProviderHelper(desiredObjectClass, name,
                 createProvider(getNamedFactory(desiredObjectClass, name), a, b, c));
     }
@@ -259,69 +255,17 @@ public final class Shank {
      * @param desiredObjectClass is the class of the desired object.
      * @param name               is the string identifier associated to a
      *                           particular factory.
-     * @param a is the first parameter to be passed to the registered factory.
-     * @param b is the second parameter to be passed to the registered factory.
-     * @param c is the third parameter to be passed to the registered factory.
-     * @param d is the fourth parameter to be passed to the registered factory.
+     * @param a                  is the first parameter to be passed to the registered factory.
+     * @param b                  is the second parameter to be passed to the registered factory.
+     * @param c                  is the third parameter to be passed to the registered factory.
+     * @param d                  is the fourth parameter to be passed to the registered factory.
      * @return an instance of the desired object as provideSingletond by the registered
      * factory.
      */
-    public static <A, B, C, D, T> T provideSingletonNamed(Class<T> desiredObjectClass, String name, A a, B b, C c, D d) {
+    public static <A, B, C, D, T> T provideNamedSingleton(Class<T> desiredObjectClass, String name, A a, B b, C c,
+            D d) {
         return namedProviderHelper(desiredObjectClass, name,
                 createProvider(getNamedFactory(desiredObjectClass, name), a, b, c, d));
-    }
-
-    /**
-     * @see Shank#provide(Class, Object, Object, Object, Object)
-     */
-    @Deprecated
-    public static <T> T provide(Class<T> desiredObjectClass) {
-        return providerHelper(desiredObjectClass, createProvider(getFactory(desiredObjectClass)));
-    }
-
-    /**
-     * @see Shank#provide(Class, Object, Object, Object, Object)
-     */
-    @Deprecated
-    public static <A, T> T provide(Class<T> desiredObjectClass, A a) {
-        return providerHelper(desiredObjectClass, createProvider(getFactory(desiredObjectClass), a));
-    }
-
-    /**
-     * @see Shank#provide(Class, Object, Object, Object, Object)
-     */
-    @Deprecated
-    public static <A, B, T> T provide(Class<T> desiredObjectClass, A a, B b) {
-        return providerHelper(desiredObjectClass, createProvider(getFactory(desiredObjectClass), a, b));
-    }
-
-    /**
-     * @see Shank#provide(Class, Object, Object, Object, Object)
-     */
-    @Deprecated
-    public static <A, B, C, T> T provide(Class<T> desiredObjectClass, A a, B b, C c) {
-        return providerHelper(desiredObjectClass, createProvider(getFactory(desiredObjectClass), a, b, c));
-    }
-
-    /**
-     * Provides the desired object. The object  returned will be created the
-     * first time this method is called, and all subsequent calls will return a
-     * cached instance of the same  object. Throws a NoFactoryException if no
-     * factory is registered for the class of the desired object. Throws an
-     * IllegalArgumentException when no factory is registered with the same
-     * number of arguments.
-     *
-     * @param desiredObjectClass is the class of the desired object.
-     * @param a is the first parameter to be passed to the registered factory.
-     * @param b is the second parameter to be passed to the registered factory.
-     * @param c is the third parameter to be passed to the registered factory.
-     * @param d is the fourth parameter to be passed to the registered factory.
-     *
-     * @return an instance of the desired object as provided by the registered factory.
-     */
-    @Deprecated
-    public static <A, B, C, D, T> T provide(Class<T> desiredObjectClass, A a, B b, C c, D d) {
-        return providerHelper(desiredObjectClass, createProvider(getFactory(desiredObjectClass), a, b, c, d));
     }
 
     /**
@@ -341,14 +285,16 @@ public final class Shank {
     /**
      * @see Shank#registerNamedFactory(Class, String, Func4)
      */
-    public static <A, B, T> void registerNamedFactory(Class<T> objectClass, String factoryName, Func2<A, B, T> factory) {
+    public static <A, B, T> void registerNamedFactory(Class<T> objectClass, String factoryName,
+            Func2<A, B, T> factory) {
         registerNamedFactoryRaw(objectClass, factoryName, factory);
     }
 
     /**
      * @see Shank#registerNamedFactory(Class, String, Func4)
      */
-    public static <A, B, C, T> void registerNamedFactory(Class<T> objectClass, String factoryName, Func3<A, B, C, T> factory) {
+    public static <A, B, C, T> void registerNamedFactory(Class<T> objectClass, String factoryName,
+            Func3<A, B, C, T> factory) {
         registerNamedFactoryRaw(objectClass, factoryName, factory);
     }
 
@@ -361,7 +307,8 @@ public final class Shank {
      * @param factory     is a factory method that will provide an instance of
      *                    the object.
      */
-    public static <A, B, C, D, T> void registerNamedFactory(Class<T> objectClass, String factoryName, Func4<A, B, C, D, T> factory) {
+    public static <A, B, C, D, T> void registerNamedFactory(Class<T> objectClass, String factoryName,
+            Func4<A, B, C, D, T> factory) {
         registerNamedFactoryRaw(objectClass, factoryName, factory);
     }
 
@@ -407,10 +354,10 @@ public final class Shank {
      * @param desiredObjectClass is the class of the desired object.
      * @param name               is the string identifier associated to a
      *                           particular factory.
-     * @param a is the first parameter to be passed to the registered factory.
-     * @param b is the second parameter to be passed to the registered factory.
-     * @param c is the third parameter to be passed to the registered factory.
-     * @param d is the fourth parameter to be passed to the registered factory.
+     * @param a                  is the first parameter to be passed to the registered factory.
+     * @param b                  is the second parameter to be passed to the registered factory.
+     * @param c                  is the third parameter to be passed to the registered factory.
+     * @param d                  is the fourth parameter to be passed to the registered factory.
      * @return an instance of the desired object as provided by the registered
      * factory.
      */
@@ -444,24 +391,23 @@ public final class Shank {
      * @param scope the class associated to a scope.
      * @return a ScopedCache builder.
      */
-    public static ScopedCache withScope(Object scope) {
+    public static ScopedCache with(Scope scope) {
         return new ScopedCache(scope);
     }
 
-    /**
-     * Create a builder to associate a scope to a class, lifetime bound.
-     *
-     * @param scopeObject         the class associated to a scope.
-     * @param whenLifetimeExpires an observable which is expected to fire when
-     *                            the lifetime of the object the cache is bound
-     *                            to expires.
-     * @return a ScopedCache builder.
-     */
-    public static ScopedCache withBoundScope(Object scopeObject,
-            Observable<Object> whenLifetimeExpires) {
-        return new ScopedCache(scopeObject, whenLifetimeExpires);
-    }
-
+    //    /**
+//     * Create a builder to associate a scope to a class, lifetime bound.
+//     *
+//     * @param scopeObject         the class associated to a scope.
+//     * @param whenLifetimeExpires an observable which is expected to fire when
+//     *                            the lifetime of the object the cache is bound
+//     *                            to expires.
+//     * @return a ScopedCache builder.
+//     */
+//    public static ScopedCache withBoundScope(Object scopeObject,
+//            Observable<Object> whenLifetimeExpires) {
+//        return new ScopedCache(scopeObject, whenLifetimeExpires);
+//    }
     private static void clearScope(Object scope) {
         scopedCache.remove(scope);
     }
@@ -555,29 +501,63 @@ public final class Shank {
         return namedFactory;
     }
 
-    public static final class ScopedCache {
+    public static final class Scope {
 
-        private final Object scope;
-        private final Observable<Object> whenLifetimeEnds;
-        private boolean named;
+        private Object scopeObect;
+        private Action0 action = () -> {
+        };
 
-        private ScopedCache(Object scope) {
-            this(scope, null);
+        private Scope(Object scopeObect) {
+            this.scopeObect = scopeObect;
         }
 
-        private ScopedCache(Object scope, Observable<Object> whenLifetimeEnds) {
-            this.scope = scope;
-            this.whenLifetimeEnds = whenLifetimeEnds;
-            if (this.whenLifetimeEnds != null) {
-                this.whenLifetimeEnds.take(1)
-                        .subscribe(s -> {
-                            if (named) {
-                                clearNamedScope(ScopedCache.this.scope);
-                            } else {
-                                clearScope(ScopedCache.this.scope);
-                            }
-                        });
+        public static Scope scope(Object scopeObect) {
+            return new Scope(scopeObect);
+        }
+
+        public void clear() {
+            action.call();
+        }
+
+        void subscribe(Action0 action) {
+            this.action = action;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
             }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+
+            Scope scope = (Scope) o;
+
+            return !(scopeObect != null ? !scopeObect.equals(scope.scopeObect) : scope.scopeObect != null);
+
+        }
+
+        @Override
+        public int hashCode() {
+            return scopeObect != null ? scopeObect.hashCode() : 0;
+        }
+    }
+
+    public static final class ScopedCache {
+
+        private final Scope scope;
+        private boolean named;
+
+        private ScopedCache(Scope scope) {
+            this.scope = scope;
+            this.scope.subscribe(() -> {
+                if (named) {
+                    clearNamedScope(ScopedCache.this.scope);
+                } else {
+                    clearScope(ScopedCache.this.scope);
+                }
+            });
         }
 
         /**
@@ -619,11 +599,10 @@ public final class Shank {
          * the newly supplied observable.
          *
          * @param desiredObjectClass is the class of the desired object.
-         * @param a is the first parameter to be passed to the registered factory.
-         * @param b is the second parameter to be passed to the registered factory.
-         * @param c is the third parameter to be passed to the registered factory.
-         * @param d is the fourth parameter to be passed to the registered factory.
-         *
+         * @param a                  is the first parameter to be passed to the registered factory.
+         * @param b                  is the second parameter to be passed to the registered factory.
+         * @param c                  is the third parameter to be passed to the registered factory.
+         * @param d                  is the fourth parameter to be passed to the registered factory.
          * @return an instance of the desired object as provided by the
          * registered factory.
          */
