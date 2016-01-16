@@ -395,19 +395,6 @@ public final class Shank {
         return new ScopedCache(scope);
     }
 
-    //    /**
-//     * Create a builder to associate a scope to a class, lifetime bound.
-//     *
-//     * @param scopeObject         the class associated to a scope.
-//     * @param whenLifetimeExpires an observable which is expected to fire when
-//     *                            the lifetime of the object the cache is bound
-//     *                            to expires.
-//     * @return a ScopedCache builder.
-//     */
-//    public static ScopedCache withBoundScope(Object scopeObject,
-//            Observable<Object> whenLifetimeExpires) {
-//        return new ScopedCache(scopeObject, whenLifetimeExpires);
-//    }
     private static void clearScope(Object scope) {
         scopedCache.remove(scope);
     }

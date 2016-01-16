@@ -541,11 +541,11 @@ public class ShankAcceptanceTest {
         Shank.registerNamedFactory(FooObject.class, "first", ChildFooObject::new);
         Shank.registerNamedFactory(FooObject.class, "second", OtherChildFooObject::new);
 
-        FooObject first = Shank.withScope(OtherFooObject.class).provideNamed(FooObject.class, "first");
-        FooObject second = Shank.withScope(OtherFooObject.class).provideNamed(FooObject.class, "second");
+        FooObject first = Shank.with(scope(OtherFooObject.class)).provideNamed(FooObject.class, "first");
+        FooObject second = Shank.with(scope(OtherFooObject.class)).provideNamed(FooObject.class, "second");
 
-        FooObject otherFirst = Shank.withScope(OtherFooObject.class).provideNamed(FooObject.class, "first");
-        FooObject otherSecond = Shank.withScope(OtherFooObject.class).provideNamed(FooObject.class, "second");
+        FooObject otherFirst = Shank.with(scope(OtherFooObject.class)).provideNamed(FooObject.class, "first");
+        FooObject otherSecond = Shank.with(scope(OtherFooObject.class)).provideNamed(FooObject.class, "second");
 
         assertThat(first, is(otherFirst));
         assertThat(second, is(otherSecond));
