@@ -1,6 +1,6 @@
 package com.memoizrlabs;
 
-import rx.functions.Action0;
+import com.memoizrlabs.functions.Action0;
 
 public final class Scope {
 

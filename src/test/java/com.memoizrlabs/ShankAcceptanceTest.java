@@ -339,7 +339,7 @@ public class ShankAcceptanceTest {
 
     @Test
     public void provideSingleton_whenObjectHasNamedFactoryWith1Arguments_provideSingletonsRightObject() {
-        Shank.registerNamedFactory(List.class, "name", (a) -> asList("a"));
+        Shank.registerNamedFactory(List.class, "name", (a) -> Collections.singletonList("a"));
 
         final List provideSingletond = Shank.named("name").provide(List.class, "a");
         assertThat(provideSingletond, is(Collections.singletonList("a")));
@@ -413,7 +413,7 @@ public class ShankAcceptanceTest {
 
     @Test
     public void withScope_and_1_arguments_returnsObjectForScope() {
-        Shank.registerFactory(List.class, (a) -> asList(a));
+        Shank.registerFactory(List.class, Collections::singletonList);
 
         final List provided = Shank.with(scope(B.class)).provide(List.class, "a");
 
@@ -484,6 +484,43 @@ public class ShankAcceptanceTest {
         assertTrue(provided != otherProvided);
         assertNotNull(provided);
         assertNotNull(otherProvided);
+    }
+
+    @Test
+    public void withDifferentEqualScope_andWithClearScope_clearsScope() {
+        Shank.registerFactory(A.class, A::new);
+        Shank.registerFactory(B.class, B::new);
+
+        Scope scope = scope("");
+        final A providedA = Shank.with(scope).provide(A.class);
+        Scope secondScope = scope("");
+        final B providedB = Shank.with(secondScope).provide(B.class);
+        secondScope.clear();
+        Scope thirdScope = scope("");
+        final A otherProvidedA = Shank.with(thirdScope).provide(A.class);
+
+        assertTrue(providedA != otherProvidedA);
+        assertNotNull(providedA);
+        assertNotNull(otherProvidedA);
+    }
+
+    @Test
+    public void withDifferentEqualNamedScope_andWithClearScope_clearsScope() {
+        Shank.registerNamedFactory(A.class, "a", A::new);
+        Shank.registerNamedFactory(A.class, "aa", A::new);
+        Shank.registerNamedFactory(B.class, "b", B::new);
+
+        Scope scope = scope("");
+        final A providedA = Shank.with(scope).named("a").provide(A.class);
+        Scope secondScope = scope("");
+        final B providedB = Shank.with(secondScope).named("b").provide(B.class);
+        secondScope.clear();
+        Scope thirdScope = scope("");
+        final A otherProvidedA = Shank.with(thirdScope).named("a").provide(A.class);
+
+        assertTrue(providedA != otherProvidedA);
+        assertNotNull(providedA);
+        assertNotNull(otherProvidedA);
     }
 
     @Test

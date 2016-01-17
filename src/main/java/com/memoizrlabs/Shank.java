@@ -1,14 +1,14 @@
 package com.memoizrlabs;
 
+import com.memoizrlabs.functions.Func0;
+import com.memoizrlabs.functions.Func1;
+import com.memoizrlabs.functions.Func2;
+import com.memoizrlabs.functions.Func3;
+import com.memoizrlabs.functions.Func4;
+import com.memoizrlabs.functions.Function;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import rx.functions.Func0;
-import rx.functions.Func1;
-import rx.functions.Func2;
-import rx.functions.Func3;
-import rx.functions.Func4;
-import rx.functions.Function;
 
 import static com.memoizrlabs.Provider.createProvider;
 
@@ -19,8 +19,8 @@ import static com.memoizrlabs.Provider.createProvider;
 public final class Shank {
 
     static final Map<Class, Map<String, Object>> unscopedCache = new HashMap<>();
-    static final Map<Class, Map<String, Function>> namedFactoryRegister = new HashMap<>();
-    static final Map<Object, Map<Class, Map<String, Object>>> scopedCache = new HashMap<>();
+    static final Map<Class, Map<String, Function>> factoryRegister = new HashMap<>();
+    static final Map<Scope, Map<Class, Map<String, Object>>> scopedCache = new HashMap<>();
 
     private Shank() {
     }
@@ -272,12 +272,12 @@ public final class Shank {
     }
 
     private static <T> void registerNamedFactoryRaw(Class<T> objectClass, String factoryName, Function factory) {
-        final Map<String, Function> factoryMap = namedFactoryRegister.get(objectClass);
+        final Map<String, Function> factoryMap = factoryRegister.get(objectClass);
 
         if (factoryMap == null) {
             final Map<String, Function> map = new HashMap<>();
             map.put(factoryName, factory);
-            namedFactoryRegister.put(objectClass, map);
+            factoryRegister.put(objectClass, map);
         } else {
             factoryMap.put(factoryName, factory);
         }
@@ -288,7 +288,7 @@ public final class Shank {
     }
 
     static <T> Function getFactory(Class<T> desiredObjectClass, String name) {
-        final Map<String, Function> namedFactoryMap = namedFactoryRegister.get(desiredObjectClass);
+        final Map<String, Function> namedFactoryMap = factoryRegister.get(desiredObjectClass);
 
         if (namedFactoryMap == null) {
             throw new NoFactoryException("There is no factory for " + desiredObjectClass.getCanonicalName());

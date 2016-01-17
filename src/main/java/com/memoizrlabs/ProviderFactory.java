@@ -1,11 +1,11 @@
 package com.memoizrlabs;
 
-import rx.functions.Func0;
-import rx.functions.Func1;
-import rx.functions.Func2;
-import rx.functions.Func3;
-import rx.functions.Func4;
-import rx.functions.Function;
+import com.memoizrlabs.functions.Func0;
+import com.memoizrlabs.functions.Func1;
+import com.memoizrlabs.functions.Func2;
+import com.memoizrlabs.functions.Func3;
+import com.memoizrlabs.functions.Func4;
+import com.memoizrlabs.functions.Function;
 
 abstract class Provider<T> {
 
