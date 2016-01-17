@@ -16,6 +16,7 @@ public class ScopedCache {
     }
 
     ScopedCache(Scope scope, String name) {
+        this.scope = scope;
         this.name = name;
     }
 
