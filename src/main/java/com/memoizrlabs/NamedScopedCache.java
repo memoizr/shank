@@ -3,6 +3,7 @@ package com.memoizrlabs;
 import static com.memoizrlabs.Provider.createProvider;
 
 public final class NamedScopedCache extends ScopedCache {
+
     private String name;
 
     NamedScopedCache(String name) {

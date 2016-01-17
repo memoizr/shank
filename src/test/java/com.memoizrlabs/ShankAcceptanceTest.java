@@ -30,6 +30,7 @@ public class ShankAcceptanceTest {
     @Before
     public void setUp() {
         Shank.clearAll();
+        Shank.clearFactories();
     }
 
     @Test
@@ -403,7 +404,7 @@ public class ShankAcceptanceTest {
     }
 
     @Test
-    public void withScope_and_0_arguments_returnsObjectForScope() {
+    public void withScope_and_0_argumentsreturnsObjectForScope() {
         Shank.registerFactory(A.class, A::new);
 
         final A provided = Shank.with(scope(B.class)).provide(A.class);
@@ -648,9 +649,20 @@ public class ShankAcceptanceTest {
         assertNotNull(second);
     }
 
-    @Test(expected = NoFactoryException.class)
+    @Test
     public void provide_whenObjectHasNoFactory_throwsException() throws Exception {
+        expectedException.expect(NoFactoryException.class);
+        expectedException.expectMessage("There is no factory for " + B.class.getCanonicalName());
         Shank.provideNew(B.class);
+    }
+
+    @Test
+    public void provide_whenObjectHasNoNamedFactory_throwsException() throws Exception {
+        expectedException.expect(NoFactoryException.class);
+        expectedException
+                .expectMessage("There is no factory for " + B.class.getCanonicalName() + " with name " + "noSuchName");
+        Shank.registerFactory(B.class, B::new);
+        Shank.named("noSuchName").provideNew(B.class);
     }
 
     static class ClassWithConstructorParameters {

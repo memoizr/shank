@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.memoizrlabs.Provider.createProvider;
+import static com.memoizrlabs.poweroptional.Optional.optionOf;
 
 public class ScopedCache {
 
@@ -76,51 +77,35 @@ public class ScopedCache {
      * registered factory.
      */
     public <A, B, C, D, V> V provide(Class<V> desiredObjectClass, A a, B b, C c, D d) {
-        return providerHelper(desiredObjectClass, createProvider(Shank.getFactory(desiredObjectClass, name), a, b, c, d));
+        return providerHelper(desiredObjectClass,
+                createProvider(Shank.getFactory(desiredObjectClass, name), a, b, c, d));
     }
 
     @SuppressWarnings("unchecked")
     private <V> V providerHelper(Class<V> desiredObjectClass, Provider provider) {
-        final Map<Class, Map<String, Object>> currentScopeMap = Shank.scopedCache.get(scope);
-
-        V desiredObject;
-        if (currentScopeMap == null) {
-            final Map<Class, Map<String, Object>> scopedMap = new HashMap<>();
-            final Map<String, Object> namedMap = new HashMap<>();
-            try {
-                desiredObject = (V) provider.call();
-            } catch (ClassCastException e) {
-                throw new IllegalArgumentException(Shank.getErrorMessage(desiredObjectClass, provider));
-            }
-            namedMap.put(name, desiredObject);
-            scopedMap.put(desiredObjectClass, namedMap);
-            Shank.scopedCache.put(scope, scopedMap);
-        } else {
-            Map<String, Object> stringObjectMap = currentScopeMap.get(desiredObjectClass);
-            if (stringObjectMap == null) {
-                final Map<String, Object> namedMap = new HashMap<>();
-                try {
-                    desiredObject = (V) provider.call();
-                } catch (ClassCastException e) {
-                    throw new IllegalArgumentException(Shank.getErrorMessage(desiredObjectClass, provider));
-                }
-                namedMap.put(name, desiredObject);
-                currentScopeMap.put(desiredObjectClass, namedMap);
-            } else {
-                Object o = stringObjectMap.get(name);
-                if (o != null) {
-                    desiredObject = (V) o;
-                } else {
-                    try {
-                        desiredObject = (V) provider.call();
-                    } catch (ClassCastException e) {
-                        throw new IllegalArgumentException(Shank.getErrorMessage(desiredObjectClass, provider));
-                    }
-                    stringObjectMap.put(name, desiredObject);
-                }
-            }
-        }
-
-        return desiredObject;
+        return optionOf(Shank.scopedCache.get(scope))
+                .map(currentScopeMap -> optionOf(currentScopeMap.get(desiredObjectClass))
+                        .map(namedObjectMap -> optionOf((V) namedObjectMap.get(name))
+                                .orElseGet(() -> {
+                                    V desiredObject = (V) provider.call();
+                                    namedObjectMap.put(name, desiredObject);
+                                    return desiredObject;
+                                }))
+                        .orElseGet(() -> {
+                            final Map<String, Object> namedMap = new HashMap<>();
+                            V desiredObject = (V) provider.call();
+                            namedMap.put(name, desiredObject);
+                            currentScopeMap.put(desiredObjectClass, namedMap);
+                            return desiredObject;
+                        }))
+                .orElseGet(() -> {
+                    final Map<Class, Map<String, Object>> scopedMap = new HashMap<>();
+                    final Map<String, Object> namedMap = new HashMap<>();
+                    V desiredObject = (V) provider.call();
+                    namedMap.put(name, desiredObject);
+                    scopedMap.put(desiredObjectClass, namedMap);
+                    Shank.scopedCache.put(scope, scopedMap);
+                    return desiredObject;
+                });
     }
 }

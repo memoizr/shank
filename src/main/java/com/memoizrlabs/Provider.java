@@ -7,7 +7,7 @@ import com.memoizrlabs.functions.Func3;
 import com.memoizrlabs.functions.Func4;
 import com.memoizrlabs.functions.Function;
 
-abstract class Provider<T> {
+abstract class Provider<T> implements Func0<T> {
 
     public static Provider createProvider(Function func) {
         return new Provider0<>(func);
@@ -29,6 +29,7 @@ abstract class Provider<T> {
         return new Provider4<>(func, a, b, c, d);
     }
 
+    @Override
     abstract public T call();
 
     abstract public String argumentsToString();

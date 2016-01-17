@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.memoizrlabs.Provider.createProvider;
+import static com.memoizrlabs.poweroptional.Optional.optionOf;
 
 /**
  * This class will cache items provided by factories, and provide them to the
@@ -18,9 +19,10 @@ import static com.memoizrlabs.Provider.createProvider;
  */
 public final class Shank {
 
-    static final Map<Class, Map<String, Object>> unscopedCache = new HashMap<>();
+    static final Map<Class, Object> unscopedCache = new HashMap<>();
     static final Map<Class, Map<String, Function>> factoryRegister = new HashMap<>();
     static final Map<Scope, Map<Class, Map<String, Object>>> scopedCache = new HashMap<>();
+    private static final String NO_NAME = "";
 
     private Shank() {
     }
@@ -225,45 +227,41 @@ public final class Shank {
     }
 
     /**
+     * Create a builder to associate a naming scope to a class.
+     *
+     * @param name the String associated to a scope.
+     * @return a NamedScopedCache builder.
+     */
+    public static NamedScopedCache named(String name) {
+        return new NamedScopedCache(name);
+    }
+
+    /**
      * Create a builder to associate a scope to a class.
      *
-     * @param scope the class associated to a scope.
+     * @param scope the scope
      * @return a ScopedCache builder.
      */
     public static ScopedCache with(Scope scope) {
         return new ScopedCache(scope);
     }
 
-    static void clearNamedScope(Object scope) {
+    static void clearNamedScope(Scope scope) {
         scopedCache.remove(scope);
     }
 
     @SuppressWarnings("unchecked")
     static <T> T providerHelper(Class<T> desiredObjectClass, Provider provider) {
-        return namedProviderHelper(desiredObjectClass, "", provider);
-    }
-
-    @SuppressWarnings("unchecked")
-    private static <T> T namedProviderHelper(Class<T> desiredObjectClass, String name, Provider provider) {
-        final Map<String, Object> desiredObjectMap = unscopedCache.get(desiredObjectClass);
-
-        T desiredObject;
         try {
-            if (desiredObjectMap == null) {
-                final Map<String, Object> map = new HashMap<>();
-                desiredObject = (T) provider.call();
-                map.put(name, desiredObject);
-                unscopedCache.put(desiredObjectClass, map);
-            } else {
-                desiredObject = (T) desiredObjectMap.get(name);
-                if (desiredObject == null) {
-                    desiredObject = (T) provider.call();
-                }
-            }
+            return (T) optionOf(unscopedCache.get(desiredObjectClass))
+                    .orElseGet(() -> {
+                        T desiredObject = (T) provider.call();
+                        unscopedCache.put(desiredObjectClass, desiredObject);
+                        return desiredObject;
+                    });
         } catch (ClassCastException e) {
             throw new IllegalArgumentException(getErrorMessage(desiredObjectClass, provider));
         }
-        return desiredObject;
     }
 
     static <T> String getErrorMessage(Class<T> desiredObjectClass, Provider provider) {
@@ -272,39 +270,28 @@ public final class Shank {
     }
 
     private static <T> void registerNamedFactoryRaw(Class<T> objectClass, String factoryName, Function factory) {
-        final Map<String, Function> factoryMap = factoryRegister.get(objectClass);
-
-        if (factoryMap == null) {
-            final Map<String, Function> map = new HashMap<>();
-            map.put(factoryName, factory);
-            factoryRegister.put(objectClass, map);
-        } else {
-            factoryMap.put(factoryName, factory);
-        }
+        optionOf(factoryRegister.get(objectClass))
+                .doIfPresent(factoryMap -> factoryMap.put(factoryName, factory))
+                .doIfEmpty(() -> factoryRegister.put(objectClass, new HashMap<String, Function>() {{
+                    put(factoryName, factory);
+                }}));
     }
 
     static <T> Function getFactory(Class<T> desiredObjectClass) {
-        return getFactory(desiredObjectClass, "");
+        return getFactory(desiredObjectClass, NO_NAME);
     }
 
     static <T> Function getFactory(Class<T> desiredObjectClass, String name) {
-        final Map<String, Function> namedFactoryMap = factoryRegister.get(desiredObjectClass);
-
-        if (namedFactoryMap == null) {
-            throw new NoFactoryException("There is no factory for " + desiredObjectClass.getCanonicalName());
-        }
-
-        final Function namedFactory = namedFactoryMap.get(name);
-
-        if (namedFactory == null) {
-            throw new NoFactoryException(
-                    "There is no factory for " + desiredObjectClass.getCanonicalName() + " with name " + name);
-        }
-
-        return namedFactory;
+        return optionOf(factoryRegister.get(desiredObjectClass))
+                .doIfEmpty(() -> {
+                    throw new NoFactoryException("There is no factory for " + desiredObjectClass.getCanonicalName());
+                })
+                .map(namedFactoryMap -> namedFactoryMap.get(name))
+                .orElseThrow(() -> new NoFactoryException(
+                        "There is no factory for " + desiredObjectClass.getCanonicalName() + " with name " + name));
     }
 
-    public static NamedScopedCache named(String name) {
-        return new NamedScopedCache(name);
+    static void clearFactories() {
+        factoryRegister.clear();
     }
 }
