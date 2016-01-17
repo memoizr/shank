@@ -1,5 +1,8 @@
 package com.memoizrlabs;
 
+import com.memoizrlabs.functions.Func0;
+import com.memoizrlabs.functions.Func1;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -10,9 +13,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-
-import rx.functions.Func0;
-import rx.functions.Func1;
 
 import static com.memoizrlabs.Scope.scope;
 import static java.util.Arrays.asList;
