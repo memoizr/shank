@@ -31,30 +31,30 @@ public class ScopedCache {
     }
 
     /**
-     * @see ScopedCache#provide(Class, Object, Object, Object, Object)
+     * @see ScopedCache#provideSingleton(Class, Object, Object, Object, Object)
      */
-    public <V> V provide(Class<V> desiredObjectClass) {
+    public <V> V provideSingleton(Class<V> desiredObjectClass) {
         return providerHelper(desiredObjectClass, createProvider(Shank.getFactory(desiredObjectClass, name)));
     }
 
     /**
-     * @see ScopedCache#provide(Class, Object, Object, Object, Object)
+     * @see ScopedCache#provideSingleton(Class, Object, Object, Object, Object)
      */
-    public <A, V> V provide(Class<V> desiredObjectClass, A a) {
+    public <A, V> V provideSingleton(Class<V> desiredObjectClass, A a) {
         return providerHelper(desiredObjectClass, createProvider(Shank.getFactory(desiredObjectClass, name), a));
     }
 
     /**
-     * @see ScopedCache#provide(Class, Object, Object, Object, Object)
+     * @see ScopedCache#provideSingleton(Class, Object, Object, Object, Object)
      */
-    public <A, B, V> V provide(Class<V> desiredObjectClass, A a, B b) {
+    public <A, B, V> V provideSingleton(Class<V> desiredObjectClass, A a, B b) {
         return providerHelper(desiredObjectClass, createProvider(Shank.getFactory(desiredObjectClass, name), a, b));
     }
 
     /**
-     * @see ScopedCache#provide(Class, Object, Object, Object, Object)
+     * @see ScopedCache#provideSingleton(Class, Object, Object, Object, Object)
      */
-    public <A, B, C, V> V provide(Class<V> desiredObjectClass, A a, B b, C c) {
+    public <A, B, C, V> V provideSingleton(Class<V> desiredObjectClass, A a, B b, C c) {
         return providerHelper(desiredObjectClass, createProvider(Shank.getFactory(desiredObjectClass, name), a, b, c));
     }
 
@@ -76,7 +76,7 @@ public class ScopedCache {
      * @return an instance of the desired object as provided by the
      * registered factory.
      */
-    public <A, B, C, D, V> V provide(Class<V> desiredObjectClass, A a, B b, C c, D d) {
+    public <A, B, C, D, V> V provideSingleton(Class<V> desiredObjectClass, A a, B b, C c, D d) {
         return providerHelper(desiredObjectClass,
                 createProvider(Shank.getFactory(desiredObjectClass, name), a, b, c, d));
     }

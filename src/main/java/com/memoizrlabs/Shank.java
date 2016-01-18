@@ -14,7 +14,7 @@ import static com.memoizrlabs.Provider.createProvider;
 import static com.memoizrlabs.poweroptional.Optional.optionOf;
 
 /**
- * This class will cache items provided by factories, and provide them to the
+ * This class will cache items provided by factories, and provideSingleton them to the
  * user according to specified scope, naming and lifetime constraints.
  */
 public final class Shank {
@@ -59,7 +59,7 @@ public final class Shank {
      * Registers a factory for the specified class of object.
      *
      * @param objectClass is the class of the object that will be produced.
-     * @param factory     is a factory method that will provide an instance of
+     * @param factory     is a factory method that will provideSingleton an instance of
      *                    the object.
      */
     public static <A, B, C, D, T> void registerFactory(Class<T> objectClass, Func4<A, B, C, D, T> factory) {
@@ -201,7 +201,7 @@ public final class Shank {
      *
      * @param objectClass is the class of the object that will be produced.
      * @param factoryName is the string identifier associated to this factory.
-     * @param factory     is a factory method that will provide an instance of
+     * @param factory     is a factory method that will provideSingleton an instance of
      *                    the object.
      */
     public static <A, B, C, D, T> void registerNamedFactory(Class<T> objectClass, String factoryName,
