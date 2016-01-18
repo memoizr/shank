@@ -391,6 +391,66 @@ public class ShankAcceptanceTest {
     }
 
     @Test
+    public void provideSingleton_with_1_arg_whenObjectHasFactory_and_provideSingletonIsCalledMultipleTimesWithDifferentArguments_provideSingletonsForEqualArguments() {
+        Shank.registerFactory(List.class, (x) -> asList(x));
+
+        List firstWithA = Shank.provideSingleton(List.class, "a");
+        List secondWithA = Shank.provideSingleton(List.class, "a");
+
+        List firstWithB = Shank.provideSingleton(List.class, "b");
+        List secondWithB = Shank.provideSingleton(List.class, "b");
+
+        assertTrue(firstWithA == secondWithA);
+        assertTrue(firstWithA != firstWithB);
+        assertTrue(firstWithB == secondWithB);
+    }
+
+    @Test
+    public void provideSingleton_with_2_args_whenObjectHasFactory_and_provideSingletonIsCalledMultipleTimesWithDifferentArguments_provideSingletonsForEqualArguments() {
+        Shank.registerFactory(List.class, (a, b) -> asList(a, b));
+
+        List firstWithA = Shank.provideSingleton(List.class, "a", "b");
+        List secondWithA = Shank.provideSingleton(List.class, "a", "b");
+
+        List firstWithB = Shank.provideSingleton(List.class, "b", "c");
+        List secondWithB = Shank.provideSingleton(List.class, "b", "c");
+
+        assertTrue(firstWithA == secondWithA);
+        assertTrue(firstWithA != firstWithB);
+        assertTrue(firstWithB == secondWithB);
+    }
+
+    @Test
+    public void provideSingleton_with_3_args_whenObjectHasFactory_and_provideSingletonIsCalledMultipleTimesWithDifferentArguments_provideSingletonsForEqualArguments() {
+        Shank.registerFactory(List.class, (a, b, c) -> asList(a, b, c));
+
+        List firstWithA = Shank.provideSingleton(List.class, "a", "b", "c");
+        List secondWithA = Shank.provideSingleton(List.class, "a", "b", "c");
+
+        List firstWithB = Shank.provideSingleton(List.class, "b", "c", "d");
+        List secondWithB = Shank.provideSingleton(List.class, "b", "c", "d");
+
+        assertTrue(firstWithA == secondWithA);
+        assertTrue(firstWithA != firstWithB);
+        assertTrue(firstWithB == secondWithB);
+    }
+
+    @Test
+    public void provideSingleton_with_4_args_whenObjectHasFactory_and_provideSingletonIsCalledMultipleTimesWithDifferentArguments_provideSingletonsForEqualArguments() {
+        Shank.registerFactory(List.class, (a, b, c, d) -> asList(a, b, c, d));
+
+        List firstWithA = Shank.provideSingleton(List.class, "a", "b", "c", "d");
+        List secondWithA = Shank.provideSingleton(List.class, "a", "b", "c", "d");
+
+        List firstWithB = Shank.provideSingleton(List.class, "b", "c", "d", "e");
+        List secondWithB = Shank.provideSingleton(List.class, "b", "c", "d", "e");
+
+        assertTrue(firstWithA == secondWithA);
+        assertTrue(firstWithA != firstWithB);
+        assertTrue(firstWithB == secondWithB);
+    }
+
+    @Test
     public void clear_whenObjectIsRemoved_provideSingletonsNewInstance() {
         Shank.registerFactory(A.class, A::new);
 

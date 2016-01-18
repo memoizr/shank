@@ -19,7 +19,7 @@ import static com.memoizrlabs.poweroptional.Optional.optionOf;
  */
 public final class Shank {
 
-    static final Map<Class, Object> unscopedCache = new HashMap<>();
+    static final Map<Class, Map<Provider, Object>> unscopedCache = new HashMap<>();
     static final Map<Class, Map<String, Function>> factoryRegister = new HashMap<>();
     static final Map<Scope, Map<Class, Map<String, Object>>> scopedCache = new HashMap<>();
     private static final String NO_NAME = "";
@@ -253,10 +253,16 @@ public final class Shank {
     @SuppressWarnings("unchecked")
     static <T> T providerHelper(Class<T> desiredObjectClass, Provider provider) {
         try {
-            return (T) optionOf(unscopedCache.get(desiredObjectClass))
+            return (T)
+                    optionOf(unscopedCache.get(desiredObjectClass))
+                            .map(providerMap -> optionOf(providerMap.get(provider)).orElseGet(() -> {
+                                                T desiredObject = (T) provider.call();
+                                                providerMap.put(provider, desiredObject);
+                                                return desiredObject;
+                                            }))
                     .orElseGet(() -> {
                         T desiredObject = (T) provider.call();
-                        unscopedCache.put(desiredObjectClass, desiredObject);
+                        unscopedCache.put(desiredObjectClass, new HashMap<Provider, Object>(){{put(provider, desiredObject);}});
                         return desiredObject;
                     });
         } catch (ClassCastException e) {
