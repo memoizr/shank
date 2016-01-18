@@ -85,39 +85,49 @@ public class ScopedCache {
     private <V> V providerHelper(Class<V> desiredObjectClass, Provider provider) {
         return optionOf(Shank.scopedCache.get(scope))
                 .map(currentScopeMap -> optionOf(currentScopeMap.get(desiredObjectClass))
-                        .map(namedObjectMap -> optionOf(namedObjectMap.get(name))
+                        .map(namedMap -> optionOf(namedMap.get(name))
                                 .map(providerMap -> (V) optionOf(providerMap.get(provider))
-                                        .orElseGet(() -> {
-                                            V desiredObject = (V) provider.call();
-                                            providerMap.put(provider, desiredObject);
-                                            return desiredObject;
-                                        }))
-                                .orElseGet(() -> {
-                                    V desiredObject = (V) provider.call();
-                                    namedObjectMap.put(name, new HashMap<Provider, Object>() {{
-                                        put(provider, desiredObject);
-                                    }});
-                                    return desiredObject;
-                                }))
-                        .orElseGet(() -> {
-                            final Map<String, Map<Provider, Object>> namedMap = new HashMap<>();
-                            V desiredObject = (V) provider.call();
-                            namedMap.put(name, new HashMap<Provider, Object>() {{
-                                put(provider, desiredObject);
-                            }});
-                            currentScopeMap.put(desiredObjectClass, namedMap);
-                            return desiredObject;
-                        }))
-                .orElseGet(() -> {
-                    final Map<Class, Map<String, Map<Provider, Object>>> scopedMap = new HashMap<>();
-                    final Map<String, Map<Provider, Object>> namedMap = new HashMap<>();
-                    V desiredObject = (V) provider.call();
-                    namedMap.put(name, new HashMap<Provider, Object>() {{
-                        put(provider, desiredObject);
-                    }});
-                    scopedMap.put(desiredObjectClass, namedMap);
-                    Shank.scopedCache.put(scope, scopedMap);
-                    return desiredObject;
-                });
+                                        .orElseGet(() -> getAndCacheObject(provider, providerMap)))
+                                .orElseGet(() -> getObjectAndCacheProviderMap(provider, namedMap)))
+                        .orElseGet(() -> getAndCacheNamedMap(desiredObjectClass, provider, currentScopeMap)))
+                .orElseGet(() -> getAndCacheScope(desiredObjectClass, provider));
+    }
+
+    private <V> V getAndCacheScope(Class<V> desiredObjectClass, final Provider provider) {
+        final Map<Class, Map<String, Map<Provider, Object>>> scopedMap = new HashMap<>();
+        final Map<String, Map<Provider, Object>> namedMap = new HashMap<>();
+        V desiredObject = (V) provider.call();
+        namedMap.put(name, new HashMap<Provider, Object>() {{
+            put(provider, desiredObject);
+        }});
+        scopedMap.put(desiredObjectClass, namedMap);
+        Shank.scopedCache.put(scope, scopedMap);
+        return desiredObject;
+    }
+
+    private <V> V getAndCacheNamedMap(Class<V> desiredObjectClass, final Provider provider,
+            Map<Class, Map<String, Map<Provider, Object>>> currentScopeMap) {
+        final Map<String, Map<Provider, Object>> namedMap = new HashMap<>();
+        V desiredObject = (V) provider.call();
+        namedMap.put(name, new HashMap<Provider, Object>() {{
+            put(provider, desiredObject);
+        }});
+        currentScopeMap.put(desiredObjectClass, namedMap);
+        return desiredObject;
+    }
+
+    private <V> V getObjectAndCacheProviderMap(final Provider provider,
+            Map<String, Map<Provider, Object>> namedObjectMap) {
+        V desiredObject = (V) provider.call();
+        namedObjectMap.put(name, new HashMap<Provider, Object>() {{
+            put(provider, desiredObject);
+        }});
+        return desiredObject;
+    }
+
+    private <V> Object getAndCacheObject(Provider provider, Map<Provider, Object> providerMap) {
+        V desiredObject = (V) provider.call();
+        providerMap.put(provider, desiredObject);
+        return desiredObject;
     }
 }
