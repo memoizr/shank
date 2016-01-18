@@ -69,33 +69,29 @@ public final class Shank {
     /**
      * @see Shank#provideNew(Class, Object, Object, Object, Object)
      */
-    @SuppressWarnings("unchecked")
     public static <T> T provideNew(Class<T> desiredObjectClass) {
-        return (T) createProvider(getFactory(desiredObjectClass, "")).call();
+        return createProvider(getFactory(desiredObjectClass, "")).call();
     }
 
     /**
      * @see Shank#provideNew(Class, Object, Object, Object, Object)
      */
-    @SuppressWarnings("unchecked")
     public static <A, T> T provideNew(Class<T> desiredObjectClass, A a) {
-        return (T) createProvider(getFactory(desiredObjectClass, ""), a).call();
+        return createProvider(getFactory(desiredObjectClass, ""), a).call();
     }
 
     /**
      * @see Shank#provideNew(Class, Object, Object, Object, Object)
      */
-    @SuppressWarnings("unchecked")
     public static <A, B, T> T provideNew(Class<T> desiredObjectClass, A a, B b) {
-        return (T) createProvider(getFactory(desiredObjectClass, ""), a, b).call();
+        return  createProvider(getFactory(desiredObjectClass, ""), a, b).call();
     }
 
     /**
      * @see Shank#provideNew(Class, Object, Object, Object, Object)
      */
-    @SuppressWarnings("unchecked")
     public static <A, B, C, T> T provideNew(Class<T> desiredObjectClass, A a, B b, C c) {
-        return (T) createProvider(getFactory(desiredObjectClass, ""), a, b, c).call();
+        return createProvider(getFactory(desiredObjectClass, ""), a, b, c).call();
     }
 
     /**
@@ -113,9 +109,8 @@ public final class Shank {
      * @param d                  is the fourth parameter to be passed to the registered factory.
      * @return an instance of the desired object as provideSingletond by the registered factory.
      */
-    @SuppressWarnings("unchecked")
     public static <A, B, C, D, T> T provideNew(Class<T> desiredObjectClass, A a, B b, C c, D d) {
-        return (T) createProvider(getFactory(desiredObjectClass, ""), a, b, c, d).call();
+        return createProvider(getFactory(desiredObjectClass, ""), a, b, c, d).call();
     }
 
     /**
@@ -168,7 +163,7 @@ public final class Shank {
     /**
      * @see Shank#registerNamedFactory(Class, String, Func4)
      */
-    public static <T> void registerNamedFactory(Class<T> objectClass, String factoryName, Func0 factory) {
+    public static <T> void registerNamedFactory(Class<T> objectClass, String factoryName, Func0<T> factory) {
         registerNamedFactoryRaw(objectClass, factoryName, factory);
     }
 
@@ -251,17 +246,17 @@ public final class Shank {
     }
 
     @SuppressWarnings("unchecked")
-    static <T> T providerHelper(Class<T> desiredObjectClass, Provider provider) {
+    static <T> T providerHelper(Class<T> desiredObjectClass, Provider<T> provider) {
         try {
             return (T)
                     optionOf(unscopedCache.get(desiredObjectClass))
                             .map(providerMap -> optionOf(providerMap.get(provider)).orElseGet(() -> {
-                                                T desiredObject = (T) provider.call();
+                                                T desiredObject = provider.call();
                                                 providerMap.put(provider, desiredObject);
                                                 return desiredObject;
                                             }))
                     .orElseGet(() -> {
-                        T desiredObject = (T) provider.call();
+                        T desiredObject = provider.call();
                         unscopedCache.put(desiredObjectClass, new HashMap<Provider, Object>(){{put(provider, desiredObject);}});
                         return desiredObject;
                     });
@@ -275,7 +270,7 @@ public final class Shank {
                 .getSimpleName();
     }
 
-    private static <T> void registerNamedFactoryRaw(Class<T> objectClass, String factoryName, Function factory) {
+    private static <T> void registerNamedFactoryRaw(Class<T> objectClass, String factoryName, Function<T> factory) {
         optionOf(factoryRegister.get(objectClass))
                 .doIfPresent(factoryMap -> factoryMap.put(factoryName, factory))
                 .doIfEmpty(() -> factoryRegister.put(objectClass, new HashMap<String, Function>() {{
@@ -283,11 +278,12 @@ public final class Shank {
                 }}));
     }
 
-    static <T> Function getFactory(Class<T> desiredObjectClass) {
+    static <T> Function<T> getFactory(Class<T> desiredObjectClass) {
         return getFactory(desiredObjectClass, NO_NAME);
     }
 
-    static <T> Function getFactory(Class<T> desiredObjectClass, String name) {
+    @SuppressWarnings("unchecked")
+    static <T> Function<T> getFactory(Class<T> desiredObjectClass, String name) {
         return optionOf(factoryRegister.get(desiredObjectClass))
                 .doIfEmpty(() -> {
                     throw new NoFactoryException("There is no factory for " + desiredObjectClass.getCanonicalName());

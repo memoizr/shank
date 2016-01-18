@@ -82,21 +82,25 @@ public class ScopedCache {
     }
 
     @SuppressWarnings("unchecked")
-    private <V> V providerHelper(Class<V> desiredObjectClass, Provider provider) {
-        return optionOf(Shank.scopedCache.get(scope))
-                .map(currentScopeMap -> optionOf(currentScopeMap.get(desiredObjectClass))
-                        .map(namedMap -> optionOf(namedMap.get(name))
-                                .map(providerMap -> (V) optionOf(providerMap.get(provider))
-                                        .orElseGet(() -> getAndCacheObject(provider, providerMap)))
-                                .orElseGet(() -> getObjectAndCacheProviderMap(provider, namedMap)))
-                        .orElseGet(() -> getAndCacheNamedMap(desiredObjectClass, provider, currentScopeMap)))
-                .orElseGet(() -> getAndCacheScope(desiredObjectClass, provider));
+    private <V> V providerHelper(Class<V> desiredObjectClass, Provider<V> provider) {
+        try {
+            return optionOf(Shank.scopedCache.get(scope))
+                    .map(currentScopeMap -> optionOf(currentScopeMap.get(desiredObjectClass))
+                            .map(namedMap -> optionOf(namedMap.get(name))
+                                    .map(providerMap -> (V) optionOf(providerMap.get(provider))
+                                            .orElseGet(() -> getAndCacheObject(provider, providerMap)))
+                                    .orElseGet(() -> getObjectAndCacheProviderMap(provider, namedMap)))
+                            .orElseGet(() -> getAndCacheNamedMap(desiredObjectClass, provider, currentScopeMap)))
+                    .orElseGet(() -> getAndCacheScope(desiredObjectClass, provider));
+        } catch (ClassCastException e) {
+            throw new IllegalArgumentException(Shank.getErrorMessage(desiredObjectClass, provider));
+        }
     }
 
-    private <V> V getAndCacheScope(Class<V> desiredObjectClass, final Provider provider) {
+    private <V> V getAndCacheScope(Class<V> desiredObjectClass, final Provider<V> provider) {
         final Map<Class, Map<String, Map<Provider, Object>>> scopedMap = new HashMap<>();
         final Map<String, Map<Provider, Object>> namedMap = new HashMap<>();
-        V desiredObject = (V) provider.call();
+        V desiredObject = provider.call();
         namedMap.put(name, new HashMap<Provider, Object>() {{
             put(provider, desiredObject);
         }});
@@ -105,10 +109,10 @@ public class ScopedCache {
         return desiredObject;
     }
 
-    private <V> V getAndCacheNamedMap(Class<V> desiredObjectClass, final Provider provider,
+    private <V> V getAndCacheNamedMap(Class<V> desiredObjectClass, final Provider<V> provider,
             Map<Class, Map<String, Map<Provider, Object>>> currentScopeMap) {
         final Map<String, Map<Provider, Object>> namedMap = new HashMap<>();
-        V desiredObject = (V) provider.call();
+        V desiredObject = provider.call();
         namedMap.put(name, new HashMap<Provider, Object>() {{
             put(provider, desiredObject);
         }});
@@ -116,17 +120,17 @@ public class ScopedCache {
         return desiredObject;
     }
 
-    private <V> V getObjectAndCacheProviderMap(final Provider provider,
+    private <V> V getObjectAndCacheProviderMap(final Provider<V> provider,
             Map<String, Map<Provider, Object>> namedObjectMap) {
-        V desiredObject = (V) provider.call();
+        V desiredObject = provider.call();
         namedObjectMap.put(name, new HashMap<Provider, Object>() {{
             put(provider, desiredObject);
         }});
         return desiredObject;
     }
 
-    private <V> Object getAndCacheObject(Provider provider, Map<Provider, Object> providerMap) {
-        V desiredObject = (V) provider.call();
+    private <V> Object getAndCacheObject(Provider<V> provider, Map<Provider, Object> providerMap) {
+        V desiredObject = provider.call();
         providerMap.put(provider, desiredObject);
         return desiredObject;
     }

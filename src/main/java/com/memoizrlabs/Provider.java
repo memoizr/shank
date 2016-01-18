@@ -9,23 +9,23 @@ import com.memoizrlabs.functions.Function;
 
 abstract class Provider<T> implements Func0<T> {
 
-    public static Provider createProvider(Function func) {
+    public static <R> Provider<R> createProvider(Function<R> func) {
         return new Provider0<>(func);
     }
 
-    public static <A> Provider createProvider(Function func, A a) {
+    public static <A, R> Provider<R> createProvider(Function<R> func, A a) {
         return new Provider1<>(func, a);
     }
 
-    public static <A, B> Provider createProvider(Function func, A a, B b) {
+    public static <A, B, R> Provider<R> createProvider(Function<R> func, A a, B b) {
         return new Provider2<>(func, a, b);
     }
 
-    public static <A, B, C> Provider createProvider(Function func, A a, B b, C c) {
+    public static <A, B, C, R> Provider<R> createProvider(Function<R> func, A a, B b, C c) {
         return new Provider3<>(func, a, b, c);
     }
 
-    public static <A, B, C, D> Provider createProvider(Function func, A a, B b, C c, D d) {
+    public static <A, B, C, D, R> Provider<R> createProvider(Function<R> func, A a, B b, C c, D d) {
         return new Provider4<>(func, a, b, c, d);
     }
 

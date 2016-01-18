@@ -271,6 +271,16 @@ public class ShankAcceptanceTest {
     }
 
     @Test
+    public void provideScopedSingleton_whenObjectHasNoFactory_throwsMeaninfulErrro() {
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("No factory with String, String, String arguments registered for List");
+
+        Shank.registerFactory(List.class, (a, b) -> asList("a", "b"));
+
+        Shank.with(scope("foo")).provideSingleton(List.class, "a", "b", "c");
+    }
+
+    @Test
     public void provideSingleton_whenObjectHasFactoryWith1Parameter_provideSingletonsRightObject() {
         Shank.registerFactory(List.class, Collections::singletonList);
 
