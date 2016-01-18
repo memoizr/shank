@@ -21,7 +21,7 @@ public final class Shank {
 
     static final Map<Class, Map<Provider, Object>> unscopedCache = new HashMap<>();
     static final Map<Class, Map<String, Function>> factoryRegister = new HashMap<>();
-    static final Map<Scope, Map<Class, Map<String, Object>>> scopedCache = new HashMap<>();
+    static final Map<Scope, Map<Class, Map<String, Map<Provider, Object>>>> scopedCache = new HashMap<>();
     private static final String NO_NAME = "";
 
     private Shank() {
