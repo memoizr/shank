@@ -1,6 +1,11 @@
 package com.memoizrlabs;
 
 import com.memoizrlabs.functions.Action0;
+import com.memoizrlabs.functions.Action1;
+
+import java.util.Map;
+
+import static com.memoizrlabs.poweroptional.Optional.optionOf;
 
 public final class Scope {
 
@@ -18,6 +23,23 @@ public final class Scope {
 
     public void clear() {
         action.call();
+    }
+
+    public void clearWithFinalAction(Action1<Object> destroyAction) {
+        try {
+            optionOf(Shank.scopedCache.get(this)).doIfPresent(scopeMap -> {
+                for (Map.Entry<Class, Map<String, Map<Provider, Object>>> scopedEntrySet : scopeMap.entrySet()) {
+                    for (Map.Entry<String, Map<Provider, Object>> namedEntrySet : scopedEntrySet.getValue()
+                            .entrySet()) {
+                        for (Map.Entry<Provider, Object> objectMap : namedEntrySet.getValue().entrySet()) {
+                            destroyAction.call(objectMap.getValue());
+                        }
+                    }
+                }
+            });
+        } finally {
+            action.call();
+        }
     }
 
     void subscribe(Action0 action) {
