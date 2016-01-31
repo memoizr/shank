@@ -60,21 +60,20 @@ public class ScopedCache {
 
     /**
      * Provides the desired object. Throws a NoFactoryException if no
-     * factory is registered for the class of the desired object. The object
-     * returned will be created the first time this method is called and
-     * all subsequent calls will return a cached instance of the same
-     * object. When the lifetime observable emits an item, the object will
-     * be removed from cache, and the next time this method is called a new
-     * instance will be returned, which will be bound to the events from
-     * the newly supplied observable.
+     * factory is registered for the class of the desired object. Calling this
+     * method with different arguments will result in different objects
+     * being returned. The object returned will be created the first time
+     * this method is called and all subsequent calls will return a cached
+     * instance of the same object. When the cache is cleared, the provided
+     * object will be removed from cache, and the next time this method is called
+     * a new instance will be returned.
      *
      * @param desiredObjectClass is the class of the desired object.
-     * @param a                  is the first parameter to be passed to the registered factory.
-     * @param b                  is the second parameter to be passed to the registered factory.
-     * @param c                  is the third parameter to be passed to the registered factory.
-     * @param d                  is the fourth parameter to be passed to the registered factory.
-     * @return an instance of the desired object as provided by the
-     * registered factory.
+     * @param a                  is the first parameter to be passed to the corresponding factory.
+     * @param b                  is the second parameter to be passed to the corresponding factory.
+     * @param c                  is the third parameter to be passed to the corresponding factory.
+     * @param d                  is the fourth parameter to be passed to the corresponding factory.
+     * @return an instance of the desired object as provided by the corresponding factory.
      */
     public <A, B, C, D, V> V provideSingleton(Class<V> desiredObjectClass, A a, B b, C c, D d) {
         return providerHelper(desiredObjectClass,

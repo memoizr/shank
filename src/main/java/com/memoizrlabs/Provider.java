@@ -9,30 +9,30 @@ import com.memoizrlabs.functions.Function;
 
 abstract class Provider<T> implements Func0<T> {
 
-    public static <R> Provider<R> createProvider(Function<R> func) {
+    static <R> Provider<R> createProvider(Function<R> func) {
         return new Provider0<>(func);
     }
 
-    public static <A, R> Provider<R> createProvider(Function<R> func, A a) {
+    static <A, R> Provider<R> createProvider(Function<R> func, A a) {
         return new Provider1<>(func, a);
     }
 
-    public static <A, B, R> Provider<R> createProvider(Function<R> func, A a, B b) {
+    static <A, B, R> Provider<R> createProvider(Function<R> func, A a, B b) {
         return new Provider2<>(func, a, b);
     }
 
-    public static <A, B, C, R> Provider<R> createProvider(Function<R> func, A a, B b, C c) {
+    static <A, B, C, R> Provider<R> createProvider(Function<R> func, A a, B b, C c) {
         return new Provider3<>(func, a, b, c);
     }
 
-    public static <A, B, C, D, R> Provider<R> createProvider(Function<R> func, A a, B b, C c, D d) {
+    static <A, B, C, D, R> Provider<R> createProvider(Function<R> func, A a, B b, C c, D d) {
         return new Provider4<>(func, a, b, c, d);
     }
 
     @Override
     abstract public T call();
 
-    abstract public String argumentsToString();
+    abstract String argumentsToString();
 
     static class Provider0<T> extends Provider<T> {
 

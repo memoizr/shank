@@ -7,6 +7,9 @@ import java.util.Map;
 
 import static com.memoizrlabs.poweroptional.Optional.optionOf;
 
+/**
+ * The scope that cached objects should be bound to.
+ */
 public final class Scope {
 
     private Object scopeObect;
@@ -17,14 +20,27 @@ public final class Scope {
         this.scopeObect = scopeObect;
     }
 
+    /**
+     * Creates a new scope that the cached objects should be bound to.
+     * @param scopeObect the object this scope should be tied to.
+     * @return the scope.
+     */
     public static Scope scope(Object scopeObect) {
         return new Scope(scopeObect);
     }
 
+    /**
+     * Clears cache for the scope.
+     */
     public void clear() {
         action.call();
     }
 
+    /**
+     * Clears the cache for the scope and runs an action for each object
+     * in the scope.
+     * @param destroyAction the action to be performed on each object in the scope.
+     */
     public void clearWithFinalAction(Action1<Object> destroyAction) {
         try {
             optionOf(Shank.scopedCache.get(this)).doIfPresent(scopeMap -> {

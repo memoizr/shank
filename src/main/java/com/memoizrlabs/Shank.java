@@ -56,7 +56,7 @@ public final class Shank {
     }
 
     /**
-     * Registers a factory for the specified class of object.
+     * Registers a factory for the specified class.
      *
      * @param objectClass is the class of the object that will be produced.
      * @param factory     is a factory method that will provideSingleton an instance of
@@ -95,9 +95,7 @@ public final class Shank {
     }
 
     /**
-     * Provides the desired object. The object  returned will be created the
-     * first time this method is called, and all subsequent calls will return a
-     * cached instance of the same  object. Throws a NoFactoryException if no
+     * Provides a new instance of the desired object. Throws a NoFactoryException if no
      * factory is registered for the class of the desired object. Throws an
      * IllegalArgumentException when no factory is registered with the same
      * number of arguments.
@@ -144,17 +142,18 @@ public final class Shank {
     /**
      * Provides the desired object. The object  returned will be created the
      * first time this method is called, and all subsequent calls will return a
-     * cached instance of the same  object. Throws a NoFactoryException if no
+     * cached instance of the same  object, unless the same method is called with
+     * different factory object parameters. Throws a NoFactoryException if no
      * factory is registered for the class of the desired object. Throws an
      * IllegalArgumentException when no factory is registered with the same
      * number of arguments.
      *
      * @param desiredObjectClass is the class of the desired object.
-     * @param a                  is the first parameter to be passed to the registered factory.
-     * @param b                  is the second parameter to be passed to the registered factory.
-     * @param c                  is the third parameter to be passed to the registered factory.
-     * @param d                  is the fourth parameter to be passed to the registered factory.
-     * @return an instance of the desired object as provideSingletond by the registered factory.
+     * @param a                  is the first parameter to be passed to the corresponding factory.
+     * @param b                  is the second parameter to be passed to the corresponding factory.
+     * @param c                  is the third parameter to be passed to the corresponding factory.
+     * @param d                  is the fourth parameter to be passed to the corresponding factory.
+     * @return an instance of the desired object as provideSingletond by the corresponding factory.
      */
     public static <A, B, C, D, T> T provideSingleton(Class<T> desiredObjectClass, A a, B b, C c, D d) {
         return providerHelper(desiredObjectClass, createProvider(getFactory(desiredObjectClass), a, b, c, d));
@@ -205,24 +204,7 @@ public final class Shank {
     }
 
     /**
-     * Clears the entire cache.
-     */
-    public static void clearAll() {
-        unscopedCache.clear();
-        scopedCache.clear();
-    }
-
-    /**
-     * Clears the scope associated to an unscoped class.
-     *
-     * @param objectClass is the class of the object.
-     */
-    public static <T> void clearUnscoped(Class<T> objectClass) {
-        unscopedCache.remove(objectClass);
-    }
-
-    /**
-     * Create a builder to associate a naming scope to a class.
+     * Creates a builder for a named scope.
      *
      * @param name the String associated to a scope.
      * @return a NamedScopedCache builder.
@@ -232,7 +214,7 @@ public final class Shank {
     }
 
     /**
-     * Create a builder to associate a scope to a class.
+     * Creates a builder for a clearable scope.
      *
      * @param scope the scope
      * @return a ScopedCache builder.
@@ -293,7 +275,27 @@ public final class Shank {
                         "There is no factory for " + desiredObjectClass.getCanonicalName() + " with name " + name));
     }
 
+    /**
+     * Clears all the registered factories.
+     */
     static void clearFactories() {
         factoryRegister.clear();
+    }
+
+    /**
+     * Clears the entire cache.
+     */
+    static void clearAll() {
+        unscopedCache.clear();
+        scopedCache.clear();
+    }
+
+    /**
+     * Clears the scope associated to an unscoped class.
+     *
+     * @param objectClass is the class of the object.
+     */
+    static <T> void clearUnscoped(Class<T> objectClass) {
+        unscopedCache.remove(objectClass);
     }
 }
