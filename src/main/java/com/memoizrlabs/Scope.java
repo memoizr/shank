@@ -3,6 +3,7 @@ package com.memoizrlabs;
 import com.memoizrlabs.functions.Action0;
 import com.memoizrlabs.functions.Action1;
 
+import java.io.Serializable;
 import java.util.Map;
 
 import static com.memoizrlabs.poweroptional.Optional.optionOf;
@@ -10,13 +11,13 @@ import static com.memoizrlabs.poweroptional.Optional.optionOf;
 /**
  * The scope that cached objects should be bound to.
  */
-public final class Scope {
+public final class Scope implements Serializable {
 
-    private Object scopeObect;
+    private Serializable scopeObect;
     private Action0 action = () -> {
     };
 
-    private Scope(Object scopeObect) {
+    private Scope(Serializable scopeObect) {
         this.scopeObect = scopeObect;
     }
 
@@ -25,7 +26,7 @@ public final class Scope {
      * @param scopeObect the object this scope should be tied to.
      * @return the scope.
      */
-    public static Scope scope(Object scopeObect) {
+    public static Scope scope(Serializable scopeObect) {
         return new Scope(scopeObect);
     }
 

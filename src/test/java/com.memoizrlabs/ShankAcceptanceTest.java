@@ -3,6 +3,7 @@ package com.memoizrlabs;
 import com.memoizrlabs.functions.Func0;
 import com.memoizrlabs.functions.Func1;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -32,6 +33,19 @@ public class ShankAcceptanceTest {
     public void setUp() {
         Shank.clearAll();
         Shank.clearFactories();
+    }
+
+    @Test
+    public void provideNamedSingleton_whenObjectHasFactoryWithNoArgs_provideNewInstanceEveryTime() {
+        Shank.registerNamedFactory(List.class, "foo", (Func0<List>) ArrayList::new);
+
+        List providedNewInstance = Shank.named("foo").provideSingleton(List.class);
+        List otherProvidedNewInstance = Shank.named("foo").provideSingleton(List.class);
+
+        assertTrue(providedNewInstance != null);
+        assertTrue(otherProvidedNewInstance != null);
+        assertTrue(providedNewInstance == otherProvidedNewInstance);
+        assertThat(providedNewInstance, is(Collections.emptyList()));
     }
 
     @Test
@@ -527,11 +541,15 @@ public class ShankAcceptanceTest {
 
     @Test
     public void clear_whenScopeIsClearedExecuteFinalizerForEachObjectInScope() {
-        List<String> list1 = new ArrayList<String>() {{add("a");}};
-        List<String> list2 = new ArrayList<String>() {{add("b");}};
+        List<String> list1 = new ArrayList<String>() {{
+            add("a");
+        }};
+        List<String> list2 = new ArrayList<String>() {{
+            add("b");
+        }};
         registerNamedFactory(List.class, "1", () -> list1);
         registerNamedFactory(List.class, "2", () -> list2);
-        Scope scope = Scope.scope(new Object());
+        Scope scope = Scope.scope("aScope");
         Shank.named("1").with(scope).provideSingleton(List.class);
         Shank.named("2").with(scope).provideSingleton(List.class);
 
@@ -651,7 +669,8 @@ public class ShankAcceptanceTest {
         final A providedA = Shank.with(scope).provideSingleton(A.class);
         Scope secondScope = scope("");
         final B providedB = Shank.with(secondScope).provideSingleton(B.class);
-        secondScope.clearWithFinalAction(o -> {});
+        secondScope.clearWithFinalAction(o -> {
+        });
         Scope thirdScope = scope("");
         final A otherProvidedA = Shank.with(thirdScope).provideSingleton(A.class);
 
@@ -846,6 +865,37 @@ public class ShankAcceptanceTest {
     }
 
     @Test
+    public void withScope_registeringNestedDependencies_bothObjectsAreProvided() {
+        final Scope scope = scope("aScope");
+        final Func0<NestedDependency> getDependency = () -> Shank.with(scope).provideSingleton(NestedDependency.class);
+        Shank.registerFactory(NestedDependency.class, NestedDependency::new);
+        Shank.registerFactory(Container.class, () -> new Container(getDependency.call()));
+
+        Container container = Shank.with(scope).provideSingleton(Container.class);
+        NestedDependency nestedDependency = getDependency.call();
+
+        assertNotNull(container);
+        assertNotNull(nestedDependency);
+        assertTrue(container.nestedDependency == getDependency.call());
+    }
+
+    @Test
+    public void named_registeringNestedDependencies_bothObjectsAreProvided() {
+        final Func0<NestedDependency> getDependency = () -> Shank.named("foo").provideSingleton(NestedDependency.class);
+        final Func0<Container> getContainer = () -> Shank.named("foo").provideSingleton(Container.class);
+        Shank.registerNamedFactory(NestedDependency.class, "foo", NestedDependency::new);
+        Shank.registerNamedFactory(Container.class, "foo", () -> new Container(getDependency.call()));
+        Shank.registerNamedFactory(SuperContainer.class, "boo", () -> new SuperContainer(getContainer.call()));
+
+        SuperContainer superContainer = Shank.named("boo").provideSingleton(SuperContainer.class);
+        NestedDependency nestedDependency = getDependency.call();
+
+        assertNotNull(superContainer);
+        assertNotNull(nestedDependency);
+        Assert.assertEquals(superContainer.container.nestedDependency, getDependency.call());
+    }
+
+    @Test
     public void provide_whenObjectHasNoFactory_throwsException() throws Exception {
         expectedException.expect(NoFactoryException.class);
         expectedException.expectMessage("There is no factory for " + B.class.getCanonicalName());
@@ -886,5 +936,25 @@ public class ShankAcceptanceTest {
 
     static class B {
 
+    }
+
+    static class Container {
+
+        private NestedDependency nestedDependency;
+
+        Container(NestedDependency nestedDependency) {
+            this.nestedDependency = nestedDependency;
+        }
+    }
+
+    static class NestedDependency {
+    }
+
+    static class SuperContainer {
+        private Container container;
+
+        SuperContainer(Container container) {
+            this.container = container;
+        }
     }
 }

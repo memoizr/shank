@@ -8,21 +8,21 @@ import static com.memoizrlabs.poweroptional.Optional.optionOf;
 
 public class ScopedCache {
 
-    private Scope scope = Scope.scope(this);
-    private String name = "";
+    private final Scope scope;
+    private String name;
 
     ScopedCache(Scope scope) {
-        this.scope = scope;
-        this.scope.subscribe(() -> Shank.clearNamedScope(scope));
+        this(scope, "");
     }
 
     ScopedCache(Scope scope, String name) {
         this.scope = scope;
+        this.scope.subscribe(() -> Shank.clearNamedScope(scope));
         this.name = name;
     }
 
     ScopedCache(String name) {
-        this.name = name;
+        this(Scope.scope(""), name);
     }
 
     public ScopedCache named(String name) {
@@ -99,23 +99,23 @@ public class ScopedCache {
     private <V> V getAndCacheScope(Class<V> desiredObjectClass, final Provider<V> provider) {
         final Map<Class, Map<String, Map<Provider, Object>>> scopedMap = new HashMap<>();
         final Map<String, Map<Provider, Object>> namedMap = new HashMap<>();
+        scopedMap.put(desiredObjectClass, namedMap);
+        Shank.scopedCache.put(scope, scopedMap);
         V desiredObject = provider.call();
         namedMap.put(name, new HashMap<Provider, Object>() {{
             put(provider, desiredObject);
         }});
-        scopedMap.put(desiredObjectClass, namedMap);
-        Shank.scopedCache.put(scope, scopedMap);
         return desiredObject;
     }
 
     private <V> V getAndCacheNamedMap(Class<V> desiredObjectClass, final Provider<V> provider,
             Map<Class, Map<String, Map<Provider, Object>>> currentScopeMap) {
         final Map<String, Map<Provider, Object>> namedMap = new HashMap<>();
+        currentScopeMap.put(desiredObjectClass, namedMap);
         V desiredObject = provider.call();
         namedMap.put(name, new HashMap<Provider, Object>() {{
             put(provider, desiredObject);
         }});
-        currentScopeMap.put(desiredObjectClass, namedMap);
         return desiredObject;
     }
 
