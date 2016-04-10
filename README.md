@@ -6,7 +6,7 @@ Shank is a simple, fast, powerful and flexible dependency injection framework fo
 - Named singletons
 - Scoped singletons
 - Named scoped singletons
-- Extremely fast initialization (>1ms per factory even on a slow phone) 
+- Fast initialization (<1ms per factory even on a slow phone) 
 - Lazy object instatiation
 - Callback for scope destruction (handy for teardown logic)
 - Dynamic injection (pass parameters to factory at runtime when requesting objects)
