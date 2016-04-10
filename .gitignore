@@ -1,0 +1,16 @@
+.gradle
+/local.properties
+.DS_Store
+
+/captures
+
+# Build output directies
+target/
+build/
+
+# IntelliJ specific files/directories
+out
+.idea
+*.ipr
+*.iws
+*.iml
