@@ -1,54 +1,77 @@
 # Shank
-Shank is a lightweight, simple and performant dependency injection framework for Java (1.7 and up). It is conceptually based on the Service Locator Pattern (Gamma 1994), and Typesafe Etherogeneous Containers (Bloch 2008). The API has been very loosely inspired by Dagger.
+Shank is a simple, fast, powerful and flexible dependency injection framework for Java (1.7 and up) and other compatible JVM languages. It is conceptually based on the Service Locator Pattern (Gamma 1994), and Typesafe Etherogeneous Containers (Bloch 2008). 
 
-####Main features
-- Scoped singletons
-- Bounded scoped singletons
+#### Main feature
+- New instances
 - Named singletons
-- Bounded named singletons
-- No upfront object graph creation
+- Scoped singletons
+- Named scoped singletons
+- Extremely fast initialization (>1ms per factory even on a slow phone) 
 - Lazy object instatiation
+- Callback for scope destruction (handy for teardown logic)
+- Dynamic injection (pass parameters to factory at runtime when requesting objects)
 
 ####Some advantages over other frameworks
 - No reflection
 - No code generation (no magic!)
 - Plain old Java
+- Very small (\~250 methods)
 
-####Usage
-Plain object: 
-returns a `StringFormatter` instance provided by the factory.
+#### Usage
+
+Specify what classes you want to instantiate and how, here's a simple example:
 ```java
-Shank.provide(StringFormatter.class);
+Shank.registerFactory(Example.class, Example::new);
 ```
 
-Plain object by name: 
-returns a `Scheduler` instance associated to a string identifier "io" provided by the factory.
+You can then get new instances of `Example` by using:
 ```java
-Shank.provideNamed(Scheduler.class, "io");
+Example example = Shank.provideNew(Example.class);
 ```
 
-Scoped singleton: 
-returns the same `StreamPresenter` instance provided by the factory every time a `StreamActivity` asks for it.
+You could use this instead to get a *global singleton*, every time you ask for it you get the same instance, for as long as the application stays in memory:
 ```java
-Shank.withScope(StreamActivity.class).provide(StreamPresenter.class);
+Example example = Shank.provideSingleton(Example.class);
 ```
 
-Bound Scoped singleton: 
-returns the same `StreamPresenter` instance provided by the factory every time a `StreamActivity` asks for it, until `endOfLifeObservable` emits an item. After that the cached object is removed from the cache.
+
+Sometimes you want to get the same instance of an object only sometimes, so you can create a scope, and for long as you ask for that object by using equal scopes, you get the same instance:
 ```java
-Shank.withBoundScope(StreamActivity.class, endOfLifeObservable).provide(StreamPresenter.class);
+Shank.with(scope("reference")).provide(StreamPresenter.class);
 ```
+
+Here 
+
+# New instance with dynamic parameters: 
+This returns a new instance of `UserPresenter`. An anonymous factory for 'UserPresenter' must have been already registered.
+```java
+Shank.provideNew(UserPresenter.class, userId);
+```
+
+
+Named new object:
+returns a new instance of `Scheduler`, as provided by the named factory.
+```java
+Shank.named("io").provideNew(Scheduler.class);
+```
+
+Named singleton:
+returns a cached (or new if none exists) instance of `Scheduler` as provided by the named factory.
+```java
+Shank.named("io").provideSingleton(Scheduler.class);
+```
+
+
+## How you create objects:
 
 Anonymous factory:
-```java
-Shank.registerFactory(SessionHandler.class, SessionHandler::new);
-```
 
 Named factory:
 ```java
-Shank.registerNamedFactory(Scheduler.class, "ui", AndroidSchedulers::mainThread);
+Shank.registerNamedFactory(Example.class, "ui", AndroidSchedulers::mainThread);
 ```
 
+## Where you put the factories:
 Modules:
 ```java
 final class AppModule implements ShankModule {
@@ -62,7 +85,7 @@ final class AppModule implements ShankModule {
 }
 ```
 
-Module initialization:
+## How you build the dependency graph:
 ```java
 ShankModuleInitializer.initializeModules(
         new AppModule(),
@@ -93,6 +116,6 @@ repositories {
 Step 2: add the dependency.
 ```groovy
 dependencies {
-    compile 'com.github.memoizr:shank:v0.2.2'
+    compile 'com.github.memoizr:shank:v1.3.1'
 }
 ```
