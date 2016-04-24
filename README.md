@@ -195,6 +195,9 @@ dependencies {
 }
 ```
 
+### Resources
+Classic CoffeMaker example: https://github.com/memoizr/shank-samples
+
 =====================================================================
 
 #### About DI
