@@ -16,6 +16,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.memoizrlabs.Scope.scope;
+import static com.memoizrlabs.Shank.provideNew;
 import static com.memoizrlabs.Shank.registerNamedFactory;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
@@ -52,8 +53,8 @@ public class ShankAcceptanceTest {
     public void provideNewInstanceProvides_whenObjectHasFactoryWithNoArgs_provideNewInstanceEveryTime() {
         Shank.registerFactory(List.class, (Func0<List>) ArrayList::new);
 
-        List providedNewInstance = Shank.provideNew(List.class);
-        List otherProvidedNewInstance = Shank.provideNew(List.class);
+        List providedNewInstance = provideNew(List.class);
+        List otherProvidedNewInstance = provideNew(List.class);
 
         assertTrue(providedNewInstance != null);
         assertTrue(otherProvidedNewInstance != null);
@@ -66,8 +67,8 @@ public class ShankAcceptanceTest {
     public void provideNewInstanceProvides_whenObjectHasFactoryWith_1_Args_provideNewInstanceEveryTime() {
         Shank.registerFactory(List.class, Collections::singletonList);
 
-        List providedNewInstance = Shank.provideNew(List.class, "a");
-        List otherProvidedNewInstance = Shank.provideNew(List.class, "a");
+        List providedNewInstance = provideNew(List.class, "a");
+        List otherProvidedNewInstance = provideNew(List.class, "a");
 
         assertTrue(providedNewInstance != null);
         assertTrue(otherProvidedNewInstance != null);
@@ -81,8 +82,8 @@ public class ShankAcceptanceTest {
     public void provideNewInstanceProvides_whenObjectHasFactoryWith_2_Args_provideNewInstanceEveryTime() {
         Shank.registerFactory(List.class, (a, b) -> asList(a, b));
 
-        List providedNewInstance = Shank.provideNew(List.class, "a", "b");
-        List otherProvidedNewInstance = Shank.provideNew(List.class, "a", "b");
+        List providedNewInstance = provideNew(List.class, "a", "b");
+        List otherProvidedNewInstance = provideNew(List.class, "a", "b");
 
         assertTrue(providedNewInstance != null);
         assertTrue(otherProvidedNewInstance != null);
@@ -95,8 +96,8 @@ public class ShankAcceptanceTest {
     public void provideNewInstanceProvides_whenObjectHasFactoryWith_3_Args_provideNewInstanceEveryTime() {
         Shank.registerFactory(List.class, (a, b, c) -> asList(a, b, c));
 
-        List providedNewInstance = Shank.provideNew(List.class, "a", "b", "c");
-        List otherProvidedNewInstance = Shank.provideNew(List.class, "a", "b", "c");
+        List providedNewInstance = provideNew(List.class, "a", "b", "c");
+        List otherProvidedNewInstance = provideNew(List.class, "a", "b", "c");
 
         assertTrue(providedNewInstance != null);
         assertTrue(otherProvidedNewInstance != null);
@@ -109,8 +110,8 @@ public class ShankAcceptanceTest {
     public void provideNewInstanceProvides_whenObjectHasFactoryWith_4_Args_provideNewInstanceEveryTime() {
         Shank.registerFactory(List.class, (a, b, c, d) -> asList(a, b, c, d));
 
-        List providedNewInstance = Shank.provideNew(List.class, "a", "b", "c", "d");
-        List otherProvidedNewInstance = Shank.provideNew(List.class, "a", "b", "c", "d");
+        List providedNewInstance = provideNew(List.class, "a", "b", "c", "d");
+        List otherProvidedNewInstance = provideNew(List.class, "a", "b", "c", "d");
 
         assertTrue(providedNewInstance != null);
         assertTrue(otherProvidedNewInstance != null);
@@ -899,7 +900,7 @@ public class ShankAcceptanceTest {
     public void provide_whenObjectHasNoFactory_throwsException() throws Exception {
         expectedException.expect(NoFactoryException.class);
         expectedException.expectMessage("There is no factory for " + B.class.getCanonicalName());
-        Shank.provideNew(B.class);
+        provideNew(B.class);
     }
 
     @Test
