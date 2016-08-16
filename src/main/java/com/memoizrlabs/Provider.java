@@ -45,7 +45,14 @@ abstract class Provider<T> implements Func0<T> {
         @Override
         @SuppressWarnings("unchecked")
         public T call() {
-            return (T) ((Func0) func).call();
+            Object call;
+            Func0 func = (Func0) this.func;
+            try {
+                call = func.call();
+            } catch (Throwable e) {
+                throw new InstantiationException(e);
+            }
+            return (T) call;
         }
 
         @Override
@@ -87,7 +94,14 @@ abstract class Provider<T> implements Func0<T> {
         @Override
         @SuppressWarnings("unchecked")
         public T call() {
-            return (T) ((Func1) func).call(a);
+            Object call;
+            Func1 func = (Func1) this.func;
+            try {
+                call = func.call(a);
+            } catch (Throwable e) {
+                throw new InstantiationException(e);
+            }
+            return (T) call;
         }
 
         @Override
@@ -136,7 +150,14 @@ abstract class Provider<T> implements Func0<T> {
         @Override
         @SuppressWarnings("unchecked")
         public T call() {
-            return (T) ((Func2) func).call(a, b);
+            Object call;
+            Func2 func = (Func2) this.func;
+            try {
+                call = func.call(a, b);
+            } catch (Throwable e) {
+                throw new InstantiationException(e);
+            }
+            return (T) call;
         }
 
         @Override
@@ -191,7 +212,14 @@ abstract class Provider<T> implements Func0<T> {
         @Override
         @SuppressWarnings("unchecked")
         public T call() {
-            return (T) ((Func3) func).call(a, b, c);
+            Object call;
+            Func3 func = (Func3) this.func;
+            try {
+                call = func.call(a, b, c);
+            } catch (Throwable e) {
+                throw new InstantiationException(e);
+            }
+            return (T) call;
         }
 
         @Override
@@ -253,7 +281,14 @@ abstract class Provider<T> implements Func0<T> {
         @Override
         @SuppressWarnings("unchecked")
         public T call() {
-            return (T) ((Func4) func).call(a, b, c, d);
+            Object call;
+            Func4 func = (Func4) this.func;
+            try {
+                call = func.call(a, b, c, d);
+            } catch (Throwable e) {
+                throw new InstantiationException(e);
+            }
+            return (T) call;
         }
 
         @Override

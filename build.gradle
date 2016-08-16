@@ -27,6 +27,15 @@ jacocoTestReport {
     reports {
         xml.enabled true
     }
+    classDirectories = fileTree(
+            dir: './build/classes/main/com/memoizrlabs/',
+            excludes: [
+                    '**/Lambda$*.class',
+                    '**/Lambda.class',
+                    '**/*Lambda.class',
+                    '**/*Lambda*.class'
+            ]
+    )
 }
 
 dependencies {

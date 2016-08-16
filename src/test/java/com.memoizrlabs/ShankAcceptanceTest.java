@@ -3,6 +3,8 @@ package com.memoizrlabs;
 import com.memoizrlabs.functions.Func0;
 import com.memoizrlabs.functions.Func1;
 
+import org.hamcrest.Description;
+import org.hamcrest.TypeSafeMatcher;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -277,13 +279,53 @@ public class ShankAcceptanceTest {
     }
 
     @Test
-    public void provideSingleton_whenObjectHasNoFactory_throwsMeaninfulErrro() {
+    public void provideSingleton_whenObjectHasNoFactory_withNoParams_throwsMeaninfulErrro() {
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("No factory with no arguments registered for List");
+
+        Shank.registerFactory(List.class, (a) -> asList("a", "b"));
+
+        Shank.provideSingleton(List.class);
+    }
+
+    @Test
+    public void provideSingleton_whenObjectHasNoFactory_withOneParams_throwsMeaninfulErrro() {
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("No factory with String arguments registered for List");
+
+        Shank.registerFactory(List.class, () -> asList("a", "b"));
+
+        Shank.provideSingleton(List.class, "a");
+    }
+
+    @Test
+    public void provideSingleton_whenObjectHasNoFactory_withTwoParams_throwsMeaninfulErrro() {
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("No factory with String, String arguments registered for List");
+
+        Shank.registerFactory(List.class, (a) -> asList("a", "b"));
+
+        Shank.provideSingleton(List.class, "a", "b");
+    }
+
+    @Test
+    public void provideSingleton_whenObjectHasNoFactory_withThreeParams_throwsMeaninfulErrro() {
         expectedException.expect(IllegalArgumentException.class);
         expectedException.expectMessage("No factory with String, String, String arguments registered for List");
 
         Shank.registerFactory(List.class, (a, b) -> asList("a", "b"));
 
         Shank.provideSingleton(List.class, "a", "b", "c");
+    }
+
+    @Test
+    public void provideSingleton_whenObjectHasNoFactory_withFourParams_throwsMeaninfulErrro() {
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("No factory with String, String, String, String arguments registered for List");
+
+        Shank.registerFactory(List.class, (a, b) -> asList("a", "b"));
+
+        Shank.provideSingleton(List.class, "a", "b", "c", "d");
     }
 
     @Test
@@ -912,6 +954,58 @@ public class ShankAcceptanceTest {
         Shank.named("noSuchName").provideNew(B.class);
     }
 
+    @Test
+    public void provide_whenObjectInitializationFailsWithClassCastException_withNoParameters_throwsWrappedException() {
+        expectedException.expect(InstantiationException.class);
+        expectedException
+                .expectCause(getExpectedCause());
+        Shank.registerFactory(C.class, C::new);
+        Shank.provideSingleton(C.class);
+    }
+
+    @Test
+    public void provide_whenObjectInitializationFailsWithClassCastException_withOneParameter_throwsWrappedException() {
+        expectedException.expect(InstantiationException.class);
+        expectedException
+                .expectCause(getExpectedCause());
+        Shank.registerFactory(C.class, (a) -> new C());
+        Shank.provideSingleton(C.class, dummyParameter);
+    }
+
+    @Test
+    public void provide_whenObjectInitializationFailsWithClassCastException_withTwoParameters_throwsWrappedException() {
+        expectedException.expect(InstantiationException.class);
+        expectedException
+                .expectCause(getExpectedCause());
+        Shank.registerFactory(C.class, (a, b) -> new C());
+        Shank.provideSingleton(C.class, dummyParameter, dummyParameter);
+    }
+
+    @Test
+    public void provide_whenObjectInitializationFailsWithClassCastException_withThreeParameters_throwsWrappedException() {
+        expectedException.expect(InstantiationException.class);
+        expectedException
+                .expectCause(getExpectedCause());
+        Shank.registerFactory(C.class, (a, b, c) -> new C());
+        Shank.provideSingleton(C.class, dummyParameter, dummyParameter, dummyParameter);
+    }
+
+    private final Object dummyParameter = null;
+
+    private TypeSafeMatcher<Throwable> getExpectedCause() {
+        return new TypeSafeMatcher<Throwable>() {
+            @Override
+            protected boolean matchesSafely(Throwable item) {
+                return item.getMessage() == "You can't do that";
+            }
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("Expecting description to contain \"You can't do that\"");
+            }
+        };
+    }
+
     static class ClassWithConstructorParameters {
 
         private String a;
@@ -939,6 +1033,13 @@ public class ShankAcceptanceTest {
 
     }
 
+    static class C {
+
+        C() {
+            throw new ClassCastException("You can't do that");
+        }
+    }
+
     static class Container {
 
         private NestedDependency nestedDependency;
@@ -949,9 +1050,11 @@ public class ShankAcceptanceTest {
     }
 
     static class NestedDependency {
+
     }
 
     static class SuperContainer {
+
         private Container container;
 
         SuperContainer(Container container) {
