@@ -11,11 +11,17 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import nl.jqno.equalsverifier.EqualsVerifier;
 
 import static com.memoizrlabs.Scope.scope;
 import static com.memoizrlabs.Shank.provideNew;
@@ -23,6 +29,7 @@ import static com.memoizrlabs.Shank.registerNamedFactory;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -991,6 +998,61 @@ public class ShankAcceptanceTest {
     }
 
     private final Object dummyParameter = null;
+
+    @Test
+    public void provider0EqualsAndHashcode() {
+        EqualsVerifier.forClass(Provider.Provider0.class).verify();
+    }
+
+    @Test
+    public void provider1EqualsAndHashcode() {
+        EqualsVerifier.forClass(Provider.Provider1.class).verify();
+    }
+
+    @Test
+    public void provider2EqualsAndHashcode() {
+        EqualsVerifier.forClass(Provider.Provider2.class).verify();
+    }
+
+    @Test
+    public void provider3EqualsAndHashcode() {
+        EqualsVerifier.forClass(Provider.Provider3.class).verify();
+    }
+
+    @Test
+    public void provider4EqualsAndHashcode() {
+        EqualsVerifier.forClass(Provider.Provider4.class).verify();
+    }
+
+    @Test
+    public void scopeEqualsAndHashcode() {
+        EqualsVerifier.forClass(Scope.class)
+                .withIgnoredFields("action")
+                .verify();
+    }
+
+    @Test
+    public void shankHasPrivateCosntructor()
+            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException,
+            java.lang.InstantiationException {
+        Constructor<Shank> shankConstructor = Shank.class.getDeclaredConstructor();
+        assertTrue(Modifier.isPrivate(shankConstructor.getModifiers()));
+        shankConstructor.setAccessible(true);
+        shankConstructor.newInstance();
+    }
+
+    @Test
+    public void shankModuleInitializerInitializesModules() {
+        final AtomicInteger callCounter = new AtomicInteger(0);
+        class DummyModule implements ShankModule {
+            @Override
+            public void registerFactories() {
+                callCounter.getAndIncrement();
+            }
+        }
+        ShankModuleInitializer.initializeModules(new DummyModule());
+        assertEquals(1, callCounter.get());
+    }
 
     private TypeSafeMatcher<Throwable> getExpectedCause() {
         return new TypeSafeMatcher<Throwable>() {

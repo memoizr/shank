@@ -13,7 +13,7 @@ import static com.memoizrlabs.poweroptional.Optional.optionOf;
  */
 public final class Scope implements Serializable {
 
-    private Serializable scopeObect;
+    private final Serializable scopeObect;
     private Action0 action = () -> {
     };
 
@@ -23,6 +23,7 @@ public final class Scope implements Serializable {
 
     /**
      * Creates a new scope that the cached objects should be bound to.
+     *
      * @param scopeObect the object this scope should be tied to.
      * @return the scope.
      */
@@ -40,6 +41,7 @@ public final class Scope implements Serializable {
     /**
      * Clears the cache for the scope and runs an action for each object
      * in the scope.
+     *
      * @param destroyAction the action to be performed on each object in the scope.
      */
     public void clearWithFinalAction(Action1<Object> destroyAction) {
