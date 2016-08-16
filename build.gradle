@@ -10,6 +10,7 @@ retrolambda {
 
 apply plugin: 'java'
 apply plugin: 'maven'
+apply plugin: 'jacoco'
 group = 'com.github.memoizr'
 version = 'v0.2.2'
 
@@ -20,6 +21,12 @@ repositories {
     mavenCentral()
     jcenter()
     maven { url "https://jitpack.io" }
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+    }
 }
 
 dependencies {
