@@ -286,7 +286,7 @@ public class ShankAcceptanceTest {
     }
 
     @Test
-    public void provideSingleton_whenObjectHasNoFactory_withNoParams_throwsMeaninfulErrro() {
+    public void provideSingleton_whenObjectHasNoFactory_withNoParams_throwsMeaningfulError() {
         expectedException.expect(IllegalArgumentException.class);
         expectedException.expectMessage("No factory with no arguments registered for List");
 
@@ -296,7 +296,7 @@ public class ShankAcceptanceTest {
     }
 
     @Test
-    public void provideSingleton_whenObjectHasNoFactory_withOneParams_throwsMeaninfulErrro() {
+    public void provideSingleton_whenObjectHasNoFactory_withOneParams_throwsMeaningfulError() {
         expectedException.expect(IllegalArgumentException.class);
         expectedException.expectMessage("No factory with String arguments registered for List");
 
@@ -306,7 +306,7 @@ public class ShankAcceptanceTest {
     }
 
     @Test
-    public void provideSingleton_whenObjectHasNoFactory_withTwoParams_throwsMeaninfulErrro() {
+    public void provideSingleton_whenObjectHasNoFactory_withTwoParams_throwsMeaningfulError() {
         expectedException.expect(IllegalArgumentException.class);
         expectedException.expectMessage("No factory with String, String arguments registered for List");
 
@@ -316,7 +316,7 @@ public class ShankAcceptanceTest {
     }
 
     @Test
-    public void provideSingleton_whenObjectHasNoFactory_withThreeParams_throwsMeaninfulErrro() {
+    public void provideSingleton_whenObjectHasNoFactory_withThreeParams_throwsMeaningfulError() {
         expectedException.expect(IllegalArgumentException.class);
         expectedException.expectMessage("No factory with String, String, String arguments registered for List");
 
@@ -326,7 +326,7 @@ public class ShankAcceptanceTest {
     }
 
     @Test
-    public void provideSingleton_whenObjectHasNoFactory_withFourParams_throwsMeaninfulErrro() {
+    public void provideSingleton_whenObjectHasNoFactory_withFourParams_throwsMeaningfulError() {
         expectedException.expect(IllegalArgumentException.class);
         expectedException.expectMessage("No factory with String, String, String, String arguments registered for List");
 
@@ -336,7 +336,7 @@ public class ShankAcceptanceTest {
     }
 
     @Test
-    public void provideScopedSingleton_whenObjectHasNoFactory_throwsMeaninfulErrro() {
+    public void provideScopedSingleton_whenObjectHasNoFactory_throwsMeaningfulError() {
         expectedException.expect(IllegalArgumentException.class);
         expectedException.expectMessage("No factory with String, String, String arguments registered for List");
 
@@ -1041,10 +1041,10 @@ public class ShankAcceptanceTest {
     }
 
     @Test
-    public void shankHasPrivateCosntructor()
+    public void shankHasPrivateConstructor()
             throws NoSuchMethodException, IllegalAccessException, InvocationTargetException,
             java.lang.InstantiationException {
-        verifyPrivateConstructor(Shank.class);
+        verifyUtilClassConstructor(Shank.class);
     }
 
     @Test
@@ -1064,10 +1064,10 @@ public class ShankAcceptanceTest {
     public void shankModuleInitializer_hasPrivateConstructor()
             throws InvocationTargetException, NoSuchMethodException, java.lang.InstantiationException,
             IllegalAccessException {
-        verifyPrivateConstructor(ShankModuleInitializer.class);
+        verifyUtilClassConstructor(ShankModuleInitializer.class);
     }
 
-    private <T> void verifyPrivateConstructor(Class<T> clazz)
+    private <T> void verifyUtilClassConstructor(Class<T> clazz)
             throws NoSuchMethodException, java.lang.InstantiationException, IllegalAccessException,
             InvocationTargetException {
         Constructor<T> shankConstructor = clazz.getDeclaredConstructor();
