@@ -997,6 +997,15 @@ public class ShankAcceptanceTest {
         Shank.provideSingleton(C.class, dummyParameter, dummyParameter, dummyParameter);
     }
 
+    @Test
+    public void provide_whenObjectInitializationFailsWithClassCastException_witheParameters_throwsWrappedException() {
+        expectedException.expect(InstantiationException.class);
+        expectedException
+                .expectCause(getExpectedCause());
+        Shank.registerFactory(C.class, (a, b, c, d) -> new C());
+        Shank.provideSingleton(C.class, dummyParameter, dummyParameter, dummyParameter, dummyParameter);
+    }
+
     private final Object dummyParameter = null;
 
     @Test
