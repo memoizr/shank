@@ -1035,10 +1035,7 @@ public class ShankAcceptanceTest {
     public void shankHasPrivateCosntructor()
             throws NoSuchMethodException, IllegalAccessException, InvocationTargetException,
             java.lang.InstantiationException {
-        Constructor<Shank> shankConstructor = Shank.class.getDeclaredConstructor();
-        assertTrue(Modifier.isPrivate(shankConstructor.getModifiers()));
-        shankConstructor.setAccessible(true);
-        shankConstructor.newInstance();
+        verifyPrivateConstructor(Shank.class);
     }
 
     @Test
@@ -1052,6 +1049,22 @@ public class ShankAcceptanceTest {
         }
         ShankModuleInitializer.initializeModules(new DummyModule());
         assertEquals(1, callCounter.get());
+    }
+
+    @Test
+    public void shankModuleInitializer_hasPrivateConstructor()
+            throws InvocationTargetException, NoSuchMethodException, java.lang.InstantiationException,
+            IllegalAccessException {
+        verifyPrivateConstructor(ShankModuleInitializer.class);
+    }
+
+    private <T> void verifyPrivateConstructor(Class<T> clazz)
+            throws NoSuchMethodException, java.lang.InstantiationException, IllegalAccessException,
+            InvocationTargetException {
+        Constructor<T> shankConstructor = clazz.getDeclaredConstructor();
+        assertTrue(Modifier.isPrivate(shankConstructor.getModifiers()));
+        shankConstructor.setAccessible(true);
+        shankConstructor.newInstance();
     }
 
     private TypeSafeMatcher<Throwable> getExpectedCause() {
