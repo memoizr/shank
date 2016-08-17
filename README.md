@@ -1,4 +1,7 @@
 [![Build Status](https://travis-ci.org/memoizr/shank.svg?branch=master)](https://travis-ci.org/memoizr/shank)
+[![codecov](https://codecov.io/gh/memoizr/shank/branch/master/graph/badge.svg)](https://codecov.io/gh/memoizr/shank)
+[![](https://jitpack.io/v/memoizr/shank.svg)](https://jitpack.io/#memoizr/shank)
+[![GitHub license](https://img.shields.io/github/license/kotlintest/kotlintest.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
 # Shank
 Shank is a simple, fast, powerful and flexible dependency injection framework for Java (1.7 and up) and other compatible JVM languages. It is conceptually based on the Service Locator Pattern (Gamma 1994), and typesafe etherogeneous Containers (Bloch 2008). It was designed for use in memory and performance limited applications, e.g. Android apps.
 
