@@ -34,7 +34,7 @@ abstract class Provider<T> implements Func0<T> {
 
     abstract String argumentsToString();
 
-    static class Provider0<T> extends Provider<T> {
+    final static class Provider0<T> extends Provider<T> {
 
         private final Function func;
 
@@ -45,7 +45,14 @@ abstract class Provider<T> implements Func0<T> {
         @Override
         @SuppressWarnings("unchecked")
         public T call() {
-            return (T) ((Func0) func).call();
+            Object call;
+            Func0 func = (Func0) this.func;
+            try {
+                call = func.call();
+            } catch (Throwable e) {
+                throw new InstantiationException(e);
+            }
+            return (T) call;
         }
 
         @Override
@@ -74,10 +81,10 @@ abstract class Provider<T> implements Func0<T> {
         }
     }
 
-    static class Provider1<A, T> extends Provider<T> {
+    final static class Provider1<A, T> extends Provider<T> {
 
         private final Function func;
-        private A a;
+        private final A a;
 
         public Provider1(Function func, A a) {
             this.func = func;
@@ -87,7 +94,14 @@ abstract class Provider<T> implements Func0<T> {
         @Override
         @SuppressWarnings("unchecked")
         public T call() {
-            return (T) ((Func1) func).call(a);
+            Object call;
+            Func1 func = (Func1) this.func;
+            try {
+                call = func.call(a);
+            } catch (Throwable e) {
+                throw new InstantiationException(e);
+            }
+            return (T) call;
         }
 
         @Override
@@ -121,11 +135,11 @@ abstract class Provider<T> implements Func0<T> {
         }
     }
 
-    static class Provider2<A, B, T> extends Provider<T> {
+    final static class Provider2<A, B, T> extends Provider<T> {
 
         private final Function func;
-        private A a;
-        private B b;
+        private final A a;
+        private final B b;
 
         public Provider2(Function func, A a, B b) {
             this.func = func;
@@ -136,7 +150,14 @@ abstract class Provider<T> implements Func0<T> {
         @Override
         @SuppressWarnings("unchecked")
         public T call() {
-            return (T) ((Func2) func).call(a, b);
+            Object call;
+            Func2 func = (Func2) this.func;
+            try {
+                call = func.call(a, b);
+            } catch (Throwable e) {
+                throw new InstantiationException(e);
+            }
+            return (T) call;
         }
 
         @Override
@@ -174,12 +195,12 @@ abstract class Provider<T> implements Func0<T> {
         }
     }
 
-    static class Provider3<A, B, C, T> extends Provider<T> {
+    final static class Provider3<A, B, C, T> extends Provider<T> {
 
         private final Function func;
-        private A a;
-        private B b;
-        private C c;
+        private final A a;
+        private final B b;
+        private final C c;
 
         public Provider3(Function func, A a, B b, C c) {
             this.func = func;
@@ -191,7 +212,14 @@ abstract class Provider<T> implements Func0<T> {
         @Override
         @SuppressWarnings("unchecked")
         public T call() {
-            return (T) ((Func3) func).call(a, b, c);
+            Object call;
+            Func3 func = (Func3) this.func;
+            try {
+                call = func.call(a, b, c);
+            } catch (Throwable e) {
+                throw new InstantiationException(e);
+            }
+            return (T) call;
         }
 
         @Override
@@ -234,13 +262,13 @@ abstract class Provider<T> implements Func0<T> {
         }
     }
 
-    static class Provider4<A, B, C, D, T> extends Provider<T> {
+    final static class Provider4<A, B, C, D, T> extends Provider<T> {
 
         private final Function func;
-        private A a;
-        private B b;
-        private C c;
-        private D d;
+        private final A a;
+        private final B b;
+        private final C c;
+        private final D d;
 
         public Provider4(Function func, A a, B b, C c, D d) {
             this.func = func;
@@ -253,7 +281,14 @@ abstract class Provider<T> implements Func0<T> {
         @Override
         @SuppressWarnings("unchecked")
         public T call() {
-            return (T) ((Func4) func).call(a, b, c, d);
+            Object call;
+            Func4 func = (Func4) this.func;
+            try {
+                call = func.call(a, b, c, d);
+            } catch (Throwable e) {
+                throw new InstantiationException(e);
+            }
+            return (T) call;
         }
 
         @Override
