@@ -4,25 +4,29 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.memoizrlabs.Provider.createProvider;
+import static com.memoizrlabs.Scope.scope;
 import static com.memoizrlabs.poweroptional.Optional.optionOf;
 
 public class ScopedCache {
+
+    private static final Scope NO_SCOPE = scope("");
+    private static final String NO_NAME = "";
 
     private final Scope scope;
     private String name;
 
     ScopedCache(Scope scope) {
-        this(scope, "");
+        this(scope, NO_NAME);
+    }
+
+    ScopedCache(String name) {
+        this(NO_SCOPE, name);
     }
 
     ScopedCache(Scope scope, String name) {
         this.scope = scope;
         this.scope.subscribe(() -> Shank.clearNamedScope(scope));
         this.name = name;
-    }
-
-    ScopedCache(String name) {
-        this(Scope.scope(""), name);
     }
 
     public ScopedCache named(String name) {
