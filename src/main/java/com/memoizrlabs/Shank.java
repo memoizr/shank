@@ -223,6 +223,13 @@ public final class Shank {
         return new ScopedCache(scope);
     }
 
+    /**
+     * Clears the entire cache.
+     */
+    public static void clearAll() {
+        unscopedCache.clear();
+        scopedCache.clear();
+    }
     static void clearNamedScope(Scope scope) {
         scopedCache.remove(scope);
     }
@@ -280,14 +287,6 @@ public final class Shank {
      */
     static void clearFactories() {
         factoryRegister.clear();
-    }
-
-    /**
-     * Clears the entire cache.
-     */
-    static void clearAll() {
-        unscopedCache.clear();
-        scopedCache.clear();
     }
 
     /**
