@@ -13,21 +13,22 @@ import static com.memoizrlabs.poweroptional.Optional.optionOf;
  */
 public final class Scope implements Serializable {
 
-    private Serializable scopeObect;
+    private final Serializable scopeObject;
     private Action0 action = () -> {
     };
 
-    private Scope(Serializable scopeObect) {
-        this.scopeObect = scopeObect;
+    private Scope(Serializable scopeObject) {
+        this.scopeObject = scopeObject;
     }
 
     /**
      * Creates a new scope that the cached objects should be bound to.
-     * @param scopeObect the object this scope should be tied to.
+     *
+     * @param scopeObject the object this scope should be tied to.
      * @return the scope.
      */
-    public static Scope scope(Serializable scopeObect) {
-        return new Scope(scopeObect);
+    public static Scope scope(Serializable scopeObject) {
+        return new Scope(scopeObject);
     }
 
     /**
@@ -40,6 +41,7 @@ public final class Scope implements Serializable {
     /**
      * Clears the cache for the scope and runs an action for each object
      * in the scope.
+     *
      * @param destroyAction the action to be performed on each object in the scope.
      */
     public void clearWithFinalAction(Action1<Object> destroyAction) {
@@ -74,12 +76,12 @@ public final class Scope implements Serializable {
 
         Scope scope = (Scope) o;
 
-        return !(scopeObect != null ? !scopeObect.equals(scope.scopeObect) : scope.scopeObect != null);
+        return !(scopeObject != null ? !scopeObject.equals(scope.scopeObject) : scope.scopeObject != null);
 
     }
 
     @Override
     public int hashCode() {
-        return scopeObect != null ? scopeObect.hashCode() : 0;
+        return scopeObject != null ? scopeObject.hashCode() : 0;
     }
 }

@@ -4,25 +4,29 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.memoizrlabs.Provider.createProvider;
+import static com.memoizrlabs.Scope.scope;
 import static com.memoizrlabs.poweroptional.Optional.optionOf;
 
 public class ScopedCache {
+
+    private static final Scope NO_SCOPE = scope("");
+    private static final String NO_NAME = "";
 
     private final Scope scope;
     private String name;
 
     ScopedCache(Scope scope) {
-        this(scope, "");
+        this(scope, NO_NAME);
+    }
+
+    ScopedCache(String name) {
+        this(NO_SCOPE, name);
     }
 
     ScopedCache(Scope scope, String name) {
         this.scope = scope;
         this.scope.subscribe(() -> Shank.clearNamedScope(scope));
         this.name = name;
-    }
-
-    ScopedCache(String name) {
-        this(Scope.scope(""), name);
     }
 
     public ScopedCache named(String name) {
@@ -86,7 +90,7 @@ public class ScopedCache {
             return optionOf(Shank.scopedCache.get(scope))
                     .map(currentScopeMap -> optionOf(currentScopeMap.get(desiredObjectClass))
                             .map(namedMap -> optionOf(namedMap.get(name))
-                                    .map(providerMap -> (V) optionOf(providerMap.get(provider))
+                                    .map(providerMap -> optionOf(getValue(provider, providerMap))
                                             .orElseGet(() -> getAndCacheObject(provider, providerMap)))
                                     .orElseGet(() -> getObjectAndCacheProviderMap(provider, namedMap)))
                             .orElseGet(() -> getAndCacheNamedMap(desiredObjectClass, provider, currentScopeMap)))
@@ -96,7 +100,12 @@ public class ScopedCache {
         }
     }
 
-    private <V> V getAndCacheScope(Class<V> desiredObjectClass, final Provider<V> provider) {
+    private <V> V getValue(Provider<V> provider, Map<Provider, Object> providerMap) {
+        return (V) providerMap.get(provider);
+    }
+
+    private <V> V getAndCacheScope(Class<V> desiredObjectClass, final Provider<V> provider)
+            throws InstantiationException {
         final Map<Class, Map<String, Map<Provider, Object>>> scopedMap = new HashMap<>();
         final Map<String, Map<Provider, Object>> namedMap = new HashMap<>();
         scopedMap.put(desiredObjectClass, namedMap);
@@ -109,7 +118,7 @@ public class ScopedCache {
     }
 
     private <V> V getAndCacheNamedMap(Class<V> desiredObjectClass, final Provider<V> provider,
-            Map<Class, Map<String, Map<Provider, Object>>> currentScopeMap) {
+            Map<Class, Map<String, Map<Provider, Object>>> currentScopeMap) throws InstantiationException {
         final Map<String, Map<Provider, Object>> namedMap = new HashMap<>();
         currentScopeMap.put(desiredObjectClass, namedMap);
         V desiredObject = provider.call();
@@ -120,7 +129,7 @@ public class ScopedCache {
     }
 
     private <V> V getObjectAndCacheProviderMap(final Provider<V> provider,
-            Map<String, Map<Provider, Object>> namedObjectMap) {
+            Map<String, Map<Provider, Object>> namedObjectMap) throws InstantiationException {
         V desiredObject = provider.call();
         namedObjectMap.put(name, new HashMap<Provider, Object>() {{
             put(provider, desiredObject);
@@ -128,7 +137,8 @@ public class ScopedCache {
         return desiredObject;
     }
 
-    private <V> Object getAndCacheObject(Provider<V> provider, Map<Provider, Object> providerMap) {
+    private <V> V getAndCacheObject(Provider<V> provider, Map<Provider, Object> providerMap)
+            throws InstantiationException {
         V desiredObject = provider.call();
         providerMap.put(provider, desiredObject);
         return desiredObject;

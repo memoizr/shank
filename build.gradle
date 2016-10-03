@@ -10,11 +10,12 @@ retrolambda {
 
 apply plugin: 'java'
 apply plugin: 'maven'
+apply plugin: 'jacoco'
 group = 'com.github.memoizr'
 version = 'v0.2.2'
 
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 repositories {
     mavenCentral()
@@ -22,9 +23,25 @@ repositories {
     maven { url "https://jitpack.io" }
 }
 
+jacocoTestReport {
+    reports {
+        xml.enabled true
+    }
+    classDirectories = fileTree(
+            dir: './build/classes/main/com/memoizrlabs/',
+            excludes: [
+                    '**/Lambda$*.class',
+                    '**/Lambda.class',
+                    '**/*Lambda.class',
+                    '**/*Lambda*.class'
+            ]
+    )
+}
+
 dependencies {
     compile 'com.github.memoizr:PowerOptional:v0.1.0'
     compile group: 'com.github.memoizr', name: 'functions', version: 'v0.4.0'
+    testCompile "nl.jqno.equalsverifier:equalsverifier:2.1.5"
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }
 

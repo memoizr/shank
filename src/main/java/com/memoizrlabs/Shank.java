@@ -31,28 +31,28 @@ public final class Shank {
      * @see Shank#registerFactory(Class, Func4)
      */
     public static <T> void registerFactory(Class<T> objectClass, Func0<T> factory) {
-        registerNamedFactory(objectClass, "", factory);
+        registerNamedFactory(objectClass, NO_NAME, factory);
     }
 
     /**
      * @see Shank#registerFactory(Class, Func4)
      */
     public static <A, T> void registerFactory(Class<T> objectClass, Func1<A, T> factory) {
-        registerNamedFactory(objectClass, "", factory);
+        registerNamedFactory(objectClass, NO_NAME, factory);
     }
 
     /**
      * @see Shank#registerFactory(Class, Func4)
      */
     public static <A, B, T> void registerFactory(Class<T> objectClass, Func2<A, B, T> factory) {
-        registerNamedFactory(objectClass, "", factory);
+        registerNamedFactory(objectClass, NO_NAME, factory);
     }
 
     /**
      * @see Shank#registerFactory(Class, Func4)
      */
     public static <A, B, C, T> void registerFactory(Class<T> objectClass, Func3<A, B, C, T> factory) {
-        registerNamedFactory(objectClass, "", factory);
+        registerNamedFactory(objectClass, NO_NAME, factory);
     }
 
     /**
@@ -63,35 +63,35 @@ public final class Shank {
      *                    the object.
      */
     public static <A, B, C, D, T> void registerFactory(Class<T> objectClass, Func4<A, B, C, D, T> factory) {
-        registerNamedFactory(objectClass, "", factory);
+        registerNamedFactory(objectClass, NO_NAME, factory);
     }
 
     /**
      * @see Shank#provideNew(Class, Object, Object, Object, Object)
      */
     public static <T> T provideNew(Class<T> desiredObjectClass) {
-        return createProvider(getFactory(desiredObjectClass, "")).call();
+        return createProvider(getFactory(desiredObjectClass, NO_NAME)).call();
     }
 
     /**
      * @see Shank#provideNew(Class, Object, Object, Object, Object)
      */
     public static <A, T> T provideNew(Class<T> desiredObjectClass, A a) {
-        return createProvider(getFactory(desiredObjectClass, ""), a).call();
+        return createProvider(getFactory(desiredObjectClass, NO_NAME), a).call();
     }
 
     /**
      * @see Shank#provideNew(Class, Object, Object, Object, Object)
      */
     public static <A, B, T> T provideNew(Class<T> desiredObjectClass, A a, B b) {
-        return  createProvider(getFactory(desiredObjectClass, ""), a, b).call();
+        return  createProvider(getFactory(desiredObjectClass, NO_NAME), a, b).call();
     }
 
     /**
      * @see Shank#provideNew(Class, Object, Object, Object, Object)
      */
     public static <A, B, C, T> T provideNew(Class<T> desiredObjectClass, A a, B b, C c) {
-        return createProvider(getFactory(desiredObjectClass, ""), a, b, c).call();
+        return createProvider(getFactory(desiredObjectClass, NO_NAME), a, b, c).call();
     }
 
     /**
@@ -108,7 +108,7 @@ public final class Shank {
      * @return an instance of the desired object as provideSingletond by the registered factory.
      */
     public static <A, B, C, D, T> T provideNew(Class<T> desiredObjectClass, A a, B b, C c, D d) {
-        return createProvider(getFactory(desiredObjectClass, ""), a, b, c, d).call();
+        return createProvider(getFactory(desiredObjectClass, NO_NAME), a, b, c, d).call();
     }
 
     /**
@@ -223,6 +223,14 @@ public final class Shank {
         return new ScopedCache(scope);
     }
 
+    /**
+     * Clears the entire cache.
+     */
+    public static void clearAll() {
+        unscopedCache.clear();
+        scopedCache.clear();
+    }
+
     static void clearNamedScope(Scope scope) {
         scopedCache.remove(scope);
     }
@@ -280,14 +288,6 @@ public final class Shank {
      */
     static void clearFactories() {
         factoryRegister.clear();
-    }
-
-    /**
-     * Clears the entire cache.
-     */
-    static void clearAll() {
-        unscopedCache.clear();
-        scopedCache.clear();
     }
 
     /**
