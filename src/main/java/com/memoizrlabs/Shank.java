@@ -230,6 +230,7 @@ public final class Shank {
         unscopedCache.clear();
         scopedCache.clear();
     }
+
     static void clearNamedScope(Scope scope) {
         scopedCache.remove(scope);
     }
