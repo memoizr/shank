@@ -5,7 +5,11 @@ import java.util.concurrent.ConcurrentHashMap
 
 abstract class Provider<T>(private val factory: Function<T>) {
     init {
-        ShankCache.factories[this] = factory as Function<Any>
+        ShankCache.factories[this] = factory
+    }
+
+    fun restore() {
+        factories[this] = factory
     }
 
     protected fun <T> Any?.invokes() = (this!! as Function0<T>).invoke()
@@ -35,7 +39,7 @@ abstract class Provider<T>(private val factory: Function<T>) {
         (this!! as ScopedFactory.(A, B, C, D, E) -> T).invoke(scope, a, b, c, d, e)
 
 
-    internal fun getScope(scope: Scope): MutableMap<Pair<Provider<out Any>, Params>, Any>? = ShankCache.scopedCache[scope]
+    internal fun getScope(scope: Scope): MutableMap<Pair<Provider<*>, Params>, Any?>? = ShankCache.scopedCache[scope]
 
     internal fun remove() {
         ShankCache.scopedCache.forEach { scope ->
@@ -45,11 +49,6 @@ abstract class Provider<T>(private val factory: Function<T>) {
                 }
             }
         }
-    }
-
-
-    fun restore() {
-        factories[this] = factory as Function<Any>
     }
 
     internal fun get(scope: Scope, params: Params = Params0, f: Any?.() -> T): T {

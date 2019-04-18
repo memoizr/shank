@@ -5,7 +5,7 @@ import com.memoizr.ShankCache.scopedCache
 
 internal object ShankCache {
     internal val factories = HashMap<Provider<*>, Any>()
-    internal val scopedCache = HashMap<Scope, MutableMap<Pair<Provider<out Any>, Params>, Any>>()
+    internal val scopedCache = HashMap<Scope, MutableMap<Pair<Provider<*>, Params>, Any?>>()
     internal val globalScope = Scope(hashCode().toString())
 }
 
