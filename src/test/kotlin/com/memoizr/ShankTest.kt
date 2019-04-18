@@ -4,6 +4,7 @@ import com.memoizr.MyModule.listOfInts
 import com.memoizr.MyModule.listOfStrings
 import com.memoizr.MyModule.newFoo
 import com.memoizr.MyModule.newWith1Params
+import com.memoizr.MyModule.nullable1
 import com.memoizr.MyModule.otherScopeSingleton
 import com.memoizr.MyModule.scopedSingleton
 import com.memoizr.MyModule.singleton
@@ -13,6 +14,8 @@ import com.memoizr.ParameterModule.fiveParamSingleton
 import com.memoizr.ParameterModule.fourParamNew
 import com.memoizr.ParameterModule.fourParamScoped
 import com.memoizr.ParameterModule.fourParamSingleton
+import com.memoizr.ParameterModule.noParamScoped
+import com.memoizr.ParameterModule.noParamSingleton
 import com.memoizr.ParameterModule.oneParamNew
 import com.memoizr.ParameterModule.oneParamScoped
 import com.memoizr.ParameterModule.oneParamSingleton
@@ -41,6 +44,9 @@ object MyModule : ShankModule() {
     val singleton = singleton { -> OtherClass() }
 
     val newWith1Params = new(::MyClass)
+
+    val nullable = new { -> if ("" == "") MyClass("") else null }
+    val nullable1 = new { s: String?, b: String-> if (s == "") MyClass("") else null }
 }
 
 class ShankTest : Scoped {
@@ -49,6 +55,7 @@ class ShankTest : Scoped {
     @Before
     fun setUp() {
         resetShank()
+        nullable1(null, "")?.value
     }
 
     @Test
@@ -141,6 +148,11 @@ class ShankTest : Scoped {
 
     @Test
     fun `allows scoped override`() {
+        noParamScoped() shouldBeEqualTo ParamData()
+        noParamScoped.overrideFactory {  -> ParamData( 2) }
+        noParamScoped() shouldBeEqualTo ParamData(2)
+        noParamScoped.restore()
+
         oneParamScoped(1) shouldBeEqualTo ParamData(1)
         oneParamScoped.overrideFactory { a: Int -> ParamData(a * 2) }
         oneParamScoped(1) shouldBeEqualTo ParamData(2)
@@ -169,30 +181,35 @@ class ShankTest : Scoped {
 
     @Test
     fun `allows singleton override`() {
-        oneParamScoped(1) shouldBeEqualTo ParamData(1)
-        oneParamScoped.overrideFactory { a: Int -> ParamData(a * 2) }
-        oneParamScoped(1) shouldBeEqualTo ParamData(2)
-        oneParamScoped.restore()
+        noParamSingleton() shouldBeEqualTo ParamData()
+        noParamSingleton.overrideFactory {  -> ParamData( 2) }
+        noParamSingleton() shouldBeEqualTo ParamData(2)
+        noParamSingleton.restore()
 
-        twoParamScoped(1, 2) shouldBeEqualTo ParamData(1, 2)
-        twoParamScoped.overrideFactory { a: Int, b: Int -> ParamData(a * 2, b * 2) }
-        twoParamScoped(1, 2) shouldBeEqualTo ParamData(2, 4)
-        twoParamScoped.restore()
+        oneParamSingleton(1) shouldBeEqualTo ParamData(1)
+        oneParamSingleton.overrideFactory { a: Int -> ParamData(a * 2) }
+        oneParamSingleton(1) shouldBeEqualTo ParamData(2)
+        oneParamSingleton.restore()
 
-        threeParamScoped(1, 2, 3) shouldBeEqualTo ParamData(1, 2, 3)
-        threeParamScoped.overrideFactory { a: Int, b: Int, c: Int -> ParamData(a * 2, b * 2, c * 2) }
-        threeParamScoped(1, 2, 3) shouldBeEqualTo ParamData(2, 4, 6)
-        threeParamScoped.restore()
+        twoParamSingleton(1, 2) shouldBeEqualTo ParamData(1, 2)
+        twoParamSingleton.overrideFactory { a: Int, b: Int -> ParamData(a * 2, b * 2) }
+        twoParamSingleton(1, 2) shouldBeEqualTo ParamData(2, 4)
+        twoParamSingleton.restore()
 
-        fourParamScoped(1, 2, 3, 4) shouldBeEqualTo ParamData(1, 2, 3, 4)
-        fourParamScoped.overrideFactory { a: Int, b: Int, c: Int, d: Int -> ParamData(a * 2, b * 2, c * 2, d * 2) }
-        fourParamScoped(1, 2, 3, 4) shouldBeEqualTo ParamData(2, 4, 6, 8)
-        fourParamScoped.restore()
+        threeParamSingleton(1, 2, 3) shouldBeEqualTo ParamData(1, 2, 3)
+        threeParamSingleton.overrideFactory { a: Int, b: Int, c: Int -> ParamData(a * 2, b * 2, c * 2) }
+        threeParamSingleton(1, 2, 3) shouldBeEqualTo ParamData(2, 4, 6)
+        threeParamSingleton.restore()
 
-        fiveParamScoped(1, 2, 3, 4, 5) shouldBeEqualTo ParamData(1, 2, 3, 4, 5)
-        fiveParamScoped.overrideFactory { a: Int, b: Int, c: Int, d: Int, e: Int -> ParamData(a * 2, b * 2, c * 2, d * 2, e * 2) }
-        fiveParamScoped(1, 2, 3, 4, 5) shouldBeEqualTo ParamData(2, 4, 6, 8, 10)
-        fiveParamScoped.restore()
+        fourParamSingleton(1, 2, 3, 4) shouldBeEqualTo ParamData(1, 2, 3, 4)
+        fourParamSingleton.overrideFactory { a: Int, b: Int, c: Int, d: Int -> ParamData(a * 2, b * 2, c * 2, d * 2) }
+        fourParamSingleton(1, 2, 3, 4) shouldBeEqualTo ParamData(2, 4, 6, 8)
+        fourParamSingleton.restore()
+
+        fiveParamSingleton(1, 2, 3, 4, 5) shouldBeEqualTo ParamData(1, 2, 3, 4, 5)
+        fiveParamSingleton.overrideFactory { a: Int, b: Int, c: Int, d: Int, e: Int -> ParamData(a * 2, b * 2, c * 2, d * 2, e * 2) }
+        fiveParamSingleton(1, 2, 3, 4, 5) shouldBeEqualTo ParamData(2, 4, 6, 8, 10)
+        fiveParamSingleton.restore()
     }
 
     @Test
@@ -266,12 +283,14 @@ object ParameterModule : ShankModule() {
     val fourParamNew = new { a: Int, b: Int, c: Int, d: Int -> ParamData(a, b, c, d) }
     val fiveParamNew = new { a: Int, b: Int, c: Int, d: Int, e: Int -> ParamData(a, b, c, d, e) }
 
+    val noParamSingleton = singleton { -> ParamData() }
     val oneParamSingleton = singleton { a: Int -> ParamData(a) }
     val twoParamSingleton = singleton { a: Int, b: Int -> ParamData(a, b) }
     val threeParamSingleton = singleton { a: Int, b: Int, c: Int -> ParamData(a, b, c) }
     val fourParamSingleton = singleton { a: Int, b: Int, c: Int, d: Int -> ParamData(a, b, c, d) }
     val fiveParamSingleton = singleton { a: Int, b: Int, c: Int, d: Int, e: Int -> ParamData(a, b, c, d, e) }
 
+    val noParamScoped = scoped { -> ParamData() }
     val oneParamScoped = scoped { a: Int -> ParamData(a) }
     val twoParamScoped = scoped { a: Int, b: Int -> ParamData(a, b) }
     val threeParamScoped = scoped { a: Int, b: Int, c: Int -> ParamData(a, b, c) }
