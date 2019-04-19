@@ -19,16 +19,12 @@ class ScopedProvider3<A, B, C, T>(factory: ScopedFactory.(A, B, C) -> T) : Provi
 }
 
 class ScopedProvider4<A, B, C, D, T>(factory: ScopedFactory.(A, B, C, D) -> T) : Provider<T,ScopedFactory.(A, B, C, D) -> T >(factory) {
-
     operator fun invoke(scope: Scope, a: A, b: B, c: C, d: D): T =
         get(scope, Params4(a, b, c, d)) { invokescoped(ScopedFactory(scope), a, b, c, d) }
-
 }
 
 class ScopedProvider5<A, B, C, D, E, T>(factory: ScopedFactory.(A, B, C, D, E) -> T) : Provider<T, ScopedFactory.(A, B, C, D, E) -> T>(factory) {
-
     operator fun invoke(scope: Scope, a: A, b: B, c: C, d: D, e: E): T =
         get(scope, Params5(a, b, c, d, e)) { invokescoped(ScopedFactory(scope), a, b, c, d, e) }
-
 }
 
