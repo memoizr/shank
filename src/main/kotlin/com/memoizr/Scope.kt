@@ -2,7 +2,7 @@ package com.memoizr
 
 import java.io.Serializable
 
-data class Scope(val value: String) : Serializable {
+data class Scope(val value: Serializable) : Serializable {
 
     fun clear() {
         ShankCache.scopedCache.remove(this)
