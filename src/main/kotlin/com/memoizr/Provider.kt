@@ -11,12 +11,13 @@ internal data class Params3(val a: Any?, val b: Any?, val c: Any?): Params
 internal data class Params4(val a: Any?, val b: Any?, val c: Any?, val d: Any?): Params
 internal data class Params5(val a: Any?, val b: Any?, val c: Any?, val d: Any?, val e: Any?): Params
 
-abstract class Provider<T>(private val factory: Function<T>) {
+abstract class Provider<T, F: Function<T>>(private val factory: F) {
     init {
         ShankCache.factories[self()] = factory
     }
-
     private fun self() = this
+
+    fun overrideFactory(f: F) = remove().also { factories[this] = f }
 
     fun restore() {
         factories[this] = factory
@@ -49,9 +50,9 @@ abstract class Provider<T>(private val factory: Function<T>) {
         (this!! as ScopedFactory.(A, B, C, D, E) -> T).invoke(scope, a, b, c, d, e)
 
 
-    internal fun getScope(scope: Scope): MutableMap<Pair<Provider<*>, Params>, Any?>? = ShankCache.scopedCache[scope]
+    private fun getScope(scope: Scope): MutableMap<Pair<Provider<*,*>, Params>, Any?>? = ShankCache.scopedCache[scope]
 
-    internal fun remove() {
+    private fun remove() {
         ShankCache.scopedCache.forEach { scope ->
             scope.value.forEach { it ->
                 if (it.key.first == this) {
@@ -69,7 +70,7 @@ abstract class Provider<T>(private val factory: Function<T>) {
         }
 
         return (getScope(scope)!!.let { newScope ->
-            val pair = Pair(this as Provider<out Any>, params)
+            val pair = Pair(this as Provider<out Any, Function<out Any>>, params)
             newScope[pair] ?: value().also {
                 newScope[pair] = it as Any
             }

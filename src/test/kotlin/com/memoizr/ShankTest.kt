@@ -14,6 +14,7 @@ import com.memoizr.ParameterModule.fiveParamSingleton
 import com.memoizr.ParameterModule.fourParamNew
 import com.memoizr.ParameterModule.fourParamScoped
 import com.memoizr.ParameterModule.fourParamSingleton
+import com.memoizr.ParameterModule.noParamNew
 import com.memoizr.ParameterModule.noParamScoped
 import com.memoizr.ParameterModule.noParamSingleton
 import com.memoizr.ParameterModule.oneParamNew
@@ -125,6 +126,10 @@ class ShankTest : Scoped {
 
     @Test
     fun `allows new override`() {
+        noParamNew() shouldBeEqualTo ParamData(null)
+        noParamNew.overrideFactory {  -> ParamData(2) }
+        noParamNew() shouldBeEqualTo ParamData(2)
+
         oneParamNew(1) shouldBeEqualTo ParamData(1)
         oneParamNew.overrideFactory { a: Int -> ParamData(a * 2) }
         oneParamNew(1) shouldBeEqualTo ParamData(2)
@@ -277,6 +282,7 @@ class ShankTest : Scoped {
 }
 
 object ParameterModule : ShankModule() {
+    val noParamNew = new { -> ParamData() }
     val oneParamNew = new { a: Int -> ParamData(a) }
     val twoParamNew = new { a: Int, b: Int -> ParamData(a, b) }
     val threeParamNew = new { a: Int, b: Int, c: Int -> ParamData(a, b, c) }

@@ -2,7 +2,7 @@ package com.memoizr
 
 abstract class ShankModule {
 
-    private val factories: MutableList<Pair<Provider<*>, Function<*>>> = mutableListOf()
+    private val factories: MutableList<Pair<Provider<*,*>, Function<*>>> = mutableListOf()
 
     fun registerFactories() {
         factories.forEach { ShankCache.factories[it.first] = it.second }
