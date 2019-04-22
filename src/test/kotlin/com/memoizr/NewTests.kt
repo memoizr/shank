@@ -10,7 +10,7 @@ import org.junit.Before
 import org.junit.Test
 import shouldBeEqualTo
 
-private object ParameterNewModule : ShankModule() {
+private object ParameterNewModule : ShankModule {
     val noParamNew = new { -> ParamData() }
     val oneParamNew = new { a: Int -> ParamData(a) }
     val twoParamNew = new { a: Int, b: Int -> ParamData(a, b) }

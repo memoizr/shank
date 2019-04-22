@@ -8,6 +8,16 @@ import kotlin.system.measureNanoTime
 class PerformanceTest {
 
     @Test
+    fun SimpleP() {
+        val x=measureTime {
+            fib8()
+        }
+
+        println(x)
+
+    }
+
+    @Test
     fun `performance`() {
         val register= (1..100).map {
             measureTime {

@@ -11,7 +11,7 @@ import org.junit.Test
 import shouldBeEqualTo
 import shouldBeSameReference
 
-private object ParameterSingletonModule : ShankModule() {
+private object ParameterSingletonModule : ShankModule {
     val noParam = singleton { -> ParamData() }
     val oneParam = singleton { a: Int -> ParamData(a) }
     val twoParam = singleton { a: Int, b: Int -> ParamData(a, b) }

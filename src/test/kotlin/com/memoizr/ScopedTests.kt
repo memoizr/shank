@@ -13,7 +13,7 @@ import shouldBeEqualTo
 import shouldBeSameReference
 
 
-private object ParameterScopedModule : ShankModule() {
+private object ParameterScopedModule : ShankModule {
     val noParamScoped = scoped { -> ParamData() }
     val oneParamScoped = scoped { a: Int -> ParamData(a) }
     val twoParamScoped = scoped { a: Int, b: Int -> ParamData(a, b) }

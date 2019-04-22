@@ -8,6 +8,7 @@ internal object ShankCache {
     internal val factories = ConcurrentHashMap<Provider<*,*>, Any>()
     internal val scopedCache = ConcurrentHashMap<Scope, MutableMap<Pair<Provider<*, *>, Params>, Any?>>()
     internal val globalScope = Scope(hashCode().toString())
+    internal val moduleFactories: ConcurrentHashMap<ShankModule, MutableList<Pair<Provider<*,*>, Function<*>>>> = ConcurrentHashMap()
 }
 
 fun resetShank() {

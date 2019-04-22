@@ -13,7 +13,7 @@ import shouldBeInstanceOf
 import shouldNotBeEqualTo
 import java.util.*
 
-object MyModule : ShankModule() {
+object MyModule : ShankModule {
     val newFoo = new { -> MyClass("my value") }
     val listOfStrings = new { -> ArrayList<String>().also { it.add("one") } }
     val listOfInts = new { -> ArrayList<Int>().also { it.add(1) } }
