@@ -2,8 +2,9 @@ package com.memoizr
 
 import com.memoizr.`_cache`.factories
 
- class NewProvider<T>() : Provider<T, () -> T>
-operator fun <T> NewProvider<T>.invoke(): T = factories[this].invokes()
+ class NewProvider<T> : Provider<T, () -> T> {
+     operator fun <T> invoke(): T = factories[this].invokes()
+ }
 
  class NewProvider1<A, T>() : Provider<T, (A) -> T> {
     operator fun invoke(a: A): T = factories[this].invokes(a)
