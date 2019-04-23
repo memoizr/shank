@@ -1,6 +1,6 @@
 package com.memoizr
 
-import com.memoizr.ShankCache.factories
+import com.memoizr.ShankFactoryCache.factories
 import java.util.concurrent.ConcurrentHashMap
 
 internal interface Params
@@ -19,7 +19,9 @@ fun <T, F : Function<T>> Provider<*, F>.restore() {
     factories[this] = factory
 }
 
-fun <T, F : Function<T>> Provider<*, F>.overrideFactory(f: F) = remove().also { factories[this] = f }
+fun <T, F : Function<T>> Provider<*, F>.overrideFactory(f: F) = remove()
+    .also { factories[this] = f }
+    .also { OverriddenCache.factories[this] = this.factory }
 
 internal inline fun <T> Any?.invokes() = (Function0::class.java.cast(this)).invoke() as T
 internal inline fun <A, T> Any?.invokes(a: A) = (this!! as Function1<A, T>).invoke(a)

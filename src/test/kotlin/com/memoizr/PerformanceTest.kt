@@ -21,7 +21,7 @@ class PerformanceTest {
     fun `performance`() {
         val register= (1..100).map {
             measureTime {
-                registerModules(Module1)
+//                registerModules(Module1)
             }
         }.median()
 

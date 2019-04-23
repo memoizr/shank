@@ -1,6 +1,6 @@
 package com.memoizr
 
-import com.memoizr.ShankCache.factories
+import com.memoizr.ShankFactoryCache.factories
 
 class NewProvider<T>(override val factory: () -> T) : Provider<T, () -> T> {
     operator fun invoke(): T = factories[this].invokes()

@@ -4,21 +4,30 @@ import com.memoizr.ShankCache.globalScope
 import com.memoizr.ShankCache.scopedCache
 import java.util.concurrent.ConcurrentHashMap
 
-internal object ShankCache {
+internal object ShankFactoryCache {
+    @JvmStatic
     internal val factories = ConcurrentHashMap<Provider<*,*>, Any>()
+}
+
+internal object OverriddenCache {
+    @JvmStatic
+    internal val factories = ConcurrentHashMap<Provider<*,*>, Any>()
+}
+
+internal object ShankCache {
+    @JvmStatic
+    internal val globalScope = Scope(hashCode())
+    @JvmStatic
     internal val scopedCache = ConcurrentHashMap<Scope, MutableMap<Pair<Provider<*, *>, Params>, Any?>>()
-    internal val globalScope = Scope(hashCode().toString())
-    internal val moduleFactories: ConcurrentHashMap<ShankModule, MutableList<Pair<Provider<*,*>, Function<*>>>> = ConcurrentHashMap()
 }
 
 fun resetShank() {
     scopedCache.clear()
     globalScope.clear()
+    OverriddenCache.factories
+        .forEach {
+            ShankFactoryCache.factories[it.key] = it.value
+            OverriddenCache.factories.remove(it.key)
+        }
 }
 
-fun registerModules(vararg modules: ShankModule) {
-    resetShank()
-    modules.forEach {
-        it.registerFactories()
-    }
-}
