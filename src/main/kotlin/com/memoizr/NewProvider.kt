@@ -1,27 +1,26 @@
 package com.memoizr
 
-import com.memoizr.ShankFactoryCache.factories
+import com.memoizr.`_ cache`.factories
 
-inline class NewProvider<T>(override val i: Long) : Provider<T, () -> T> {
-    operator fun invoke(): T = factories[i].invokes()
+ class NewProvider<T>() : Provider<T, () -> T>
+operator fun <T> NewProvider<T>.invoke(): T = factories[this].invokes()
+
+ class NewProvider1<A, T>() : Provider<T, (A) -> T> {
+    operator fun invoke(a: A): T = factories[this].invokes(a)
 }
 
-inline class NewProvider1<A, T>(override val i: Long) : Provider<T, (A) -> T> {
-    operator fun invoke(a: A): T = factories[i].invokes(a)
+ class NewProvider2<A, B, T>() : Provider<T, (A, B) ->T> {
+    operator fun invoke(a: A, b: B): T = factories[this].invokes(a, b)
 }
 
-inline class NewProvider2<A, B, T>(override val i: Long) : Provider<T, (A, B) ->T> {
-    operator fun invoke(a: A, b: B): T = factories[i].invokes(a, b)
+ class NewProvider3<A, B, C, T>() : Provider<T, (A, B, C) -> T> {
+    operator fun invoke(a: A, b: B, c: C): T = factories[this].invokes(a, b, c)
 }
 
-inline class NewProvider3<A, B, C, T>(override val i: Long) : Provider<T, (A, B, C) -> T> {
-    operator fun invoke(a: A, b: B, c: C): T = factories[i].invokes(a, b, c)
+ class NewProvider4<A, B, C, D, T>() : Provider<T,  (A, B, C, D) -> T> {
+    operator fun invoke(a: A, b: B, c: C, d: D): T = factories[this].invokes(a, b, c, d)
 }
 
-inline class NewProvider4<A, B, C, D, T>(override val i: Long) : Provider<T,  (A, B, C, D) -> T> {
-    operator fun invoke(a: A, b: B, c: C, d: D): T = factories[i].invokes(a, b, c, d)
-}
-
-inline class NewProvider5<A, B, C, D, E, T>(override val i: Long) : Provider<T, (A, B, C, D, E) -> T> {
-    operator fun invoke(a: A, b: B, c: C, d: D, e: E): T = factories[i].invokes(a, b, c, d, e)
+ class NewProvider5<A, B, C, D, E, T>() : Provider<T, (A, B, C, D, E) -> T> {
+    operator fun invoke(a: A, b: B, c: C, d: D, e: E): T = factories[this].invokes(a, b, c, d, e)
 }

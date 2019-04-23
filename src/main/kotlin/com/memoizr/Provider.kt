@@ -1,6 +1,6 @@
 package com.memoizr
 
-import com.memoizr.ShankFactoryCache.factories
+import com.memoizr.`_ cache`.factories
 import java.util.concurrent.ConcurrentHashMap
 
 internal interface Params
@@ -11,19 +11,17 @@ internal data class Params3(val a: Any?, val b: Any?, val c: Any?) : Params
 internal data class Params4(val a: Any?, val b: Any?, val c: Any?, val d: Any?) : Params
 internal data class Params5(val a: Any?, val b: Any?, val c: Any?, val d: Any?, val e: Any?) : Params
 
-interface Provider<T, F : Function<T>> {
-    val i: Long
-}
+interface Provider<T, F : Function<T>>
 
-fun <T, F : Function<T>> Provider<*, F>.factory(): F = factories[i] as F
+fun <T, F : Function<T>> Provider<*, F>.factory(): F = factories[this] as F
 
 fun <T, F : Function<T>> Provider<*, F>.restore() {
-    factories[i] = factory()
+    factories[this] = factory()
 }
 
 fun <T, F : Function<T>> Provider<*, F>.overrideFactory(f: F) = remove()
-    .also { OverriddenCache.factories[i] = this.factory() }
-    .also { factories[i] = f }
+    .also { OverriddenCache.factories[this] = this.factory() }
+    .also { factories[this] = f }
 
 internal inline fun <T> Any?.invokes() = (Function0::class.java.cast(this)).invoke() as T
 internal inline fun <A, T> Any?.invokes(a: A) = (this!! as Function1<A, T>).invoke(a)
@@ -51,13 +49,12 @@ internal inline fun <A, B, C, D, T> Any?.invokescoped(scope: ScopedFactory, a: A
 internal inline fun <A, B, C, D, E, T> Any?.invokescoped(scope: ScopedFactory, a: A, b: B, c: C, d: D, e: E) =
     (this!! as ScopedFactory.(A, B, C, D, E) -> T).invoke(scope, a, b, c, d, e)
 
-private inline fun getScope(scope: Scope): MutableMap<Pair<Long, Params>, Any?>? =
-    ShankCache.scopedCache[scope]
+private inline fun getScope(scope: Scope) = ShankCache.scopedCache[scope]
 
 private inline fun Provider<*, *>.remove() {
     ShankCache.scopedCache.forEach { scope ->
         scope.value.forEach { it ->
-            if (it.key.first == i) {
+            if (it.key.first == this) {
                 scope.value.remove(it.key)
             }
         }
@@ -74,8 +71,8 @@ internal inline fun <T, F : Function<T>> Provider<*, F>.get(
     }
 
     return (getScope(scope)!!.let { newScope ->
-        val pair = Pair(i, params)
-        newScope[pair] ?: factories[i].f().also {
+        val pair = Pair(this, params)
+        newScope[pair] ?: factories[this].f().also {
             newScope[pair] = it as Any
         }
     }) as T

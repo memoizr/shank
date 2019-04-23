@@ -8,7 +8,7 @@ data class Scope(val value: Serializable) : Serializable {
         ShankCache.scopedCache.remove(this)
     }
 
-    fun clearWithAction(action: (Long, Any?) -> Unit) {
+    fun clearWithAction(action: (Provider<*,*>, Any?) -> Unit) {
         ShankCache.scopedCache.also { it[this]?.forEach { action(it.key.first, it.value) } }.remove(this)
     }
 }
