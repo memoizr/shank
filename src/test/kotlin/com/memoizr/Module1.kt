@@ -1,14 +1,14 @@
 package com.memoizr
 
 object Module1 : ShankModule {
-    val fib1: NewProvider<Fib> = new { -> Fib1() }
-    val fib2: NewProvider<Fib> = new { -> Fib2() }
-    val fib3: NewProvider<Fib> = new { -> Fib3(fib2(), fib1()) }
-    val fib4: NewProvider<Fib> = new { -> Fib4(fib3(), fib2()) }
-    val fib5: NewProvider<Fib> = new { -> Fib5(fib4(), fib3()) }
-    val fib6: NewProvider<Fib> = new { -> Fib6(fib5(), fib4()) }
-    val fib7: NewProvider<Fib> = new { -> Fib7(fib6(), fib5()) }
-    val fib8: NewProvider<Fib> = new { -> Fib8(fib7(), fib6()) }
+    val fib1 = new { -> Fib1() }
+    val fib2 = new { -> Fib2() }
+    val fib3 = new { -> Fib3(fib2(), fib1()) }
+    val fib4 = new { -> Fib4(fib3(), fib2()) }
+    val fib5 = new { -> Fib5(fib4(), fib3()) }
+    val fib6 = new { -> Fib6(fib5(), fib4()) }
+    val fib7 = new { -> Fib7(fib6(), fib5()) }
+    val fib8 = new { -> Fib8(fib7(), fib6()) }
 //    val fib9: NewProvider<Fib> = new { -> Fib9(fib8(), fib7()) }
 //    val fib10: NewProvider<Fib> = new { -> Fib10(fib9(), fib8()) }
 //    val fib11: NewProvider<Fib> = new { -> Fib11(fib10(), fib9()) }

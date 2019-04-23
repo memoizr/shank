@@ -1,6 +1,5 @@
 package com.memoizr
 
-import com.memoizr.MyModule.newFoo
 import com.memoizr.ParameterScopedModule.fiveParamScoped
 import com.memoizr.ParameterScopedModule.fourParamScoped
 import com.memoizr.ParameterScopedModule.noParamScoped
@@ -121,7 +120,7 @@ class ScopedTests: Scoped {
 
         scope.clearWithAction { wrapper, value ->
             when {
-                wrapper == newFoo -> println(newFoo())
+//                wrapper == newFoo -> println(newFoo())
             }
         }
     }
