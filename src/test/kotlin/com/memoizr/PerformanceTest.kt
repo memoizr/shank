@@ -6,10 +6,39 @@ import kotlin.system.measureNanoTime
 
 
 class PerformanceTest {
+    object Moo {
+//        val a = System.nanoTime()
+//        val b = System.nanoTime()
+//        val c = System.nanoTime()
+//        val d = System.nanoTime()
+//        val e = System.nanoTime()
+//        val f = System.nanoTime()
+//        val g = System.nanoTime()
+    }
 
     @Test
     fun SimpleP() {
-        val x=measureTime {
+//        println(measureNanoTime {
+//            val x = AtomicInteger()
+//            x.incrementAndGet()
+//            x.incrementAndGet()
+//            x.incrementAndGet()
+//            x.incrementAndGet()
+//            x.incrementAndGet()
+//            x.incrementAndGet()
+//            x.incrementAndGet()
+//        })
+//        println(measureNanoTime {
+////            val a = System.nanoTime()
+////            val b = System.nanoTime()
+////            val c = System.nanoTime()
+////            val d = System.nanoTime()
+////            val e = System.nanoTime()
+////            val f = System.nanoTime()
+////            val g = System.nanoTime()
+//        })
+
+        val x = measureTime {
             fib8()
         }
 
@@ -19,9 +48,9 @@ class PerformanceTest {
 
     @Test
     fun `performance`() {
-        val register= (1..100).map {
+        val register = (1..100).map {
             measureTime {
-//                registerModules(Module1)
+                //                registerModules(Module1)
             }
         }.median()
 
