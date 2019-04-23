@@ -19,23 +19,25 @@ class PerformanceTest {
     @Test
     fun SimpleP() {
 //        println(measureNanoTime {
-//            val x = AtomicInteger()
-//            x.incrementAndGet()
-//            x.incrementAndGet()
-//            x.incrementAndGet()
-//            x.incrementAndGet()
-//            x.incrementAndGet()
-//            x.incrementAndGet()
-//            x.incrementAndGet()
+//            hashCode()
+//            hashCode()
+//            hashCode()
+//            hashCode()
+//            hashCode()
+//            hashCode()
+//            hashCode()
 //        })
 //        println(measureNanoTime {
-////            val a = System.nanoTime()
-////            val b = System.nanoTime()
-////            val c = System.nanoTime()
-////            val d = System.nanoTime()
-////            val e = System.nanoTime()
-////            val f = System.nanoTime()
-////            val g = System.nanoTime()
+//            val x = System.nanoTime().toInt()
+//            val y = System.nanoTime().toInt()
+//            val z = System.nanoTime()
+//            System.nanoTime()
+//            System.nanoTime()
+//            System.nanoTime()
+//            System.nanoTime()
+//            println(x)
+//            println(y)
+//            println(z)
 //        })
 
         val x = measureTime {
@@ -43,6 +45,7 @@ class PerformanceTest {
         }
 
         println(x)
+//        val dfe = Caster.cast<Int, String>(3)
 
     }
 

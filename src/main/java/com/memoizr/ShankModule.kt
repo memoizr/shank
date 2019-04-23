@@ -1,25 +1,19 @@
 package com.memoizr
 
-import com.memoizr.`_cache`.factories
+import com.memoizr._cache.factories
 
 interface ShankModule
 
 operator fun ShankModule.invoke(customize: ShankModule.() -> Unit) = also(customize)
 
-inline fun <T> ShankModule.new(noinline factory: () -> T): NewProvider<T> = NewProvider<T>().also { factories[it] = factory }
+inline fun <T> ShankModule.new(noinline factory: () -> T): NewProvider<T> =
+    NewProvider<T>().also { factories[it] = factory }
 
 fun <A, T> ShankModule.new(factory: (A) -> T) = NewProvider1<A, T>().also { factories[it] = factory }
-fun <A, B, T> ShankModule.new(factory: (A, B) -> T) =
-    NewProvider2<A, B, T>().also { factories[it] = factory }
-
-fun <A, B, C, T> ShankModule.new(factory: (A, B, C) -> T) =
-    NewProvider3<A, B, C, T>().also { factories[it] = factory }
-
-fun <A, B, C, D, T> ShankModule.new(factory: (A, B, C, D) -> T) =
-    NewProvider4<A, B, C, D, T>().also { factories[it] = factory }
-
-fun <A, B, C, D, E, T> ShankModule.new(factory: (A, B, C, D, E) -> T) =
-    NewProvider5<A, B, C, D, E, T>().also { factories[it] = factory }
+fun <A, B, T> ShankModule.new(factory: (A, B) -> T) = NewProvider2<A, B, T>().also { factories[it] = factory }
+fun <A, B, C, T> ShankModule.new(factory: (A, B, C) -> T) = NewProvider3<A, B, C, T>().also { factories[it] = factory }
+fun <A, B, C, D, T> ShankModule.new(factory: (A, B, C, D) -> T) = NewProvider4<A, B, C, D, T>().also { factories[it] = factory }
+fun <A, B, C, D, E, T> ShankModule.new(factory: (A, B, C, D, E) -> T) = NewProvider5<A, B, C, D, E, T>().also { factories[it] = factory }
 
 fun <T> ShankModule.scoped(factory: ScopedFactory.() -> T) =
     ScopedProvider<T>().also { factories[it] = factory }

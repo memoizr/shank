@@ -23,7 +23,7 @@ fun <T, F : Function<T>> Provider<*, F>.overrideFactory(f: F) = remove()
     .also { OverriddenCache.factories[this] = this.factory() }
     .also { factories[this] = f }
 
-internal inline fun <T> Any?.invokes() = (Function0::class.java.cast(this)).invoke() as T
+internal inline fun <T> Any?.invokes() = (Caster.cast<Function0<T>>(this)).invoke()
 internal inline fun <A, T> Any?.invokes(a: A) = (this!! as Function1<A, T>).invoke(a)
 internal inline fun <A, B, T> Any?.invokes(a: A, b: B) = (this!! as Function2<A, B, T>).invoke(a, b)
 internal inline fun <A, B, C, T> Any?.invokes(a: A, b: B, c: C) = (this!! as Function3<A, B, C, T>).invoke(a, b, c)
