@@ -4,7 +4,7 @@ import com.memoizr.ShankCache.globalScope
 import com.memoizr.ShankCache.scopedCache
 import java.util.concurrent.ConcurrentHashMap
 
-object `_ cache` {
+object `_cache` {
     val factories = ConcurrentHashMap<Provider<*,*>, Any>()
 }
 
@@ -25,7 +25,7 @@ fun resetShank() {
     globalScope.clear()
     OverriddenCache.factories
         .forEach {
-            `_ cache`.factories[it.key] = it.value
+            `_cache`.factories[it.key] = it.value
             OverriddenCache.factories.remove(it.key)
         }
 }
