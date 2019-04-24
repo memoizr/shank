@@ -6,7 +6,7 @@ import java.util.concurrent.ConcurrentHashMap
 
 object _cache {
     @JvmStatic
-    val factories: ConcurrentHashMap<Provider<*, *>, Any> = ConcurrentHashMap()
+    val factories: ConcurrentHashMap<Provider<*, *>, Any> = ConcurrentHashMap(24)
 }
 
 internal object OverriddenCache {
