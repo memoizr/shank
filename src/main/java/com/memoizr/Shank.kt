@@ -5,7 +5,8 @@ import com.memoizr.ShankCache.scopedCache
 import java.util.concurrent.ConcurrentHashMap
 
 object _cache {
-    val factories = ConcurrentHashMap<Provider<*,*>, Any>()
+    @JvmStatic
+    val factories: ConcurrentHashMap<Provider<*, *>, Any> = ConcurrentHashMap()
 }
 
 internal object OverriddenCache {
