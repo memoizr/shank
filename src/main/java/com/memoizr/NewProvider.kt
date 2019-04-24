@@ -3,7 +3,7 @@ package com.memoizr
 import com.memoizr.`_cache`.factories
 
  class NewProvider<T> : Provider<T, () -> T> {
-     operator fun invoke(): T = factories.get(this).invokes()
+     operator inline fun invoke(): T = (Caster.cast<Function0<T>>(factories.get(this))).invoke()
  }
 
 class NewProvider1<A, T> : Provider<T, (A) -> T> {
