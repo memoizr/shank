@@ -1,4 +1,4 @@
-package com.memoizr;
+package life.shank;
 
 public class Caster {
      public static <T> T cast(Object o){

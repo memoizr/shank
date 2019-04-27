@@ -1,11 +1,11 @@
-package com.memoizr
+package life.shank
 
-import com.memoizr.ParameterNewModule.fiveParamNew
-import com.memoizr.ParameterNewModule.fourParamNew
-import com.memoizr.ParameterNewModule.noParamNew
-import com.memoizr.ParameterNewModule.oneParamNew
-import com.memoizr.ParameterNewModule.threeParamNew
-import com.memoizr.ParameterNewModule.twoParamNew
+import life.shank.ParameterNewModule.fiveParamNew
+import life.shank.ParameterNewModule.fourParamNew
+import life.shank.ParameterNewModule.noParamNew
+import life.shank.ParameterNewModule.oneParamNew
+import life.shank.ParameterNewModule.threeParamNew
+import life.shank.ParameterNewModule.twoParamNew
 import org.junit.Before
 import org.junit.Test
 import shouldBeEqualTo
@@ -55,7 +55,14 @@ class NewTests {
         threeParamNew(1, 2, 3) shouldBeEqualTo ParamData(2, 4, 6)
 
         fourParamNew(1, 2, 3, 4) shouldBeEqualTo ParamData(1, 2, 3, 4)
-        fourParamNew.overrideFactory { a: Int, b: Int, c: Int, d: Int -> ParamData(a * 2, b * 2, c * 2, d * 2) }
+        fourParamNew.overrideFactory { a: Int, b: Int, c: Int, d: Int ->
+            ParamData(
+                a * 2,
+                b * 2,
+                c * 2,
+                d * 2
+            )
+        }
         fourParamNew(1, 2, 3, 4) shouldBeEqualTo ParamData(2, 4, 6, 8)
 
         fiveParamNew(1, 2, 3, 4, 5) shouldBeEqualTo ParamData(1, 2, 3, 4, 5)

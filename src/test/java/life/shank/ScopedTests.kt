@@ -1,11 +1,11 @@
-package com.memoizr
+package life.shank
 
-import com.memoizr.ParameterScopedModule.fiveParamScoped
-import com.memoizr.ParameterScopedModule.fourParamScoped
-import com.memoizr.ParameterScopedModule.noParamScoped
-import com.memoizr.ParameterScopedModule.oneParamScoped
-import com.memoizr.ParameterScopedModule.threeParamScoped
-import com.memoizr.ParameterScopedModule.twoParamScoped
+import life.shank.ParameterScopedModule.fiveParamScoped
+import life.shank.ParameterScopedModule.fourParamScoped
+import life.shank.ParameterScopedModule.noParamScoped
+import life.shank.ParameterScopedModule.oneParamScoped
+import life.shank.ParameterScopedModule.threeParamScoped
+import life.shank.ParameterScopedModule.twoParamScoped
 import org.junit.Before
 import org.junit.Test
 import shouldBeEqualTo

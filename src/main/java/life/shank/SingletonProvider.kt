@@ -1,6 +1,6 @@
-package com.memoizr
+package life.shank
 
-import com.memoizr.ShankCache.globalScope
+import life.shank.ShankCache.globalScope
 
  class SingletonProvider<T> : Provider<T, () -> T> {
     fun eager(): SingletonProvider<T> {

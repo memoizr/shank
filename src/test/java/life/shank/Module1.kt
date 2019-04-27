@@ -1,4 +1,4 @@
-package com.memoizr
+package life.shank
 
 object Module1 : ShankModule {
     val fib1 = new { -> Fib1() }

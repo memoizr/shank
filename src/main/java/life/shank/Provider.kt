@@ -1,6 +1,6 @@
-package com.memoizr
+package life.shank
 
-import com.memoizr.`_cache`.factories
+import life.shank._cache.factories
 import java.util.concurrent.ConcurrentHashMap
 
 internal interface Params

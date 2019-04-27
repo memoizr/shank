@@ -1,4 +1,4 @@
-package com.memoizr
+package life.shank
 
 interface Fib {
     val fib: Fib?

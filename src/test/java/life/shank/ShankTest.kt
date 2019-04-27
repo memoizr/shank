@@ -1,11 +1,11 @@
-package com.memoizr
+package life.shank
 
-import com.memoizr.MyModule.listOfInts
-import com.memoizr.MyModule.listOfStrings
-import com.memoizr.MyModule.newFoo
-import com.memoizr.MyModule.otherScopeSingleton
-import com.memoizr.MyModule.scopedSingleton
-import com.memoizr.MyModule.singleton
+import life.shank.MyModule.listOfInts
+import life.shank.MyModule.listOfStrings
+import life.shank.MyModule.newFoo
+import life.shank.MyModule.otherScopeSingleton
+import life.shank.MyModule.scopedSingleton
+import life.shank.MyModule.singleton
 import org.junit.Before
 import org.junit.Test
 import shouldBeEqualTo

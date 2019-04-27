@@ -1,4 +1,4 @@
-package com.memoizr
+package life.shank
 
 import java.io.Serializable
 
@@ -8,12 +8,13 @@ data class Scope(val value: Serializable) : Serializable {
         ShankCache.scopedCache.remove(this)
     }
 
-    fun clearWithAction(action: (Provider<*,*>, Any?) -> Unit) {
+    fun clearWithAction(action: (Provider<*, *>, Any?) -> Unit) {
         ShankCache.scopedCache.also { it[this]?.forEach { action(it.key.first, it.value) } }.remove(this)
     }
 }
 
-data class ScopedFactory(override val scope: Scope) : Scoped
+interface ScopedFactory : Scoped
+data class SimpleScopedFactory(override val scope: Scope) : ScopedFactory
 
 interface Scoped {
     val scope: Scope

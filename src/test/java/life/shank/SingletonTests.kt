@@ -1,11 +1,11 @@
-package com.memoizr
+package life.shank
 
-import com.memoizr.ParameterSingletonModule.fiveParam
-import com.memoizr.ParameterSingletonModule.fourParam
-import com.memoizr.ParameterSingletonModule.noParam
-import com.memoizr.ParameterSingletonModule.oneParam
-import com.memoizr.ParameterSingletonModule.threeParam
-import com.memoizr.ParameterSingletonModule.twoParam
+import life.shank.ParameterSingletonModule.fiveParam
+import life.shank.ParameterSingletonModule.fourParam
+import life.shank.ParameterSingletonModule.noParam
+import life.shank.ParameterSingletonModule.oneParam
+import life.shank.ParameterSingletonModule.threeParam
+import life.shank.ParameterSingletonModule.twoParam
 import org.junit.Before
 import org.junit.Test
 import shouldBeEqualTo

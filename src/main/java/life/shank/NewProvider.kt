@@ -1,13 +1,14 @@
-package com.memoizr
+package life.shank
 
-import com.memoizr.`_cache`.factories
+import life.shank._cache.factories
 
  class NewProvider<T> : Provider<T, () -> T> {
-     operator inline fun invoke(): T = (Caster.cast<Function0<T>>(factories.get(this))).invoke()
+     operator inline fun invoke(): T = (Caster.cast<Function0<T>>(factories[this])).invoke()
  }
 
 class NewProvider1<A, T> : Provider<T, (A) -> T> {
     operator fun invoke(a: A): T = factories[this].invokes(a)
+
 }
 
 class NewProvider2<A, B, T> : Provider<T, (A, B) -> T> {
