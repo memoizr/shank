@@ -2,6 +2,7 @@ package life.shank
 
 import life.shank.ParameterScopedModule.fiveParamScoped
 import life.shank.ParameterScopedModule.fourParamScoped
+import life.shank.ParameterScopedModule.noParamNonClassScoped
 import life.shank.ParameterScopedModule.noParamScoped
 import life.shank.ParameterScopedModule.oneParamScoped
 import life.shank.ParameterScopedModule.threeParamScoped
@@ -10,6 +11,7 @@ import org.junit.Before
 import org.junit.Test
 import shouldBeEqualTo
 import shouldBeSameReference
+import shouldNotBeEqualTo
 
 
 private object ParameterScopedModule : ShankModule {
@@ -19,9 +21,11 @@ private object ParameterScopedModule : ShankModule {
     val threeParamScoped = scoped { a: Int, b: Int, c: Int -> ParamData(a, b, c) }
     val fourParamScoped = scoped { a: Int, b: Int, c: Int, d: Int -> ParamData(a, b, c, d) }
     val fiveParamScoped = scoped { a: Int, b: Int, c: Int, d: Int, e: Int -> ParamData(a, b, c, d, e) }
+
+    val noParamNonClassScoped = scoped { -> Any() }
 }
 
-class ScopedTests: Scoped {
+class ScopedTests : Scoped {
     override val scope: Scope = Scope("singleton")
 
     @Before
@@ -125,4 +129,43 @@ class ScopedTests: Scoped {
         }
     }
 
+    val nested = scope.nest()
+
+    @Test
+    fun `supports nested scopes`() {
+        noParamNonClassScoped(nested) shouldBeEqualTo noParamNonClassScoped(nested)
+    }
+
+    @Test
+    fun `nested scope is different from parent`() {
+        noParamNonClassScoped(nested) shouldNotBeEqualTo noParamNonClassScoped(scope)
+    }
+
+    @Test
+    fun `clearing child scope does not clear parent`() {
+        val child = noParamNonClassScoped(nested)
+        val parent = noParamNonClassScoped(scope)
+        nested.clear()
+
+        child shouldNotBeEqualTo noParamNonClassScoped(nested)
+        parent shouldBeEqualTo noParamNonClassScoped(scope)
+    }
+
+    @Test
+    fun `clearing parent scope clears parent`() {
+        val child = noParamNonClassScoped(nested)
+        val parent = noParamNonClassScoped(scope)
+        scope.clear()
+
+        parent shouldNotBeEqualTo noParamNonClassScoped(scope)
+        child shouldNotBeEqualTo noParamNonClassScoped(nested)
+    }
+
+    @Test
+    fun `gets cached value from parent scope if no nested cached value is found`() {
+        val parent = noParamNonClassScoped(scope)
+        val child = noParamNonClassScoped(nested)
+
+        parent shouldBeEqualTo child
+    }
 }

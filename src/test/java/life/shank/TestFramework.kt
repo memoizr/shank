@@ -28,7 +28,7 @@ infix fun <T: Any> T?.shouldBeEqualTo(other: T) = assert(this == other) {
 }
 
 infix fun <T: Any> T?.shouldNotBeEqualTo(other: T) = assert(this != other) {
-    """Values should not be equal but aren't;
+    """Values should not be equal but are;
     Value:
     $this"""
 }

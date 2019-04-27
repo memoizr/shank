@@ -61,7 +61,7 @@ private inline fun Provider<*, *>.remove() {
     }
 }
 
-internal inline fun <T, F : Function<T>> Provider<*, F>.get(
+internal fun <T, F : Function<T>> Provider<*, F>.get(
     scope: Scope,
     params: Params = Params0,
     f: Any?.() -> T
@@ -72,8 +72,10 @@ internal inline fun <T, F : Function<T>> Provider<*, F>.get(
 
     return (getScope(scope)!!.let { newScope ->
         val pair = Pair(this, params)
-        newScope[pair] ?: factories[this].f().also {
+        newScope[pair] ?: scope.parent?.let { get(it, params, f) } ?: factories[this].f().also {
             newScope[pair] = it as Any
         }
     }) as T
 }
+
+
