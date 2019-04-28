@@ -5,19 +5,29 @@ import life.shank.ShankCache.scopedCache
 import life.shank._cache.factories
 import java.util.concurrent.ConcurrentHashMap
 
-internal interface Params
-internal object Params0 : Params
-internal inline class Params1(val a: Any?) : Params
-internal data class Params2(val a: Any?, val b: Any?) : Params
-internal data class Params3(val a: Any?, val b: Any?, val c: Any?) : Params
-internal data class Params4(val a: Any?, val b: Any?, val c: Any?, val d: Any?) : Params
-internal data class Params5(val a: Any?, val b: Any?, val c: Any?, val d: Any?, val e: Any?) : Params
+inline infix fun Provider<*, *>.mash(other: Params): Long = hashCode() * 31 + other * 1299827L
+
+inline infix fun Any?.or(other: Any?) = this.hashCode() * 31 + other.hashCode()
+internal typealias Params = Int
+
+internal inline fun Params1(a: Any?): Params = a.hashCode()
+internal inline fun Params2(a: Any?, b: Any?): Params = a or b
+internal inline fun Params3(a: Any?, b: Any?, c: Any?): Params = a or b or c
+internal inline fun Params4(a: Any?, b: Any?, c: Any?, d: Any?): Params = a or b or c or d
+internal inline fun Params5(a: Any?, b: Any?, c: Any?, d: Any?, e: Any?): Params = a or b or c or d or e
+
+internal interface OldParams
+internal object OldParams0 : OldParams
+internal inline class OldParams1(val a: Any?) : OldParams
+internal data class OldParams2(val a: Any?, val b: Any?) : OldParams
+internal data class OldParams3(val a: Any?, val b: Any?, val c: Any?) : OldParams
+internal data class OldParams4(val a: Any?, val b: Any?, val c: Any?, val d: Any?) : OldParams
+internal data class OldParams5(val a: Any?, val b: Any?, val c: Any?, val d: Any?, val e: Any?) : OldParams
 
 interface Provider<T, F : Function<T>>
 
 fun <T, F : Function<T>> Provider<*, F>.factory(): F = cast<F>(factories[this])
 fun <T, F : Function<T>> Provider<*, F>.restore() = also { factories[this] = factory() }
-
 fun <T, F : Function<T>> Provider<*, F>.overrideFactory(f: F) = remove()
     .also { OverriddenCache.factories[this] = this.factory() }
     .also { factories[this] = f }
@@ -25,14 +35,15 @@ fun <T, F : Function<T>> Provider<*, F>.overrideFactory(f: F) = remove()
 private inline fun Provider<*, *>.remove() = also {
     scopedCache.forEach { scope ->
         scope.value.forEach { it ->
-            if (it.key.first == this) {
+            if (((it.key - (hashCode() * 31)) % 1299827L) == 0L) {
                 scope.value.remove(it.key)
             }
         }
     }
 }
+typealias ProvToParams = Long
 
-internal inline fun Scope.lookInParents(params: Pair<Provider<*, *>, Params>): Any? {
+internal inline fun Scope.lookInParents(params: ProvToParams): Any? {
     var s: Scope? = parent
     while (s != null) {
         val v = findCached(s, params)
@@ -44,12 +55,13 @@ internal inline fun Scope.lookInParents(params: Pair<Provider<*, *>, Params>): A
     return null
 }
 
-internal inline fun findCached(scope: Scope, params: Pair<Provider<*, *>, Params>) = (
-        ShankCache.scopedCache[scope] ?: ConcurrentHashMap<Pair<Provider<*, *>, Params>, Any?>().also { ShankCache.scopedCache[scope] = it }
+internal inline fun findCached(scope: Scope, params: ProvToParams) = (
+        ShankCache.scopedCache[scope]
+            ?: ConcurrentHashMap<ProvToParams, Any?>().also { it: ConcurrentHashMap<ProvToParams, Any?> -> ShankCache.scopedCache.put(scope, it) }
         ).let { it[params] }
 
-internal inline fun <T, F : Function<T>> Provider<*, F>.get(scope: Scope, params: Params = Params0, f: Any?.() -> T): T = Pair(this, params).let { p ->
-    cast<T>(findCached(scope, p) ?: scope.lookInParents(p) ?: factories[this].f().also { ShankCache.scopedCache[scope]!![p] = it })
+internal inline fun <T, F : Function<T>> Provider<*, F>.get(scope: Scope, params: Params, f: Any?.() -> T): T = mash(params).let { p ->
+    cast<T>(findCached(scope, p) ?: scope.lookInParents(p) ?: factories[this].f().also { ShankCache.scopedCache.get(scope)!![p] = it })
 }
 
 internal inline fun <T> Any?.i() = cast<Function0<T>>(this).invoke()

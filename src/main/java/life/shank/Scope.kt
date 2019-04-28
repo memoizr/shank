@@ -13,8 +13,8 @@ data class Scope(val value: Serializable, val parent: Scope? = null) : Serializa
         clearActions = null
     }
 
-    fun clearWithAction(action: (Provider<*, *>, Any?) -> Unit) {
-        ShankCache.scopedCache.also { it[this]?.forEach { action(it.key.first, it.value) } }.remove(this)
+    fun clearWithAction(action: (Any?) -> Unit) {
+        ShankCache.scopedCache.also { it[this]?.forEach { action(it.value) } }.remove(this)
     }
 
     fun nest() = copy(value = Dummy(), parent = this)
@@ -30,7 +30,7 @@ data class Scope(val value: Serializable, val parent: Scope? = null) : Serializa
 
 class Dummy : Serializable
 interface ScopedFactory : Scoped
-data class SimpleScopedFactory(override val scope: Scope) : ScopedFactory
+internal data class SSF(override val scope: Scope) : ScopedFactory
 
 interface Scoped {
     val scope: Scope

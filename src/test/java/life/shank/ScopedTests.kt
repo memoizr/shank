@@ -122,7 +122,7 @@ class ScopedTests : Scoped {
     fun `clears scope with final action`() {
         noParamScoped()
 
-        scope.clearWithAction { wrapper, value ->
+        scope.clearWithAction { value ->
             when {
 //                wrapper == newFoo -> println(newFoo())
             }

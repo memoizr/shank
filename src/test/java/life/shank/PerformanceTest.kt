@@ -1,52 +1,29 @@
 package life.shank
 
-import life.shank.Module1.fib8
 import org.junit.Test
+import java.util.concurrent.ConcurrentHashMap
 import kotlin.system.measureNanoTime
 
 
 class PerformanceTest {
 
-    object a : ShankModule {
-//        val egg = new { -> Egg(chicken()) }
-//        val chicken = new { -> Chicken(god()) }
-//        val god = new { -> God(human()) }
-//        val human = new { -> Human(plant()) }
-//        val plant = new { -> Plant(eggshell()) }
-    }
+    val arrayHash = ConcurrentHashMap<Any, Any>()
 
-    object b: ShankModule {
-//        val eggshell = new { -> EggShell(egg()) }
-    }
 
     @Test
-    fun SimpleP() {
+    fun arrayvspair() {
+//        params().also { arrayHash[it] = true }.also { arrayHash[it] }
+//        Pair(Any(), "no").also { arrayHash[it] = true }.also { arrayHash[it] }
 
-        val x = measureTime {
-            fib8()
+        measureNanoTime {
+//            Pair(Any(), "no").also { arrayHash[it] = true }.also { arrayHash[it] }
         }
-
+            .also { println(it) }
     }
 
-    @Test
-    fun `performance`() {
-        val register = (1..100).map {
-            measureTime {
-                //                registerModules(Module1)
-            }
-        }.median()
+//    private inline fun params() = Any() mash "no"
 
-        val get = (1..10).map {
-            measureTime {
-                fib8().number()
-            }
-        }.median()
 
-        println(register)
-        println(get)
-    }
-
-    fun List<Double>.median() = sorted().let { (it[it.size / 2] + it[(it.size - 1) / 2]) / 2 }
-    fun measureTime(block: () -> Unit): Double = measureNanoTime(block) / 1000000.0
+    val hash = hashMapOf("yo" to 666)
 }
 
