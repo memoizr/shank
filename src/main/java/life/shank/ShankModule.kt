@@ -4,7 +4,7 @@ import life.shank._cache.factories
 
 interface ShankModule
 
-operator fun ShankModule.invoke(customize: ShankModule.() -> Unit) = also(customize)
+operator fun <T: ShankModule> T.invoke(customize: T.() -> Unit) = also(customize)
 
 inline fun <T> ShankModule.new(noinline factory: () -> T): NewProvider<T> = NewProvider<T>().also { factories.put(it, factory) }
 

@@ -18,7 +18,7 @@ internal object ShankCache {
     @JvmStatic
     internal val globalScope = Scope(hashCode())
     @JvmStatic
-    internal val scopedCache = ConcurrentHashMap<Scope, MutableMap<Pair<Provider<*, *>, Params>, Any?>>()
+    internal val scopedCache = ConcurrentHashMap<Scope, ConcurrentHashMap<Pair<Provider<*, *>, Params>, Any?>>()
 }
 
 fun resetShank() {

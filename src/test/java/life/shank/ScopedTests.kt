@@ -168,4 +168,43 @@ class ScopedTests : Scoped {
 
         parent shouldBeEqualTo child
     }
+
+    @Test
+    fun `adds on clear actions`() {
+        var result = "failed"
+        var otherResult = "failed"
+        scope.addOnClearAction { result = "success" }
+        scope.addOnClearAction { otherResult = "success" }
+        noParamNonClassScoped()
+        result shouldBeEqualTo "failed"
+        otherResult shouldBeEqualTo "failed"
+
+        scope.clear()
+
+        result shouldBeEqualTo "success"
+        otherResult shouldBeEqualTo "success"
+    }
+
+    @Test
+    fun `on clear actions can be removed`() {
+        var result = "success"
+        var otherResult = "success"
+
+        val action = { result = "failed" }
+        val otherAction = { otherResult = "failed" }
+
+        scope.addOnClearAction(action)
+        scope.addOnClearAction(otherAction)
+        noParamNonClassScoped()
+        result shouldBeEqualTo "success"
+        otherResult shouldBeEqualTo "success"
+
+
+        scope.removeOnClearAction(action)
+        scope.removeOnClearAction(otherAction)
+        scope.clear()
+
+        result shouldBeEqualTo "success"
+        otherResult shouldBeEqualTo "success"
+    }
 }

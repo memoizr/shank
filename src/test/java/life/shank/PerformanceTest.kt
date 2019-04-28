@@ -6,12 +6,6 @@ import kotlin.system.measureNanoTime
 
 
 class PerformanceTest {
-    class Egg(chicken: Chicken)
-    class Chicken(god: God)
-    class God(human: Human)
-    class Human(plant: Plant)
-    class Plant(eggshell: EggShell?)
-    class EggShell(egg: Egg)
 
     object a : ShankModule {
 //        val egg = new { -> Egg(chicken()) }
