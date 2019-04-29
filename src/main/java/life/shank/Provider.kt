@@ -16,14 +16,6 @@ internal inline fun Params3(a: Any?, b: Any?, c: Any?): Params = a or b or c
 internal inline fun Params4(a: Any?, b: Any?, c: Any?, d: Any?): Params = a or b or c or d
 internal inline fun Params5(a: Any?, b: Any?, c: Any?, d: Any?, e: Any?): Params = a or b or c or d or e
 
-internal interface OldParams
-internal object OldParams0 : OldParams
-internal inline class OldParams1(val a: Any?) : OldParams
-internal data class OldParams2(val a: Any?, val b: Any?) : OldParams
-internal data class OldParams3(val a: Any?, val b: Any?, val c: Any?) : OldParams
-internal data class OldParams4(val a: Any?, val b: Any?, val c: Any?, val d: Any?) : OldParams
-internal data class OldParams5(val a: Any?, val b: Any?, val c: Any?, val d: Any?, val e: Any?) : OldParams
-
 interface Provider<T, F : Function<T>>
 
 fun <T, F : Function<T>> Provider<*, F>.factory(): F = cast<F>(factories[this])

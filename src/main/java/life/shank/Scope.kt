@@ -13,10 +13,6 @@ data class Scope(val value: Serializable, val parent: Scope? = null) : Serializa
         clearActions = null
     }
 
-    fun clearWithAction(action: (Any?) -> Unit) {
-        ShankCache.scopedCache.also { it[this]?.forEach { action(it.value) } }.remove(this)
-    }
-
     fun nest() = copy(value = Dummy(), parent = this)
         .also { (children ?: apply { children = ArrayList() }.children!!).add(it) }
 
@@ -26,6 +22,10 @@ data class Scope(val value: Serializable, val parent: Scope? = null) : Serializa
     fun removeOnClearAction(action: () -> Unit) = also {
         clearActions?.remove(action)
     }
+}
+
+fun Scope.clearWithAction(action: (Any?) -> Unit) {
+    ShankCache.scopedCache.also { it[this]?.forEach { action(it.value) } }.remove(this)
 }
 
 class Dummy : Serializable

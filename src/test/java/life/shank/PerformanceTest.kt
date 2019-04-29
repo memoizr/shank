@@ -16,9 +16,9 @@ class PerformanceTest {
 //        Pair(Any(), "no").also { arrayHash[it] = true }.also { arrayHash[it] }
 
         measureNanoTime {
-//            Pair(Any(), "no").also { arrayHash[it] = true }.also { arrayHash[it] }
+            MyThing
         }
-            .also { println(it) }
+            .also { println(it/1000) }
     }
 
 //    private inline fun params() = Any() mash "no"
@@ -27,3 +27,7 @@ class PerformanceTest {
     val hash = hashMapOf("yo" to 666)
 }
 
+
+object MyThing: ShankModule {
+    @JvmField val a1 = new { -> "" }
+}

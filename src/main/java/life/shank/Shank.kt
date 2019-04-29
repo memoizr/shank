@@ -2,6 +2,7 @@ package life.shank
 
 import life.shank.ShankCache.globalScope
 import life.shank.ShankCache.scopedCache
+import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
 object _cache {
@@ -10,24 +11,24 @@ object _cache {
 }
 
 internal object OverriddenCache {
-    @JvmStatic
+    @JvmField
     internal val factories = ConcurrentHashMap<Provider<*, *>, Any>()
 }
 
 internal object ShankCache {
-    @JvmStatic
+    @JvmField
     internal val globalScope = Scope(hashCode())
-    @JvmStatic
+    @JvmField
     internal val scopedCache = ConcurrentHashMap<Scope, ConcurrentHashMap<Long, Any?>>()
 }
 
 fun resetShank() {
-    scopedCache.clear()
-    globalScope.clear()
     OverriddenCache.factories
         .forEach {
             _cache.factories[it.key] = it.value
-            OverriddenCache.factories.remove(it.key)
         }
+    OverriddenCache.factories.clear()
+    scopedCache.clear()
+    globalScope.clear()
 }
 
