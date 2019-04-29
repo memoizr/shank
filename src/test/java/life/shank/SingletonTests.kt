@@ -1,11 +1,19 @@
 package life.shank
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import life.shank.ParameterSingletonModule.fiveParam
 import life.shank.ParameterSingletonModule.fourParam
 import life.shank.ParameterSingletonModule.noParam
 import life.shank.ParameterSingletonModule.oneParam
 import life.shank.ParameterSingletonModule.threeParam
 import life.shank.ParameterSingletonModule.twoParam
+import life.shank.SingletonTests.ConcurrentSingleton.nanotime0
+import life.shank.SingletonTests.ConcurrentSingleton.nanotime1
+import life.shank.SingletonTests.ConcurrentSingleton.nanotime2
+import life.shank.SingletonTests.ConcurrentSingleton.nanotime3
+import life.shank.SingletonTests.ConcurrentSingleton.nanotime4
+import life.shank.SingletonTests.ConcurrentSingleton.nanotime5
 import org.junit.Before
 import org.junit.Test
 import shouldBeEqualTo
@@ -47,20 +55,20 @@ class SingletonTests {
 
     @Test
     fun `provides different values per params`() {
-//        oneParam(1) shouldBeSameReference oneParam(1)
-//        oneParam(2).a shouldBeEqualTo 2
+        oneParam(1) shouldBeSameReference oneParam(1)
+        oneParam(2).a shouldBeEqualTo 2
 
         twoParam(1, 2) shouldBeEqualTo ParamData(1, 2)
         twoParam(2, 3) shouldBeEqualTo ParamData(2, 3)
 
-//        threeParam(1, 2, 3) shouldBeEqualTo ParamData(1, 2, 3)
-//        threeParam(2, 3, 4) shouldBeEqualTo ParamData(2, 3, 4)
-//
-//        fourParam(1, 2, 3, 4) shouldBeEqualTo ParamData(1, 2, 3, 4)
-//        fourParam(2, 3, 4, 5) shouldBeEqualTo ParamData(2, 3, 4, 5)
-//
-//        fiveParam(1, 2, 3, 4, 5) shouldBeEqualTo ParamData(1, 2, 3, 4, 5)
-//        fiveParam(2, 3, 4, 5, 6) shouldBeEqualTo ParamData(2, 3, 4, 5, 6)
+        threeParam(1, 2, 3) shouldBeEqualTo ParamData(1, 2, 3)
+        threeParam(2, 3, 4) shouldBeEqualTo ParamData(2, 3, 4)
+
+        fourParam(1, 2, 3, 4) shouldBeEqualTo ParamData(1, 2, 3, 4)
+        fourParam(2, 3, 4, 5) shouldBeEqualTo ParamData(2, 3, 4, 5)
+
+        fiveParam(1, 2, 3, 4, 5) shouldBeEqualTo ParamData(1, 2, 3, 4, 5)
+        fiveParam(2, 3, 4, 5, 6) shouldBeEqualTo ParamData(2, 3, 4, 5, 6)
     }
 
 
@@ -93,7 +101,7 @@ class SingletonTests {
                 b * 2,
                 c * 2,
                 d * 2
-            )
+                     )
         }
         fourParam(1, 2, 3, 4) shouldBeEqualTo ParamData(2, 4, 6, 8)
         fourParam.restore()
@@ -106,9 +114,38 @@ class SingletonTests {
                 c * 2,
                 d * 2,
                 e * 2
-            )
+                     )
         }
         fiveParam(1, 2, 3, 4, 5) shouldBeEqualTo ParamData(2, 4, 6, 8, 10)
         fiveParam.restore()
     }
+
+
+    @Test
+    fun `supports concurrent requests`() {
+        runBlocking(Dispatchers.Default) {
+            testConcurrentAccess { nanotime0() }
+            testConcurrentAccess { nanotime1(0) }
+            testConcurrentAccess { nanotime2(0, 0) }
+            testConcurrentAccess { nanotime3(0, 0, 0) }
+            testConcurrentAccess { nanotime4(0, 0, 0, 0) }
+            testConcurrentAccess { nanotime5(0, 0, 0, 0, 0) }
+        }
+
+    }
+
+    private object ConcurrentSingleton : ShankModule {
+        val nanotime0 = singleton { -> getTimeSlow() }
+        val nanotime1 = singleton { _: Any -> getTimeSlow() }
+        val nanotime2 = singleton { _: Any, _: Any -> getTimeSlow() }
+        val nanotime3 = singleton { _: Any, _: Any, _: Any -> getTimeSlow() }
+        val nanotime4 = singleton { _: Any, _: Any, _: Any, _: Any -> getTimeSlow() }
+        val nanotime5 = singleton { _: Any, _: Any, _: Any, _: Any, _: Any -> getTimeSlow() }
+
+        private inline fun getTimeSlow(): Long {
+            Thread.sleep(1)
+            return System.nanoTime()
+        }
+    }
 }
+

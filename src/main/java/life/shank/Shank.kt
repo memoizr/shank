@@ -2,10 +2,11 @@ package life.shank
 
 import life.shank.ShankCache.globalScope
 import life.shank.ShankCache.scopedCache
+import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
 object _cache {
-    @JvmField val factories: ConcurrentHashMap<Provider<*, *>, Any> = ConcurrentHashMap(32)
+    @JvmField val factories: IdentityHashMap<Provider<*, *>, Any> = IdentityHashMap(32)
 }
 
 internal object OverriddenCache {

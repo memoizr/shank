@@ -1,5 +1,7 @@
 package life.shank
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import life.shank.ParameterScopedModule.fiveParamScoped
 import life.shank.ParameterScopedModule.fourParamScoped
 import life.shank.ParameterScopedModule.noParamNonClassScoped
@@ -7,6 +9,12 @@ import life.shank.ParameterScopedModule.noParamScoped
 import life.shank.ParameterScopedModule.oneParamScoped
 import life.shank.ParameterScopedModule.threeParamScoped
 import life.shank.ParameterScopedModule.twoParamScoped
+import life.shank.ScopedTests.ConcurrentScoped.nanotime0
+import life.shank.ScopedTests.ConcurrentScoped.nanotime1
+import life.shank.ScopedTests.ConcurrentScoped.nanotime2
+import life.shank.ScopedTests.ConcurrentScoped.nanotime3
+import life.shank.ScopedTests.ConcurrentScoped.nanotime4
+import life.shank.ScopedTests.ConcurrentScoped.nanotime5
 import org.junit.Before
 import org.junit.Test
 import shouldBeEqualTo
@@ -206,5 +214,32 @@ class ScopedTests : Scoped {
 
         result shouldBeEqualTo "success"
         otherResult shouldBeEqualTo "success"
+    }
+
+    @Test
+    fun `supports concurrent requests`() {
+        runBlocking(Dispatchers.Default) {
+            testConcurrentAccess { nanotime0() }
+            testConcurrentAccess { nanotime1(0) }
+            testConcurrentAccess { nanotime2(0, 0) }
+            testConcurrentAccess { nanotime3(0, 0, 0) }
+            testConcurrentAccess { nanotime4(0, 0, 0, 0) }
+            testConcurrentAccess { nanotime5(0, 0, 0, 0, 0) }
+        }
+
+    }
+
+    private object ConcurrentScoped : ShankModule {
+        val nanotime0 = scoped { -> getTimeSlow() }
+        val nanotime1 = scoped { _: Any -> getTimeSlow() }
+        val nanotime2 = scoped { _: Any, _: Any -> getTimeSlow() }
+        val nanotime3 = scoped { _: Any, _: Any, _: Any -> getTimeSlow() }
+        val nanotime4 = scoped { _: Any, _: Any, _: Any, _: Any -> getTimeSlow() }
+        val nanotime5 = scoped { _: Any, _: Any, _: Any, _: Any, _: Any -> getTimeSlow() }
+
+        private inline fun getTimeSlow(): Long {
+            Thread.sleep(1)
+            return System.nanoTime()
+        }
     }
 }

@@ -8,6 +8,7 @@ class SingletonProvider<T> : Provider<T, () -> T> {
         return this
     }
 
+    @Synchronized
     operator fun invoke(): T = get(globalScope, 1299821) { i() }
 }
 
@@ -17,6 +18,7 @@ class SingletonProvider1<A, T> : Provider<T, (A) -> T> {
         return this
     }
 
+    @Synchronized
     operator fun invoke(a: A): T = get(globalScope, Params1(a)) { i(a) }
 }
 
@@ -26,6 +28,7 @@ class SingletonProvider2<A, B, T> : Provider<T, (A, B) -> T> {
         return this
     }
 
+    @Synchronized
     operator fun invoke(a: A, b: B): T = get(globalScope, Params2(a, b)) { i(a, b) }
 }
 
@@ -36,6 +39,7 @@ class SingletonProvider3<A, B, C, T> : Provider<T, (A, B, C) -> T> {
         return this
     }
 
+    @Synchronized
     operator fun invoke(a: A, b: B, c: C): T = get(globalScope, Params3(a, b, c)) { i(a, b, c) }
 }
 
@@ -45,6 +49,7 @@ class SingletonProvider4<A, B, C, D, T> : Provider<T, (A, B, C, D) -> T> {
         return this
     }
 
+    @Synchronized
     operator fun invoke(a: A, b: B, c: C, d: D): T = get(globalScope, Params4(a, b, c, d)) { i(a, b, c, d) }
 }
 
@@ -54,5 +59,6 @@ class SingletonProvider5<A, B, C, D, E, T> : Provider<T, (A, B, C, D, E) -> T> {
         return this
     }
 
+    @Synchronized
     operator fun invoke(a: A, b: B, c: C, d: D, e: E): T = get(globalScope, Params5(a, b, c, d, e)) { i(a, b, c, d, e) }
 }
