@@ -25,7 +25,7 @@ data class Scope(val value: Serializable, val parent: Scope? = null) : Serializa
 }
 
 fun Scope.clearWithAction(action: (Any?) -> Unit) {
-    ShankCache.scopedCache.also { it[this]?.forEach { action(it.value) } }.remove(this)
+    ShankCache.scopedCache.also { it[this]?.values?.forEach { action(it) } }.remove(this)
 }
 
 private class Dummy : Serializable

@@ -3,9 +3,8 @@ package life.shank
 import life.shank.Caster.cast
 import life.shank.ShankCache.scopedCache
 import life.shank._cache.factories
-import java.util.concurrent.ConcurrentHashMap
 
-inline infix fun Provider<*, *>.mash(other: Params): Long = hashCode() * 31 + other * 1299827L
+inline infix fun Provider<*, *>.mash(other: Params) = hashCode() * 31 + other * 128
 
 inline infix fun Any?.or(other: Any?) = this.hashCode() * 31 + other.hashCode()
 internal typealias Params = Int
@@ -18,22 +17,24 @@ internal inline fun Params5(a: Any?, b: Any?, c: Any?, d: Any?, e: Any?): Params
 
 interface Provider<T, F : Function<T>>
 
-fun <T, F : Function<T>> Provider<*, F>.factory(): F = cast<F>(factories[this])
-fun <T, F : Function<T>> Provider<*, F>.restore() = also { factories[this] = factory() }
+fun <T, F : Function<T>> Provider<*, F>.factory(): F = cast<F>(factories.get(this))
+fun <T, F : Function<T>> Provider<*, F>.restore() = also { factories.put(this, factory()) }
 fun <T, F : Function<T>> Provider<*, F>.overrideFactory(f: F) = remove()
     .also { OverriddenCache.factories[this] = this.factory() }
-    .also { factories[this] = f }
+    .also { factories.put(this, f) }
 
 private inline fun Provider<*, *>.remove() = also {
     scopedCache.forEach { scope ->
-        scope.value.forEach { it ->
-            if (((it.key - (hashCode() * 31)) % 1299827L) == 0L) {
-                scope.value.remove(it.key)
+        Int.MAX_VALUE
+        scope.value.clear()
+        scope.value.keys.forEach {
+            if (((it - (hashCode() * 31)) % 127) == 0) {
+                scope.value.remove(it)
             }
         }
     }
 }
-typealias ProvToParams = Long
+typealias ProvToParams = Int
 
 internal inline fun Scope.lookInParents(params: ProvToParams): Any? {
     var s: Scope? = parent
@@ -49,11 +50,11 @@ internal inline fun Scope.lookInParents(params: ProvToParams): Any? {
 
 internal inline fun findCached(scope: Scope, params: ProvToParams) = (
         ShankCache.scopedCache[scope]
-            ?: ConcurrentHashMap<ProvToParams, Any?>().also { it: ConcurrentHashMap<ProvToParams, Any?> -> ShankCache.scopedCache.put(scope, it) }
+            ?: Mapppp<Any?>().also { it: Mapppp<Any?> -> ShankCache.scopedCache.put(scope, it) }
         ).let { it[params] }
 
 internal inline fun <T, F : Function<T>> Provider<*, F>.get(scope: Scope, params: Params, f: Any?.() -> T): T = mash(params).let { p ->
-    cast<T>(findCached(scope, p) ?: scope.lookInParents(p) ?: factories[this].f().also { ShankCache.scopedCache.get(scope)!![p] = it })
+    cast<T>(findCached(scope, p) ?: scope.lookInParents(p) ?: factories[this].f().also { ShankCache.scopedCache.get(scope)!!.put(p, it) })
 }
 
 internal inline fun <T> Any?.i() = cast<Function0<T>>(this).invoke()
