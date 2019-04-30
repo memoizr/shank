@@ -38,7 +38,7 @@ public class Mapppp<V> {
     }
 
     public V get(Object key) {
-        int h = System.identityHashCode(key);
+        int h = key.hashCode();
         int k = (h == 0 ? NULL_KEY : h);
         int[] tab = keys;
         Object[] vals = values;
@@ -89,7 +89,7 @@ public class Mapppp<V> {
     }
 
     public V put(Object key, V value) {
-        int h = System.identityHashCode(key);
+        int h = key.hashCode();
         final int k = (h == 0 ? NULL_KEY : h);
 
         retryAfterResize:
