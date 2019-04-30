@@ -5,9 +5,11 @@ import java.io.Serializable
 data class Scope(val value: Serializable, val parent: Scope? = null) : Serializable {
     @Transient private var children: ArrayList<Scope>? = null
     @Transient private var clearActions: HashSet<() -> Unit>? = null
+    @Transient val hashcode = value.hashCode() * 31 + parent.hashCode()
 
     fun clear() {
-        ShankCache.scopedCache.remove(this)
+        ShankScopedCache.scopedCache.remove(this.hashcode)
+        ShankGlobalCache.globalCache.clear()
         children?.forEach { it.clear() }
         clearActions?.forEach { it() }
         clearActions = null
@@ -22,10 +24,13 @@ data class Scope(val value: Serializable, val parent: Scope? = null) : Serializa
     fun removeOnClearAction(action: () -> Unit) = also {
         clearActions?.remove(action)
     }
+
+    inline override fun hashCode(): Int = hashcode
+    inline override fun equals(other: Any?): Boolean = this.hashcode == other.hashCode()
 }
 
 fun Scope.clearWithAction(action: (Any?) -> Unit) {
-    ShankCache.scopedCache.also { it[this]?.values?.forEach { action(it) } }.remove(this)
+    ShankScopedCache.scopedCache.also { it[this]?.values?.forEach { action(it) } }.remove(this.hashcode)
 }
 
 private class Dummy : Serializable

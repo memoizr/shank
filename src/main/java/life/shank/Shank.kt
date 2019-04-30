@@ -1,11 +1,11 @@
 package life.shank
 
-import life.shank.ShankCache.globalScope
-import life.shank.ShankCache.scopedCache
+import life.shank.ShankScopedCache.globalScope
+import life.shank.ShankScopedCache.scopedCache
 import java.util.concurrent.ConcurrentHashMap
 
 object _cache {
-    @JvmField val factories: Mapppp<Any> = Mapppp()
+    @JvmField val factories: HashcodeHashMap<Any> = HashcodeHashMap()
 }
 
 internal object OverriddenCache {
@@ -13,17 +13,21 @@ internal object OverriddenCache {
     internal val factories = ConcurrentHashMap<Provider<*, *>, Any>()
 }
 
-internal object ShankCache {
+object ShankGlobalCache {
+    @JvmField val globalCache: HashcodeHashMap<Any> = HashcodeHashMap()
+}
+
+internal object ShankScopedCache {
     @JvmField
-    internal val globalScope = Scope(System.identityHashCode(this))
+    internal val globalScope = Scope(this.hashCode())
     @JvmField
-    internal val scopedCache = ConcurrentHashMap<Scope, Mapppp<Any?>>()
+    internal val scopedCache = HashcodeHashMap<HashcodeHashMap<Any?>>()
 }
 
 fun resetShank() {
     OverriddenCache.factories
         .forEach {
-            _cache.factories.put(it.key, it.value)
+            _cache.factories.put(it.key.hashCode(), it.value)
         }
     OverriddenCache.factories.clear()
     scopedCache.clear()

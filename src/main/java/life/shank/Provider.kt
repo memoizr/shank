@@ -1,7 +1,8 @@
 package life.shank
 
 import life.shank.Caster.cast
-import life.shank.ShankCache.scopedCache
+import life.shank.ShankGlobalCache.globalCache
+import life.shank.ShankScopedCache.scopedCache
 import life.shank._cache.factories
 
 inline infix fun Provider<*, *>.mash(other: Params) = hashCode() * 31 + other * 127
@@ -24,12 +25,16 @@ fun <T, F : Function<T>> Provider<*, F>.overrideFactory(f: F) = remove()
     .also { factories.put(this, f) }
 
 private inline fun Provider<*, *>.remove() = also {
-    scopedCache.forEach { scope ->
-        Int.MAX_VALUE
-        scope.value.clear()
-        scope.value.keys.forEach {
+    globalCache.keys.forEach {
+        if (((it - (hashCode() * 31)) % 127) == 0) {
+            globalCache.remove(it)
+        }
+    }
+    scopedCache.values.filterNotNull().forEach { scope ->
+        val hashMap = scope as HashcodeHashMap<Any>
+        hashMap.keys.forEach {
             if (((it - (hashCode() * 31)) % 127) == 0) {
-                scope.value.remove(it)
+                hashMap.remove(it)
             }
         }
     }
@@ -49,12 +54,12 @@ internal inline fun Scope.lookInParents(params: ProvToParams): Any? {
 }
 
 internal inline fun findCached(scope: Scope, params: ProvToParams) = (
-        ShankCache.scopedCache[scope]
-            ?: Mapppp<Any?>().also { it: Mapppp<Any?> -> ShankCache.scopedCache.put(scope, it) }
+        ShankScopedCache.scopedCache[scope.hashcode]
+            ?: HashcodeHashMap<Any?>().also { it: HashcodeHashMap<Any?> -> ShankScopedCache.scopedCache.put(scope.hashcode, it) }
         ).let { it[params] }
 
 internal inline fun <T, F : Function<T>> Provider<*, F>.get(scope: Scope, params: Params, f: Any?.() -> T): T = mash(params).let { p ->
-    cast<T>(findCached(scope, p) ?: scope.lookInParents(p) ?: factories[this].f().also { ShankCache.scopedCache.get(scope)!!.put(p, it) })
+    cast<T>(findCached(scope, p) ?: scope.lookInParents(p) ?: factories[this].f().also { ShankScopedCache.scopedCache.get(scope.hashcode)!!.put(p, it) })
 }
 
 internal inline fun <T> Any?.i() = cast<Function0<T>>(this).invoke()

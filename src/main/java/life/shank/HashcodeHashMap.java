@@ -1,8 +1,8 @@
 package life.shank;
 
 
-public class Mapppp<V> {
-    private static final int DEFAULT_CAPACITY = 64;
+public class HashcodeHashMap<V> {
+    private static final int DEFAULT_CAPACITY = 128;
     private static final int MAXIMUM_CAPACITY = 1 << 29;
     transient int[] keys; // non-private to simplify nested class access
     transient Object[] values; // non-private to simplify nested class access
@@ -14,7 +14,7 @@ public class Mapppp<V> {
         return (key == 0 ? NULL_KEY : key);
     }
 
-    public Mapppp() {
+    public HashcodeHashMap() {
         keys = new int[DEFAULT_CAPACITY];
         values = new Object[DEFAULT_CAPACITY];
     }
@@ -146,7 +146,7 @@ public class Mapppp<V> {
             final int s = size + 1;
             // Use optimized form of 3 * s.
             // Next capacity is len, 2 * current capacity.
-            if (s + (s << 1) > len && resize(len))
+            if (s * 3  > len && resize(len))
                 continue retryAfterResize;
 
             modCount++;
