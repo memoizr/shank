@@ -3,6 +3,9 @@ package life.shank
 import life.shank.ShankCache.globalScope
 
 class SingletonProvider<T> : Provider<T, () -> T> {
+    @JvmField val hashcode = hashCode()
+    inline override fun hashCode(): Int = hashcode
+
     fun eager(): SingletonProvider<T> {
         invoke()
         return this
@@ -13,6 +16,8 @@ class SingletonProvider<T> : Provider<T, () -> T> {
 }
 
 class SingletonProvider1<A, T> : Provider<T, (A) -> T> {
+    @JvmField val hashcode = hashCode()
+    inline override fun hashCode(): Int = hashcode
     fun eager(a: A): SingletonProvider1<A, T> {
         invoke(a)
         return this
@@ -23,6 +28,8 @@ class SingletonProvider1<A, T> : Provider<T, (A) -> T> {
 }
 
 class SingletonProvider2<A, B, T> : Provider<T, (A, B) -> T> {
+    @JvmField val hashcode = hashCode()
+    inline override fun hashCode(): Int = hashcode
     fun eager(a: A, b: B): SingletonProvider2<A, B, T> {
         invoke(a, b)
         return this
@@ -34,6 +41,8 @@ class SingletonProvider2<A, B, T> : Provider<T, (A, B) -> T> {
 
 
 class SingletonProvider3<A, B, C, T> : Provider<T, (A, B, C) -> T> {
+    @JvmField val hashcode = hashCode()
+    inline override fun hashCode(): Int = hashcode
     fun eager(a: A, b: B, c: C): SingletonProvider3<A, B, C, T> {
         invoke(a, b, c)
         return this
@@ -44,6 +53,8 @@ class SingletonProvider3<A, B, C, T> : Provider<T, (A, B, C) -> T> {
 }
 
 class SingletonProvider4<A, B, C, D, T> : Provider<T, (A, B, C, D) -> T> {
+    @JvmField val hashcode = hashCode()
+    inline override fun hashCode(): Int = hashcode
     fun eager(a: A, b: B, c: C, d: D): SingletonProvider4<A, B, C, D, T> {
         invoke(a, b, c, d)
         return this
@@ -54,6 +65,8 @@ class SingletonProvider4<A, B, C, D, T> : Provider<T, (A, B, C, D) -> T> {
 }
 
 class SingletonProvider5<A, B, C, D, E, T> : Provider<T, (A, B, C, D, E) -> T> {
+    @JvmField val hashcode = hashCode()
+    inline override fun hashCode(): Int = hashcode
     fun eager(a: A, b: B, c: C, d: D, e: E): SingletonProvider5<A, B, C, D, E, T> {
         invoke(a, b, c, d, e)
         return this
