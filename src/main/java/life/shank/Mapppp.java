@@ -39,7 +39,20 @@ public class Mapppp<V> {
 
     public V get(Object key) {
         int h = System.identityHashCode(key);
-        return get(h);
+        int k = (h == 0 ? NULL_KEY : h);
+        int[] tab = keys;
+        Object[] vals = values;
+        int len = tab.length;
+        // Multiply by -127, and left-shift to use least bit as part of hash
+        int i = ((k << 1) - (k << 8)) & (len - 1);
+        while (true) {
+            int item = tab[i];
+            if (item == k)
+                return (V) vals[i];
+            if (item == 0)
+                return null;
+            i = (i + 1 < len ? i + 1 : 0);
+        }
     }
 
     public V get(int key) {
@@ -77,7 +90,37 @@ public class Mapppp<V> {
 
     public V put(Object key, V value) {
         int h = System.identityHashCode(key);
-        return put(h, value);
+        final int k = (h == 0 ? NULL_KEY : h);
+
+        retryAfterResize:
+        for (; ; ) {
+            final int[] kk = keys;
+            final int len = kk.length;
+            // Multiply by -127, and left-shift to use least bit as part of hash
+            int i = ((k << 1) - (k << 8)) & (len - 1);
+
+            for (int item; (item = kk[i]) != NULL_KEY;
+                 i = (i + 1 < len ? i + 1 : 0)) {
+                if (item == k) {
+                    @SuppressWarnings("unchecked")
+                    V oldValue = (V) values[i];
+                    values[i] = value;
+                    return oldValue;
+                }
+            }
+
+            final int s = size + 1;
+            // Use optimized form of 3 * s.
+            // Next capacity is len, 2 * current capacity.
+            if (s + (s << 1) > len && resize(len))
+                continue retryAfterResize;
+
+            modCount++;
+            keys[i] = k;
+            values[i] = value;
+            size = s;
+            return null;
+        }
     }
 
     public V put(int key, V value) {
