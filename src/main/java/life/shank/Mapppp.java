@@ -27,6 +27,7 @@ public class Mapppp<V> {
         return size == 0;
     }
 
+
     private static int hash(int h, int length) {
         // Multiply by -127, and left-shift to use least bit as part of hash
         return ((h << 1) - (h << 8)) & (length - 1);
@@ -42,33 +43,35 @@ public class Mapppp<V> {
     }
 
     public V get(int key) {
-        int k = maskNull(key);
+        int k = (key == 0 ? NULL_KEY : key);
         int[] tab = keys;
         Object[] vals = values;
         int len = tab.length;
-        int i = hash(k, len);
+        // Multiply by -127, and left-shift to use least bit as part of hash
+        int i = ((k << 1) - (k << 8)) & (len - 1);
         while (true) {
             int item = tab[i];
             if (item == k)
                 return (V) vals[i];
             if (item == 0)
                 return null;
-            i = nextKeyIndex(i, len);
+            i = (i + 1 < len ? i + 1 : 0);
         }
     }
 
     public boolean containsKey(int key) {
-        int k = maskNull(key);
+        int k = (key == 0 ? NULL_KEY : key);
         int[] tab = keys;
         int len = tab.length;
-        int i = hash(k, len);
+        // Multiply by -127, and left-shift to use least bit as part of hash
+        int i = ((k << 1) - (k << 8)) & (len - 1);
         while (true) {
             int item = tab[i];
             if (item == k)
                 return true;
             if (item == NULL_KEY)
                 return false;
-            i = nextKeyIndex(i, len);
+            i = (i + 1 < len ? i + 1 : 0);
         }
     }
 
@@ -78,16 +81,17 @@ public class Mapppp<V> {
     }
 
     public V put(int key, V value) {
-        final int k = maskNull(key);
+        final int k = (key == 0 ? NULL_KEY : key);
 
         retryAfterResize:
         for (; ; ) {
             final int[] kk = keys;
             final int len = kk.length;
-            int i = hash(k, len);
+            // Multiply by -127, and left-shift to use least bit as part of hash
+            int i = ((k << 1) - (k << 8)) & (len - 1);
 
             for (int item; (item = kk[i]) != NULL_KEY;
-                 i = nextKeyIndex(i, len)) {
+                 i = (i + 1 < len ? i + 1 : 0)) {
                 if (item == k) {
                     @SuppressWarnings("unchecked")
                     V oldValue = (V) values[i];
@@ -134,9 +138,10 @@ public class Mapppp<V> {
                 Object value = oldValues[j];
                 oldKeys[j] = NULL_KEY;
                 oldValues[j] = null;
-                int i = hash(key, newLength);
+                // Multiply by -127, and left-shift to use least bit as part of hash
+                int i = ((key << 1) - (key << 8)) & (newLength - 1);
                 while (newKeys[i] != NULL_KEY)
-                    i = nextKeyIndex(i, newLength);
+                    i = (i + 1 < newLength ? i + 1 : 0);
                 newKeys[i] = key;
                 newValues[i] = value;
             }
@@ -156,11 +161,12 @@ public class Mapppp<V> {
      * previously associated <tt>null</tt> with <tt>key</tt>.)
      */
     public V remove(int key) {
-        int k = maskNull(key);
+        int k = (key == 0 ? NULL_KEY : key);
         int[] tab = keys;
         Object[] vals = values;
         int len = tab.length;
-        int i = hash(k, len);
+        // Multiply by -127, and left-shift to use least bit as part of hash
+        int i = ((k << 1) - (k << 8)) & (len - 1);
 
         while (true) {
             int item = tab[i];
@@ -176,7 +182,7 @@ public class Mapppp<V> {
             }
             if (item == NULL_KEY)
                 return null;
-            i = nextKeyIndex(i, len);
+            i = (i + 1 < len ? i + 1 : 0);
         }
     }
 
@@ -198,15 +204,16 @@ public class Mapppp<V> {
         // and continuing until a null slot is seen, indicating
         // the end of a run of possibly-colliding keys.
         int item;
-        for (int i = nextKeyIndex(d, len); (item = tab[i]) != NULL_KEY;
-             i = nextKeyIndex(i, len)) {
+        for (int i = (d + 1 < len ? d + 1 : 0); (item = tab[i]) != NULL_KEY;
+             i = (i + 1 < len ? i + 1 : 0)) {
             // The following test triggers if the item at slot i (which
             // hashes to be at slot r) should take the spot vacated by d.
             // If so, we swap it in, and then continue with d now at the
             // newly vacated i.  This process will terminate when we hit
             // the null slot at the end of this run.
             // The test is messy because we are using a circular table.
-            int r = hash(item, len);
+            // Multiply by -127, and left-shift to use least bit as part of hash
+            int r = ((item << 1) - (item << 8)) & (len - 1);
             if ((i < r && (r <= d || d <= i)) || (r <= d && d <= i)) {
                 tab[d] = item;
                 vals[d] = vals[i];
