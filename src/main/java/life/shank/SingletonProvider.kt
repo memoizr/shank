@@ -14,10 +14,10 @@ class SingletonProvider<T> : Provider<T, () -> T> {
     }
 
     @Synchronized
-    operator fun invoke(): T = getGlobal(hashcode, 1299821) { i() }
+    inline operator fun invoke(): T = getGlobal(hashcode, 1299821) { cast<Function0<T>>(this).invoke() }
 }
 
-private inline fun <T, F : Function<T>> Provider<*, F>.getGlobal(h: Int, params: Params, f: Any?.() -> T): T =
+inline fun <T, F : Function<T>> Provider<*, F>.getGlobal(h: Int, params: Params, f: Any?.() -> T): T =
     mash(params).let { hash -> cast<T>(globalCache[hash]) ?: factories[h].f().also { globalCache.put(hash, it) } }
 
 
