@@ -5,16 +5,19 @@ import life.shank.ShankCache.scopedCache
 import java.util.concurrent.ConcurrentHashMap
 
 object _cache {
-    @JvmField val factories  = Mapppp<Any>()
+    @JvmField val factories: Mapppp<Any> = Mapppp()
 }
 
 internal object OverriddenCache {
-    @JvmField internal val factories = ConcurrentHashMap<Provider<*, *>, Any>()
+    @JvmField
+    internal val factories = ConcurrentHashMap<Provider<*, *>, Any>()
 }
 
 internal object ShankCache {
-    @JvmField internal val globalScope = Scope(System.identityHashCode(this))
-    @JvmField internal val scopedCache = ConcurrentHashMap<Scope, Mapppp<Any?>>()
+    @JvmField
+    internal val globalScope = Scope(System.identityHashCode(this))
+    @JvmField
+    internal val scopedCache = ConcurrentHashMap<Scope, Mapppp<Any?>>()
 }
 
 fun resetShank() {

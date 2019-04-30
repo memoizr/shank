@@ -1,10 +1,9 @@
 package life.shank;
 
 
-public class Mapppp<V> implements java.io.Serializable, Cloneable {
+public class Mapppp<V> {
     private static final int DEFAULT_CAPACITY = 64;
     private static final int MAXIMUM_CAPACITY = 1 << 29;
-    private static final long serialVersionUID = 8188218128353913215L;
     transient int[] keys; // non-private to simplify nested class access
     transient Object[] values; // non-private to simplify nested class access
     int size;
