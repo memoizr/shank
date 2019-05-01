@@ -5,7 +5,7 @@ import java.io.Serializable
 data class Scope(val value: Serializable, val parent: Scope? = null) : Serializable {
     @Transient private var children: ArrayList<Scope>? = null
     @Transient private var clearActions: HashSet<() -> Unit>? = null
-    @Transient val hashcode = value.hashCode() * 31 + parent.hashCode()
+    @Transient @JvmField val hashcode = value.hashCode() * 31 + parent.hashCode()
 
     fun clear() {
         ShankScopedCache.scopedCache.remove(this.hashcode)
@@ -15,7 +15,7 @@ data class Scope(val value: Serializable, val parent: Scope? = null) : Serializa
         clearActions = null
     }
 
-    fun nest() = copy(value = Dummy(), parent = this)
+    fun nest() = copy(value = Any().hashCode(), parent = this)
         .also { (children ?: apply { children = ArrayList() }.children!!).add(it) }
 
     fun addOnClearAction(action: () -> Unit): Scope =
@@ -33,7 +33,6 @@ fun Scope.clearWithAction(action: (Any?) -> Unit) {
     ShankScopedCache.scopedCache.also { it[this]?.values?.forEach { action(it) } }.remove(this.hashcode)
 }
 
-private class Dummy : Serializable
 interface ScopedFactory : Scoped
 internal data class SSF(override val scope: Scope) : ScopedFactory
 

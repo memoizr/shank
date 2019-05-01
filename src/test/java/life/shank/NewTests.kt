@@ -27,35 +27,25 @@ class NewTests {
     }
 
     @Test
-    fun `supports parameters new`() {
-        noParamNew() shouldBeEqualTo ParamData()
-        oneParamNew(1) shouldBeEqualTo ParamData(1)
-        twoParamNew(1, 2) shouldBeEqualTo ParamData(1, 2)
-        threeParamNew(1, 2, 3) shouldBeEqualTo ParamData(1, 2, 3)
-        fourParamNew(1, 2, 3, 4) shouldBeEqualTo ParamData(1, 2, 3, 4)
-        fiveParamNew(1, 2, 3, 4, 5) shouldBeEqualTo ParamData(1, 2, 3, 4, 5)
-    }
-
-    @Test
     fun `allows new override`() {
         noParamNew() shouldBeEqualTo ParamData(null)
-        noParamNew.overrideFactory { -> ParamData(2) }
+        noParamNew override  { -> ParamData(2) }
         noParamNew() shouldBeEqualTo ParamData(2)
 
         oneParamNew(1) shouldBeEqualTo ParamData(1)
-        oneParamNew.overrideFactory { a: Int -> ParamData(a * 2) }
+        oneParamNew.override { a: Int -> ParamData(a * 2) }
         oneParamNew(1) shouldBeEqualTo ParamData(2)
 
         twoParamNew(1, 2) shouldBeEqualTo ParamData(1, 2)
-        twoParamNew.overrideFactory { a: Int, b: Int -> ParamData(a * 2, b * 2) }
+        twoParamNew.override { a: Int, b: Int -> ParamData(a * 2, b * 2) }
         twoParamNew(1, 2) shouldBeEqualTo ParamData(2, 4)
 
         threeParamNew(1, 2, 3) shouldBeEqualTo ParamData(1, 2, 3)
-        threeParamNew.overrideFactory { a: Int, b: Int, c: Int -> ParamData(a * 2, b * 2, c * 2) }
+        threeParamNew.override{ a: Int, b: Int, c: Int -> ParamData(a * 2, b * 2, c * 2) }
         threeParamNew(1, 2, 3) shouldBeEqualTo ParamData(2, 4, 6)
 
         fourParamNew(1, 2, 3, 4) shouldBeEqualTo ParamData(1, 2, 3, 4)
-        fourParamNew.overrideFactory { a: Int, b: Int, c: Int, d: Int ->
+        fourParamNew.override { a: Int, b: Int, c: Int, d: Int ->
             ParamData(
                 a * 2,
                 b * 2,
@@ -66,7 +56,7 @@ class NewTests {
         fourParamNew(1, 2, 3, 4) shouldBeEqualTo ParamData(2, 4, 6, 8)
 
         fiveParamNew(1, 2, 3, 4, 5) shouldBeEqualTo ParamData(1, 2, 3, 4, 5)
-        fiveParamNew.overrideFactory { a: Int, b: Int, c: Int, d: Int, e: Int ->
+        fiveParamNew.override { a: Int, b: Int, c: Int, d: Int, e: Int ->
             ParamData(
                 a * 2,
                 b * 2,
@@ -76,5 +66,15 @@ class NewTests {
             )
         }
         fiveParamNew(1, 2, 3, 4, 5) shouldBeEqualTo ParamData(2, 4, 6, 8, 10)
+    }
+
+    @Test
+    fun `supports parameters new`() {
+        noParamNew() shouldBeEqualTo ParamData()
+        oneParamNew(1) shouldBeEqualTo ParamData(1)
+        twoParamNew(1, 2) shouldBeEqualTo ParamData(1, 2)
+        threeParamNew(1, 2, 3) shouldBeEqualTo ParamData(1, 2, 3)
+        fourParamNew(1, 2, 3, 4) shouldBeEqualTo ParamData(1, 2, 3, 4)
+        fiveParamNew(1, 2, 3, 4, 5) shouldBeEqualTo ParamData(1, 2, 3, 4, 5)
     }
 }

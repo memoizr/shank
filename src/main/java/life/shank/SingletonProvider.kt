@@ -14,7 +14,7 @@ class SingletonProvider<T> : Provider<T, () -> T> {
     }
 
     @Synchronized
-    inline operator fun invoke(): T = getGlobal(hashcode, 1299821) { cast<Function0<T>>(this).invoke() }
+    inline operator fun invoke(): T = getGlobal(hashCode(), 1299821) { cast<Function0<T>>(this).invoke() }
 }
 
 inline fun <T, F : Function<T>> Provider<*, F>.getGlobal(h: Int, params: Params, f: Any?.() -> T): T =
