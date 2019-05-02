@@ -15,7 +15,6 @@ import life.shank.SingletonTests.ConcurrentSingleton.nanotime3
 import life.shank.SingletonTests.ConcurrentSingleton.nanotime4
 import life.shank.SingletonTests.ConcurrentSingleton.nanotime5
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Test
 import shouldBeEqualTo
 import shouldBeSameReference
@@ -122,7 +121,7 @@ class SingletonTests {
     }
 
 
-    @Test @Ignore
+    @Test
     fun `supports concurrent requests`() {
         runBlocking(Dispatchers.Default) {
             testConcurrentAccess { nanotime0() }

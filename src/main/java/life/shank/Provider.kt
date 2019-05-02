@@ -5,9 +5,9 @@ import life.shank.ShankGlobalCache.globalCache
 import life.shank.ShankScopedCache.scopedCache
 import life.shank._cache.factories
 
-inline infix fun Provider<*, *>.mash(other: Params) = hashCode() * 31 + other * 127
+internal inline infix fun Provider<*, *>.mash(other: Params) = hashCode() * 31 + other * 127
 
-inline infix fun Any?.or(other: Any?) = this.hashCode() * 31 + other.hashCode()
+internal inline infix fun Any?.or(other: Any?) = this.hashCode() * 31 + other.hashCode()
 internal typealias Params = Int
 
 internal inline fun Params1(a: Any?): Params = a.hashCode()
@@ -18,7 +18,7 @@ internal inline fun Params5(a: Any?, b: Any?, c: Any?, d: Any?, e: Any?): Params
 
 interface Provider<T, F : Function<T>>
 
-fun <T, F : Function<T>> Provider<*, F>.factory(): F = cast<F>(factories.get(this.hashCode()))
+internal fun <T, F : Function<T>> Provider<*, F>.factory(): F = cast<F>(factories.get(this.hashCode()))
 fun <T, F : Function<T>> Provider<*, F>.restore() = also { factories.put(this.hashCode(), factory()) }
 fun <T, F : Function<T>> Provider<*, F>.overrideFactory(f: F) = remove()
     .also { OverriddenCache.factories[this] = this.factory() }
@@ -39,8 +39,8 @@ private inline fun Provider<*, *>.remove() = also {
         }
     }
 }
-typealias ProvToParams = Int
 
+internal typealias ProvToParams = Int
 internal inline fun Scope.lookInParents(params: ProvToParams): Any? {
     var s: Scope? = parent
     while (s != null) {

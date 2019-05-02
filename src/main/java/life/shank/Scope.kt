@@ -25,8 +25,8 @@ data class Scope(val value: Serializable, val parent: Scope? = null) : Serializa
         clearActions?.remove(action)
     }
 
-    inline override fun hashCode(): Int = hashcode
-    inline override fun equals(other: Any?): Boolean = this.hashcode == other.hashCode()
+    override fun hashCode(): Int = hashcode
+    override fun equals(other: Any?): Boolean = this.hashcode == other.hashCode()
 }
 
 fun Scope.clearWithAction(action: (Any?) -> Unit) {
