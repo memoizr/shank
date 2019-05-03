@@ -1,8 +1,8 @@
 package life.shank
 
-interface AutoDetachable
+interface Attachable
 
-interface DetachAware<V : AutoDetachable> {
-    fun attach(v: V)
-    fun detach(v: V)
+interface AttachListener<A : Attachable> {
+    fun onAttach(a: A)
+    fun onDetach(a: A)
 }
