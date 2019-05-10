@@ -39,8 +39,8 @@ internal data class SSF(override val scope: Scope) : ScopedFactory
 interface Scoped {
     val scope: Scope
 
-    operator fun <T> _ScopedProvider0<T>.invoke() = this(scope)
-    operator fun <A, T> _ScopedProvider1<A, T>.invoke(a: A) = this(scope, a)
-    operator fun <A, B, T> _ScopedProvider2<A, B, T>.invoke(a: A, b: B) = this(scope, a, b)
-    operator fun <A, B, C, T> _ScopedProvider3<A, B, C, T>.invoke(a: A, b: B, c: C) = this(scope, a, b, c)
+    operator fun <T> ScopedProvider0<T>.invoke() = this(scope)
+    operator fun <A, T> ScopedProvider1<A, T>.invoke(a: A) = this(scope, a)
+    operator fun <A, B, T> ScopedProvider2<A, B, T>.invoke(a: A, b: B) = this(scope, a, b)
+    operator fun <A, B, C, T> ScopedProvider3<A, B, C, T>.invoke(a: A, b: B, c: C) = this(scope, a, b, c)
 }
