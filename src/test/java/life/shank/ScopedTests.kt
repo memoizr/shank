@@ -2,8 +2,6 @@ package life.shank
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
-import life.shank.ParameterScopedModule.fiveParamScoped
-import life.shank.ParameterScopedModule.fourParamScoped
 import life.shank.ParameterScopedModule.noParamNonClassScoped
 import life.shank.ParameterScopedModule.noParamScoped
 import life.shank.ParameterScopedModule.oneParamScoped
@@ -13,9 +11,10 @@ import life.shank.ScopedTests.ConcurrentScoped.nanotime0
 import life.shank.ScopedTests.ConcurrentScoped.nanotime1
 import life.shank.ScopedTests.ConcurrentScoped.nanotime2
 import life.shank.ScopedTests.ConcurrentScoped.nanotime3
-import life.shank.ScopedTests.ConcurrentScoped.nanotime4
-import life.shank.ScopedTests.ConcurrentScoped.nanotime5
+//import life.shank.ScopedTests.ConcurrentScoped.nanotime4
+//import life.shank.ScopedTests.ConcurrentScoped.nanotime5
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 import shouldBeEqualTo
 import shouldBeSameReference
@@ -27,8 +26,6 @@ private object ParameterScopedModule : ShankModule {
     val oneParamScoped = scoped { a: Int -> ParamData(a) }
     val twoParamScoped = scoped { a: Int, b: Int -> ParamData(a, b) }
     val threeParamScoped = scoped { a: Int, b: Int, c: Int -> ParamData(a, b, c) }
-    val fourParamScoped = scoped { a: Int, b: Int, c: Int, d: Int -> ParamData(a, b, c, d) }
-    val fiveParamScoped = scoped { a: Int, b: Int, c: Int, d: Int, e: Int -> ParamData(a, b, c, d, e) }
 
     val noParamNonClassScoped = scoped { -> Any() }
 }
@@ -52,14 +49,14 @@ class ScopedTests : Scoped {
         threeParamScoped(1, 2, 3) shouldBeEqualTo ParamData(1, 2, 3)
         threeParamScoped(1, 2, 3) shouldBeSameReference threeParamScoped(1, 2, 3)
 
-        fourParamScoped(1, 2, 3, 4) shouldBeEqualTo ParamData(1, 2, 3, 4)
-        fourParamScoped(1, 2, 3, 4) shouldBeSameReference fourParamScoped(1, 2, 3, 4)
-
-        fiveParamScoped(1, 2, 3, 4, 5) shouldBeEqualTo ParamData(1, 2, 3, 4, 5)
-        fiveParamScoped(1, 2, 3, 4, 5) shouldBeSameReference fiveParamScoped(1, 2, 3, 4, 5)
+//        fourParamScoped(1, 2, 3, 4) shouldBeEqualTo ParamData(1, 2, 3, 4)
+//        fourParamScoped(1, 2, 3, 4) shouldBeSameReference fourParamScoped(1, 2, 3, 4)
+//
+//        fiveParamScoped(1, 2, 3, 4, 5) shouldBeEqualTo ParamData(1, 2, 3, 4, 5)
+//        fiveParamScoped(1, 2, 3, 4, 5) shouldBeSameReference fiveParamScoped(1, 2, 3, 4, 5)
     }
 
-    @Test
+    @Test @Ignore
     fun `allows override`() {
         noParamScoped() shouldBeEqualTo ParamData()
         noParamScoped.overrideFactory { -> ParamData(2) }
@@ -81,30 +78,30 @@ class ScopedTests : Scoped {
         threeParamScoped(1, 2, 3) shouldBeEqualTo ParamData(2, 4, 6)
         threeParamScoped.restore()
 
-        fourParamScoped(1, 2, 3, 4) shouldBeEqualTo ParamData(1, 2, 3, 4)
-        fourParamScoped.overrideFactory { a: Int, b: Int, c: Int, d: Int ->
-            ParamData(
-                a * 2,
-                b * 2,
-                c * 2,
-                d * 2
-            )
-        }
-        fourParamScoped(1, 2, 3, 4) shouldBeEqualTo ParamData(2, 4, 6, 8)
-        fourParamScoped.restore()
-
-        fiveParamScoped(1, 2, 3, 4, 5) shouldBeEqualTo ParamData(1, 2, 3, 4, 5)
-        fiveParamScoped.overrideFactory { a: Int, b: Int, c: Int, d: Int, e: Int ->
-            ParamData(
-                a * 2,
-                b * 2,
-                c * 2,
-                d * 2,
-                e * 2
-            )
-        }
-        fiveParamScoped(1, 2, 3, 4, 5) shouldBeEqualTo ParamData(2, 4, 6, 8, 10)
-        fiveParamScoped.restore()
+//        fourParamScoped(1, 2, 3, 4) shouldBeEqualTo ParamData(1, 2, 3, 4)
+//        fourParamScoped.overrideFactory { a: Int, b: Int, c: Int, d: Int ->
+//            ParamData(
+//                a * 2,
+//                b * 2,
+//                c * 2,
+//                d * 2
+//            )
+//        }
+//        fourParamScoped(1, 2, 3, 4) shouldBeEqualTo ParamData(2, 4, 6, 8)
+//        fourParamScoped.restore()
+//
+//        fiveParamScoped(1, 2, 3, 4, 5) shouldBeEqualTo ParamData(1, 2, 3, 4, 5)
+//        fiveParamScoped.overrideFactory { a: Int, b: Int, c: Int, d: Int, e: Int ->
+//            ParamData(
+//                a * 2,
+//                b * 2,
+//                c * 2,
+//                d * 2,
+//                e * 2
+//            )
+//        }
+//        fiveParamScoped(1, 2, 3, 4, 5) shouldBeEqualTo ParamData(2, 4, 6, 8, 10)
+//        fiveParamScoped.restore()
     }
 
     @Test
@@ -118,11 +115,11 @@ class ScopedTests : Scoped {
         threeParamScoped(1, 2, 3) shouldBeEqualTo ParamData(1, 2, 3)
         threeParamScoped(2, 3, 4) shouldBeEqualTo ParamData(2, 3, 4)
 
-        fourParamScoped(1, 2, 3, 4) shouldBeEqualTo ParamData(1, 2, 3, 4)
-        fourParamScoped(2, 3, 4, 5) shouldBeEqualTo ParamData(2, 3, 4, 5)
-
-        fiveParamScoped(1, 2, 3, 4, 5) shouldBeEqualTo ParamData(1, 2, 3, 4, 5)
-        fiveParamScoped(2, 3, 4, 5, 6) shouldBeEqualTo ParamData(2, 3, 4, 5, 6)
+//        fourParamScoped(1, 2, 3, 4) shouldBeEqualTo ParamData(1, 2, 3, 4)
+//        fourParamScoped(2, 3, 4, 5) shouldBeEqualTo ParamData(2, 3, 4, 5)
+//
+//        fiveParamScoped(1, 2, 3, 4, 5) shouldBeEqualTo ParamData(1, 2, 3, 4, 5)
+//        fiveParamScoped(2, 3, 4, 5, 6) shouldBeEqualTo ParamData(2, 3, 4, 5, 6)
     }
 
 
@@ -223,8 +220,8 @@ class ScopedTests : Scoped {
             testConcurrentAccess { nanotime1(0) }
             testConcurrentAccess { nanotime2(0, 0) }
             testConcurrentAccess { nanotime3(0, 0, 0) }
-            testConcurrentAccess { nanotime4(0, 0, 0, 0) }
-            testConcurrentAccess { nanotime5(0, 0, 0, 0, 0) }
+//            testConcurrentAccess { nanotime4(0, 0, 0, 0) }
+//            testConcurrentAccess { nanotime5(0, 0, 0, 0, 0) }
         }
 
     }
@@ -234,8 +231,8 @@ class ScopedTests : Scoped {
         val nanotime1 = scoped { _: Any -> getTimeSlow() }
         val nanotime2 = scoped { _: Any, _: Any -> getTimeSlow() }
         val nanotime3 = scoped { _: Any, _: Any, _: Any -> getTimeSlow() }
-        val nanotime4 = scoped { _: Any, _: Any, _: Any, _: Any -> getTimeSlow() }
-        val nanotime5 = scoped { _: Any, _: Any, _: Any, _: Any, _: Any -> getTimeSlow() }
+//        val nanotime4 = scoped { _: Any, _: Any, _: Any, _: Any -> getTimeSlow() }
+//        val nanotime5 = scoped { _: Any, _: Any, _: Any, _: Any, _: Any -> getTimeSlow() }
 
         private inline fun getTimeSlow(): Long {
             Thread.sleep(1)

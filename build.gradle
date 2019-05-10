@@ -28,7 +28,13 @@ dependencies {
 
 compileKotlin {
     kotlinOptions.jvmTarget = "1.6"
+    kotlinOptions {
+        freeCompilerArgs = ["-XXLanguage:+NewInference"]
+    }
 }
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.6"
+    kotlinOptions {
+        freeCompilerArgs = ["-XXLanguage:+NewInference"]
+    }
 }

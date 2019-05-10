@@ -5,7 +5,6 @@ import life.shank.MyModule.listOfStrings
 import life.shank.MyModule.newFoo
 import life.shank.MyModule.otherScopeSingleton
 import life.shank.MyModule.scopedSingleton
-import life.shank.MyModule.singleton
 import org.junit.Before
 import org.junit.Test
 import shouldBeEqualTo
@@ -20,7 +19,7 @@ object MyModule : ShankModule {
 
     val scopedSingleton = scoped { -> OtherClass() }
     val otherScopeSingleton = scoped { -> MyClass("value") }
-    val singleton = singleton { -> OtherClass() }
+//    val singleton = singleton { -> OtherClass() }
 
     val nullable = new { -> if ("" == "") MyClass("") else null }
     val nullable1 = new { s: String?, b: String -> if (s == "") MyClass("") else null }
@@ -70,7 +69,7 @@ class ShankTest : Scoped {
 
     @Test
     fun `supports global scope`() {
-        singleton() shouldBeEqualTo singleton()
+//        singleton() shouldBeEqualTo singleton()
     }
 
     @Test
