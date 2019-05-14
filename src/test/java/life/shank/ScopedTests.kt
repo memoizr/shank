@@ -7,6 +7,10 @@ import life.shank.ParameterScopedModule.noParamScoped
 import life.shank.ParameterScopedModule.oneParamScoped
 import life.shank.ParameterScopedModule.threeParamScoped
 import life.shank.ParameterScopedModule.twoParamScoped
+import life.shank.ScopedTests.ClearableScoped.clearable0
+import life.shank.ScopedTests.ClearableScoped.clearable1
+import life.shank.ScopedTests.ClearableScoped.clearable2
+import life.shank.ScopedTests.ClearableScoped.clearable3
 import life.shank.ScopedTests.ConcurrentScoped.nanotime0
 import life.shank.ScopedTests.ConcurrentScoped.nanotime1
 import life.shank.ScopedTests.ConcurrentScoped.nanotime2
@@ -56,7 +60,8 @@ class ScopedTests : Scoped {
 //        fiveParamScoped(1, 2, 3, 4, 5) shouldBeSameReference fiveParamScoped(1, 2, 3, 4, 5)
     }
 
-    @Test @Ignore
+    @Test
+    @Ignore
     fun `allows override`() {
         noParamScoped() shouldBeEqualTo ParamData()
         noParamScoped.overrideFactory { -> ParamData(2) }
@@ -175,6 +180,26 @@ class ScopedTests : Scoped {
     }
 
     @Test
+    fun `clearable objects are notified on clear`() {
+        val c0 = clearable0()
+        val c1 = clearable1(0)
+        val c2 = clearable2(0, 0)
+        val c3 = clearable3(0, 0, 0)
+
+        c0.cleared shouldBeEqualTo false
+        c1.cleared shouldBeEqualTo false
+        c2.cleared shouldBeEqualTo false
+        c0.cleared shouldBeEqualTo false
+
+        scope.clear()
+
+        c1.cleared shouldBeEqualTo true
+        c2.cleared shouldBeEqualTo true
+        c3.cleared shouldBeEqualTo true
+        c3.cleared shouldBeEqualTo true
+    }
+
+    @Test
     fun `adds on clear actions`() {
         var result = "failed"
         var otherResult = "failed"
@@ -237,6 +262,22 @@ class ScopedTests : Scoped {
         private inline fun getTimeSlow(): Long {
             Thread.sleep(1)
             return System.nanoTime()
+        }
+    }
+
+    object ClearableScoped : ShankModule {
+        val clearable0 = scoped { -> ClearableClass() }
+        val clearable1 = scoped { _: Any -> ClearableClass() }
+        val clearable2 = scoped { _: Any, _: Any -> ClearableClass() }
+        val clearable3 = scoped { _: Any, _: Any, _: Any -> ClearableClass() }
+    }
+
+    class ClearableClass : Clearable {
+
+        var cleared = false
+
+        override fun onClear() {
+            cleared = true
         }
     }
 }
