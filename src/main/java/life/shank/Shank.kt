@@ -22,6 +22,8 @@ internal object ShankScopedCache {
     internal val globalScope = Scope(this.hashCode())
     @JvmField
     internal val scopedCache = HashcodeHashMap<HashcodeHashMap<Any?>>()
+    @JvmField
+    internal val globalOnClearActions = HashSet<(Any?) -> Unit>()
 }
 
 fun resetShank() {

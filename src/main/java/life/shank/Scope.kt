@@ -12,13 +12,12 @@ data class Scope(val value: Serializable, val parent: Scope? = null) : Serializa
     val hashcode = value.hashCode() * 31 + parent.hashCode()
 
     fun clear() {
-        ShankScopedCache.scopedCache.get(this.hashCode())?.values
-            ?.forEach {
-                if (it is Clearable) {
-                    it.onClear()
-                }
+        ShankScopedCache.scopedCache.get(this.hashcode)?.values?.forEach { item ->
+            ShankScopedCache.globalOnClearActions.forEach { action ->
+                action(item)
             }
 
+        }
         ShankScopedCache.scopedCache.remove(this.hashcode)
         ShankGlobalCache.globalCache.clear()
         children?.forEach { it.clear() }
@@ -44,6 +43,10 @@ fun Scope.clearWithAction(action: (Any?) -> Unit) {
     ShankScopedCache.scopedCache.also { it[this]?.values?.forEach { action(it) } }.remove(this.hashcode)
 }
 
+fun addGlobalOnClearAction(action: (Any?) -> Unit) {
+    ShankScopedCache.globalOnClearActions.add(action)
+}
+
 interface ScopedFactory : Scoped
 internal data class SSF(override val scope: Scope) : ScopedFactory
 
@@ -54,8 +57,4 @@ interface Scoped {
     operator fun <A, T> ScopedProvider1<A, T>.invoke(a: A) = this(scope, a)
     operator fun <A, B, T> ScopedProvider2<A, B, T>.invoke(a: A, b: B) = this(scope, a, b)
     operator fun <A, B, C, T> ScopedProvider3<A, B, C, T>.invoke(a: A, b: B, c: C) = this(scope, a, b, c)
-}
-
-interface Clearable {
-    fun onClear()
 }

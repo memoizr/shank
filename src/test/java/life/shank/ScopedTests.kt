@@ -181,6 +181,8 @@ class ScopedTests : Scoped {
 
     @Test
     fun `clearable objects are notified on clear`() {
+        addGlobalOnClearAction { if (it is Clearable) it.onClear() }
+
         val c0 = clearable0()
         val c1 = clearable1(0)
         val c2 = clearable2(0, 0)
@@ -280,4 +282,8 @@ class ScopedTests : Scoped {
             cleared = true
         }
     }
+}
+
+interface Clearable {
+    fun onClear()
 }
