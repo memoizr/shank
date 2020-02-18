@@ -81,10 +81,3 @@ class ShankTest : Scoped {
 class OtherClass
 class MyClass(val value: String)
 
-data class ParamData(
-    val a: Int? = null,
-    val b: Int? = null,
-    val c: Int? = null,
-    val d: Int? = null,
-    val e: Int? = null
-)

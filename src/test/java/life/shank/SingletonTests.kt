@@ -1,25 +1,25 @@
 package life.shank
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
-import life.shank.ParameterSingletonModule.noParam
-import life.shank.ParameterSingletonModule.oneParam
-import life.shank.ParameterSingletonModule.threeParam
-import life.shank.ParameterSingletonModule.twoParam
-import life.shank.SingletonTests.ConcurrentSingleton.nanotime0
-import life.shank.SingletonTests.ConcurrentSingleton.nanotime1
+import kotlinx.coroutines.*
+import life.shank.ParameterSingletonModule.single0
+import life.shank.ParameterSingletonModule.single1
+import life.shank.ParameterSingletonModule.single2
+import life.shank.ParameterSingletonModule.single3
+import life.shank.ParameterSingletonModule.single4
+import life.shank.ParameterSingletonModule.single5
 import org.junit.Before
 import org.junit.Test
 import shouldBeEqualTo
 import shouldBeSameReference
+import shouldNotBeSameReference
 
 private object ParameterSingletonModule : ShankModule {
-    val noParam = single { -> ParamData() }
-    val oneParam = single { a: Int -> ParamData(a) }
-    val twoParam = single { a: Int, b: Int -> ParamData(a, b) }
-    val threeParam = single { a: Int, b: Int, c: Int -> ParamData(a, b, c) }
-//    val fourParam = singleton { a: Int, b: Int, c: Int, d: Int -> ParamData(a, b, c, d) }
-//    val fiveParam = singleton { a: Int, b: Int, c: Int, d: Int, e: Int -> ParamData(a, b, c, d, e) }
+    val single0 = single { -> DataForTest() }
+    val single1 = single { a: Int -> DataForTest(a) }
+    val single2 = single { a: Int, b: Int -> DataForTest(a, b) }
+    val single3 = single { a: Int, b: Int, c: Int -> DataForTest(a, b, c) }
+    val single4 = single { a: Int, b: Int, c: Int, d: Int -> DataForTest(a, b, c, d) }
+    val single5 = single { a: Int, b: Int, c: Int, d: Int, e: Int -> DataForTest(a, b, c, d, e) }
 }
 
 class SingletonTests {
@@ -30,115 +30,58 @@ class SingletonTests {
     }
 
     @Test
-    fun `supports parameters`() {
-        oneParam(1) shouldBeEqualTo ParamData(1)
-        oneParam(1) shouldBeSameReference oneParam(1)
+    fun `can register factories for singleton instance with up to 5 parameters`() {
+        single0() shouldBeEqualTo DataForTest()
+        single0() shouldBeEqualTo single0()
 
-        twoParam(1, 2) shouldBeEqualTo ParamData(1, 2)
-        twoParam(1, 2) shouldBeSameReference twoParam(1, 2)
+        single1(1) shouldBeEqualTo DataForTest(1)
+        single1(1) shouldBeSameReference single1(1)
 
-        threeParam(1, 2, 3) shouldBeEqualTo ParamData(1, 2, 3)
-        threeParam(1, 2, 3) shouldBeSameReference threeParam(1, 2, 3)
-//
-//        fourParam(1, 2, 3, 4) shouldBeEqualTo ParamData(1, 2, 3, 4)
-//        fourParam(1, 2, 3, 4) shouldBeSameReference fourParam(1, 2, 3, 4)
-//
-//        fiveParam(1, 2, 3, 4, 5) shouldBeEqualTo ParamData(1, 2, 3, 4, 5)
-//        fiveParam(1, 2, 3, 4, 5) shouldBeSameReference fiveParam(1, 2, 3, 4, 5)
+        single2(1, 2) shouldBeEqualTo DataForTest(1, 2)
+        single2(1, 2) shouldBeSameReference single2(1, 2)
+
+        single3(1, 2, 3) shouldBeEqualTo DataForTest(1, 2, 3)
+        single3(1, 2, 3) shouldBeSameReference single3(1, 2, 3)
+
+        single4(1, 2, 3, 4) shouldBeEqualTo DataForTest(1, 2, 3, 4)
+        single4(1, 2, 3, 4) shouldBeSameReference single4(1, 2, 3, 4)
+
+        single5(1, 2, 3, 4, 5) shouldBeEqualTo DataForTest(1, 2, 3, 4, 5)
+        single5(1, 2, 3, 4, 5) shouldBeSameReference single5(1, 2, 3, 4, 5)
     }
 
     @Test
-    fun `provides different values per params`() {
-        oneParam(1) shouldBeSameReference oneParam(1)
-        oneParam(2).a shouldBeEqualTo 2
-
-        twoParam(1, 2) shouldBeEqualTo ParamData(1, 2)
-        twoParam(2, 3) shouldBeEqualTo ParamData(2, 3)
-
-        threeParam(1, 2, 3) shouldBeEqualTo ParamData(1, 2, 3)
-        threeParam(2, 3, 4) shouldBeEqualTo ParamData(2, 3, 4)
-//
-//        fourParam(1, 2, 3, 4) shouldBeEqualTo ParamData(1, 2, 3, 4)
-//        fourParam(2, 3, 4, 5) shouldBeEqualTo ParamData(2, 3, 4, 5)
-//
-//        fiveParam(1, 2, 3, 4, 5) shouldBeEqualTo ParamData(1, 2, 3, 4, 5)
-//        fiveParam(2, 3, 4, 5, 6) shouldBeEqualTo ParamData(2, 3, 4, 5, 6)
+    fun `different parameters will create new singleton for those parameters`() {
+        single1(1) shouldNotBeSameReference single1(2)
+        single2(1, 2) shouldNotBeSameReference single2(2, 4)
+        single3(1, 2, 3) shouldNotBeSameReference single3(2, 4, 6)
+        single4(1, 2, 3, 4) shouldNotBeSameReference single4(2, 4, 6, 8)
+        single5(1, 2, 3, 4, 5) shouldNotBeSameReference single5(2, 4, 6, 8, 10)
     }
 
-
     @Test
-    fun `allows override`() {
-        noParam() shouldBeEqualTo ParamData()
-        noParam.override { -> ParamData(2) }
-        noParam() shouldBeEqualTo ParamData(2)
-        noParam.override(null)
-
-        oneParam(1) shouldBeEqualTo ParamData(1)
-        oneParam.override { a: Int -> ParamData(a * 2) }
-        oneParam(1) shouldBeEqualTo ParamData(2)
-        oneParam.override(null)
-
-        twoParam(1, 2) shouldBeEqualTo ParamData(1, 2)
-        twoParam.override { a: Int, b: Int -> ParamData(a * 2, b * 2) }
-        twoParam(1, 2) shouldBeEqualTo ParamData(2, 4)
-        twoParam.override(null)
-
-        threeParam(1, 2, 3) shouldBeEqualTo ParamData(1, 2, 3)
-        threeParam.override { a: Int, b: Int, c: Int -> ParamData(a * 2, b * 2, c * 2) }
-        threeParam(1, 2, 3) shouldBeEqualTo ParamData(2, 4, 6)
-        threeParam.override(null)
-//
-//        fourParam(1, 2, 3, 4) shouldBeEqualTo ParamData(1, 2, 3, 4)
-//        fourParam.overrideFactory { a: Int, b: Int, c: Int, d: Int ->
-//            ParamData(
-//                a * 2,
-//                b * 2,
-//                c * 2,
-//                d * 2
-//                     )
-//        }
-//        fourParam(1, 2, 3, 4) shouldBeEqualTo ParamData(2, 4, 6, 8)
-//        fourParam.restore()
-//
-//        fiveParam(1, 2, 3, 4, 5) shouldBeEqualTo ParamData(1, 2, 3, 4, 5)
-//        fiveParam.overrideFactory { a: Int, b: Int, c: Int, d: Int, e: Int ->
-//            ParamData(
-//                a * 2,
-//                b * 2,
-//                c * 2,
-//                d * 2,
-//                e * 2
-//                     )
-//        }
-//        fiveParam(1, 2, 3, 4, 5) shouldBeEqualTo ParamData(2, 4, 6, 8, 10)
-//        fiveParam.restore()
-    }
-
-
-    @Test
-    fun `supports concurrent requests`() {
-        runBlocking(Dispatchers.Default) {
-            testConcurrentAccess { nanotime0() }
-            testConcurrentAccess { nanotime1(0) }
-//            testConcurrentAccess { nanotime2(0, 0) }
-//            testConcurrentAccess { nanotime3(0, 0, 0) }
-//            testConcurrentAccess { nanotime4(0, 0, 0, 0) }
-//            testConcurrentAccess { nanotime5(0, 0, 0, 0, 0) }
+    fun `supports concurrent and suspend requests`() {
+        val testConcurrentSingletonGet: suspend CoroutineScope.(() -> Any) -> Unit = { getInstance ->
+            val goGetInstanceTrigger = CompletableDeferred<Unit>()
+            val instance1Async = async {
+                goGetInstanceTrigger.await()
+                getInstance()
+            }
+            val instance2Async = async {
+                goGetInstanceTrigger.await()
+                getInstance()
+            }
+            goGetInstanceTrigger.complete(Unit)
+            instance1Async.await() shouldBeSameReference instance2Async.await()
         }
 
-    }
-
-    private object ConcurrentSingleton : ShankModule {
-        val nanotime0 = single { -> getTimeSlow() }
-        val nanotime1 = single { _: Any -> getTimeSlow() }
-//        val nanotime2 = singleton { _: Any, _: Any -> getTimeSlow() }
-//        val nanotime3 = singleton { _: Any, _: Any, _: Any -> getTimeSlow() }
-//        val nanotime4 = singleton { _: Any, _: Any, _: Any, _: Any -> getTimeSlow() }
-//        val nanotime5 = singleton { _: Any, _: Any, _: Any, _: Any, _: Any -> getTimeSlow() }
-
-        private inline fun getTimeSlow(): Long {
-            Thread.sleep(1)
-            return System.nanoTime()
+        runBlocking(Dispatchers.Default) {
+            testConcurrentSingletonGet { single0() }
+            testConcurrentSingletonGet { single1(1) }
+            testConcurrentSingletonGet { single2(1, 2) }
+            testConcurrentSingletonGet { single3(1, 2, 3) }
+            testConcurrentSingletonGet { single4(1, 2, 3, 4) }
+            testConcurrentSingletonGet { single5(1, 2, 3, 4, 5) }
         }
     }
 }

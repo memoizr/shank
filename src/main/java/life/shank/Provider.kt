@@ -26,4 +26,3 @@ interface Provider4<A, B, C, D, T> : Provider<T, (A, B, C, D) -> T> {
 interface Provider5<A, B, C, D, E, T> : Provider<T, (A, B, C, D, E) -> T> {
     operator fun invoke(a: A, b: B, c: C, d: D, e: E): T
 }
-
