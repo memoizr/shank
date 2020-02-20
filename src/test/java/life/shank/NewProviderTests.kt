@@ -20,12 +20,6 @@ private object ParameterNewModule : ShankModule {
 }
 
 class NewTests {
-
-    @Before
-    fun setUp() {
-        resetShank()
-    }
-
     @Test
     fun `can register factories for new instance with up to 5 parameters`() {
         new0() shouldBeEqualTo DataForTest()

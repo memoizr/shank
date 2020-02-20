@@ -1,17 +1,18 @@
 package life.shank
 
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import life.shank.ParameterSingletonModule.single0
 import life.shank.ParameterSingletonModule.single1
 import life.shank.ParameterSingletonModule.single2
 import life.shank.ParameterSingletonModule.single3
 import life.shank.ParameterSingletonModule.single4
 import life.shank.ParameterSingletonModule.single5
-import org.junit.Before
 import org.junit.Test
 import shouldBeEqualTo
 import shouldBeSameReference
 import shouldNotBeSameReference
+import testConcurrentSingletonGet
 
 private object ParameterSingletonModule : ShankModule {
     val single0 = single { -> DataForTest() }
@@ -24,15 +25,10 @@ private object ParameterSingletonModule : ShankModule {
 
 class SingletonTests {
 
-    @Before
-    fun setUp() {
-        resetShank()
-    }
-
     @Test
     fun `can register factories for singleton instance with up to 5 parameters`() {
         single0() shouldBeEqualTo DataForTest()
-        single0() shouldBeEqualTo single0()
+        single0() shouldBeSameReference single0()
 
         single1(1) shouldBeEqualTo DataForTest(1)
         single1(1) shouldBeSameReference single1(1)
@@ -60,29 +56,13 @@ class SingletonTests {
     }
 
     @Test
-    fun `supports concurrent and suspend requests`() {
-        val testConcurrentSingletonGet: suspend CoroutineScope.(() -> Any) -> Unit = { getInstance ->
-            val goGetInstanceTrigger = CompletableDeferred<Unit>()
-            val instance1Async = async {
-                goGetInstanceTrigger.await()
-                getInstance()
-            }
-            val instance2Async = async {
-                goGetInstanceTrigger.await()
-                getInstance()
-            }
-            goGetInstanceTrigger.complete(Unit)
-            instance1Async.await() shouldBeSameReference instance2Async.await()
-        }
-
-        runBlocking(Dispatchers.Default) {
-            testConcurrentSingletonGet { single0() }
-            testConcurrentSingletonGet { single1(1) }
-            testConcurrentSingletonGet { single2(1, 2) }
-            testConcurrentSingletonGet { single3(1, 2, 3) }
-            testConcurrentSingletonGet { single4(1, 2, 3, 4) }
-            testConcurrentSingletonGet { single5(1, 2, 3, 4, 5) }
-        }
+    fun `supports concurrent and suspend requests`() = runBlocking(Dispatchers.Default) {
+        testConcurrentSingletonGet { single0() }
+        testConcurrentSingletonGet { single1(1) }
+        testConcurrentSingletonGet { single2(1, 2) }
+        testConcurrentSingletonGet { single3(1, 2, 3) }
+        testConcurrentSingletonGet { single4(1, 2, 3, 4) }
+        testConcurrentSingletonGet { single5(1, 2, 3, 4, 5) }
     }
 }
 

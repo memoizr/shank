@@ -1,37 +1,35 @@
 package life.shank
 
+import life.shank.Shank.internalInstancesInScopesCache
+import life.shank.Shank.scopedInstancesClearActions
 import java.io.Serializable
 
-data class Scope(val value: Serializable, val parent: Scope? = null) : Serializable {
+data class Scope(val value: Serializable) : Serializable {
     @Transient
-    private var children: ArrayList<Scope>? = null
-    @Transient
-    private var clearActions: HashSet<() -> Unit>? = null
+    private var clearActions: HashSet<(Any?) -> Unit>? = null
     @Transient
     @JvmField
-    val hashcode = value.hashCode() * 31 + parent.hashCode()
+    val hashcode = value.hashCode()
 
     fun clear() {
-        ShankScopedCache.scopedCache.get(this.hashcode)?.values?.forEach { item ->
-            ShankScopedCache.globalOnClearActions.forEach { action ->
-                action(item)
-            }
-
+        internalInstancesInScopesCache.get(hashcode)?.values?.filterNotNull()?.forEach { item ->
+            clearActions?.forEach { action -> action(item) }
+            scopedInstancesClearActions.forEach { action -> action(item) }
         }
-        ShankScopedCache.scopedCache.remove(this.hashcode)
-        ShankGlobalCache.globalCache.clear()
-        children?.forEach { it.clear() }
-        clearActions?.forEach { it() }
-        clearActions = null
+        internalInstancesInScopesCache.remove(hashcode)
     }
 
-    fun nest() = copy(value = Any().hashCode(), parent = this)
-        .also { (children ?: apply { children = ArrayList() }.children!!).add(it) }
+    fun addOnClearAction(action: (Any?) -> Unit): Scope {
+        var clearActions = this.clearActions
+        if (clearActions == null) {
+            clearActions = HashSet()
+            this.clearActions = clearActions
+        }
+        clearActions.add(action)
+        return this
+    }
 
-    fun addOnClearAction(action: () -> Unit): Scope =
-        also { (clearActions ?: apply { clearActions = HashSet() }.clearActions!!).add(action) }
-
-    fun removeOnClearAction(action: () -> Unit) = also {
+    fun removeOnClearAction(action: (Any?) -> Unit) = apply {
         clearActions?.remove(action)
     }
 
@@ -39,22 +37,15 @@ data class Scope(val value: Serializable, val parent: Scope? = null) : Serializa
     override fun equals(other: Any?): Boolean = this.hashcode == other.hashCode()
 }
 
-fun Scope.clearWithAction(action: (Any?) -> Unit) {
-    ShankScopedCache.scopedCache.also { it[this]?.values?.forEach { action(it) } }.remove(this.hashcode)
-}
-
-fun addGlobalOnClearAction(action: (Any?) -> Unit) {
-    ShankScopedCache.globalOnClearActions.add(action)
-}
-
-interface ScopedFactory : Scoped
-internal data class SSF(override val scope: Scope) : ScopedFactory
-
 interface Scoped {
     val scope: Scope
 
     operator fun <T> ScopedProvider0<T>.invoke() = this(scope)
-    operator fun <A, T> ScopedProvider1<A, T>.invoke(a: A) = this(scope, a)
-    operator fun <A, B, T> ScopedProvider2<A, B, T>.invoke(a: A, b: B) = this(scope, a, b)
-    operator fun <A, B, C, T> ScopedProvider3<A, B, C, T>.invoke(a: A, b: B, c: C) = this(scope, a, b, c)
+    operator fun <P1, T> ScopedProvider1<P1, T>.invoke(p1: P1) = this(scope, p1)
+    operator fun <P1, P2, T> ScopedProvider2<P1, P2, T>.invoke(p1: P1, p2: P2) = this(scope, p1, p2)
+    operator fun <P1, P2, P3, T> ScopedProvider3<P1, P2, P3, T>.invoke(p1: P1, p2: P2, p3: P3) = this(scope, p1, p2, p3)
+    operator fun <P1, P2, P3, P4, T> ScopedProvider4<P1, P2, P3, P4, T>.invoke(p1: P1, p2: P2, p3: P3, p4: P4) = this(scope, p1, p2, p3, p4)
+    operator fun <P1, P2, P3, P4, P5, T> ScopedProvider5<P1, P2, P3, P4, P5, T>.invoke(p1: P1, p2: P2, p3: P3, p4: P4, p5: P5) = this(scope, p1, p2, p3, p4, p5)
 }
+
+data class InternalScoped(override val scope: Scope) : Scoped

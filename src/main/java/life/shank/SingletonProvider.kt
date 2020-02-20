@@ -1,51 +1,57 @@
 package life.shank
 
-interface SingleProvider0<T> : Provider0<T>
-interface SingleProvider1<A, T> : Provider1<A, T>
-interface SingleProvider2<A, B, T> : Provider2<A, B, T>
-interface SingleProvider3<A, B, C, T> : Provider3<A, B, C, T>
-interface SingleProvider4<A, B, C, D, T> : Provider4<A, B, C, D, T>
-interface SingleProvider5<A, B, C, D, E, T> : Provider5<A, B, C, D, E, T>
+interface SingleProvider0<T> : Provider<T, () -> T> {
+    operator fun invoke(): T
+}
+
+interface SingleProvider1<P1, T> : Provider<T, (P1) -> T> {
+    operator fun invoke(p1: P1): T
+}
+
+interface SingleProvider2<P1, P2, T> : Provider<T, (P1, P2) -> T> {
+    operator fun invoke(p1: P1, p2: P2): T
+}
+
+interface SingleProvider3<P1, P2, P3, T> : Provider<T, (P1, P2, P3) -> T> {
+    operator fun invoke(p1: P1, p2: P2, p3: P3): T
+}
+
+interface SingleProvider4<P1, P2, P3, P4, T> : Provider<T, (P1, P2, P3, P4) -> T> {
+    operator fun invoke(p1: P1, p2: P2, p3: P3, p4: P4): T
+}
+
+interface SingleProvider5<P1, P2, P3, P4, P5, T> : Provider<T, (P1, P2, P3, P4, P5) -> T> {
+    operator fun invoke(p1: P1, p2: P2, p3: P3, p4: P4, p5: P5): T
+}
 
 inline fun <T> ShankModule.single(crossinline factory: () -> T) = object : SingleProvider0<T> {
-    private val cache by lazy { HashcodeHashMap<T>() }
-
     @Synchronized
-    override fun invoke(): T = cache.get(this) ?: factory().also { cache.put(this, it) }
+    override fun invoke(): T = createOrGetSingletonInstance(hashCode()) { factory() }
 }
 
-inline fun <A, T> ShankModule.single(crossinline factory: (A) -> T) = object : SingleProvider1<A, T> {
-    private val cache by lazy { HashcodeHashMap<T>() }
-
+inline fun <P1, T> ShankModule.single(crossinline factory: (P1) -> T) = object : SingleProvider1<P1, T> {
     @Synchronized
-    override fun invoke(a: A): T = cache.get(this or a) ?: factory(a).also { cache.put(this or a, it) }
+    override fun invoke(p1: P1): T = createOrGetSingletonInstance(shankInternalMashHashCodes(this, p1)) { factory(p1) }
 }
 
-inline fun <A, B, T> ShankModule.single(crossinline factory: (A, B) -> T) = object : SingleProvider2<A, B, T> {
-    private val cache by lazy { HashcodeHashMap<T>() }
-
+inline fun <P1, P2, T> ShankModule.single(crossinline factory: (P1, P2) -> T) = object : SingleProvider2<P1, P2, T> {
     @Synchronized
-    override fun invoke(a: A, b: B): T = cache.get(this or a or b) ?: factory(a, b).also { cache.put(this or a or b, it) }
+    override fun invoke(p1: P1, p2: P2): T = createOrGetSingletonInstance(shankInternalMashHashCodes(this, p1, p2)) { factory(p1, p2) }
 }
 
-inline fun <A, B, C, T> ShankModule.single(crossinline factory: (A, B, C) -> T) = object : SingleProvider3<A, B, C, T> {
-    private val cache by lazy { HashcodeHashMap<T>() }
-
+inline fun <P1, P2, P3, T> ShankModule.single(crossinline factory: (P1, P2, P3) -> T) = object : SingleProvider3<P1, P2, P3, T> {
     @Synchronized
-    override fun invoke(a: A, b: B, c: C): T = cache.get(this or a or b or c) ?: factory(a, b, c).also { cache.put(this or a or b or c, it) }
+    override fun invoke(p1: P1, p2: P2, p3: P3): T = createOrGetSingletonInstance(shankInternalMashHashCodes(this, p1, p2, p3)) { factory(p1, p2, p3) }
 }
 
-inline fun <A, B, C, D, T> ShankModule.single(crossinline factory: (A, B, C, D) -> T) = object : SingleProvider4<A, B, C, D, T> {
-    private val cache by lazy { HashcodeHashMap<T>() }
-
+inline fun <P1, P2, P3, P4, T> ShankModule.single(crossinline factory: (P1, P2, P3, P4) -> T) = object : SingleProvider4<P1, P2, P3, P4, T> {
     @Synchronized
-    override fun invoke(a: A, b: B, c: C, d: D): T = cache.get(this or a or b or c or d) ?: factory(a, b, c, d).also { cache.put(this or a or b or c or d, it) }
+    override fun invoke(p1: P1, p2: P2, p3: P3, p4: P4): T =
+        createOrGetSingletonInstance(shankInternalMashHashCodes(this, p1, p2, p3, p4)) { factory(p1, p2, p3, p4) }
 }
 
-inline fun <A, B, C, D, E, T> ShankModule.single(crossinline factory: (A, B, C, D, E) -> T) = object : SingleProvider5<A, B, C, D, E, T> {
-    private val cache by lazy { HashcodeHashMap<T>() }
-
+inline fun <P1, P2, P3, P4, P5, T> ShankModule.single(crossinline factory: (P1, P2, P3, P4, P5) -> T) = object : SingleProvider5<P1, P2, P3, P4, P5, T> {
     @Synchronized
-    override fun invoke(a: A, b: B, c: C, d: D, e: E): T =
-        cache.get(this or a or b or c or d or e) ?: factory(a, b, c, d, e).also { cache.put(this or a or b or c or d or e, it) }
+    override fun invoke(p1: P1, p2: P2, p3: P3, p4: P4, p5: P5): T =
+        createOrGetSingletonInstance(shankInternalMashHashCodes(this, p1, p2, p3, p4, p5)) { factory(p1, p2, p3, p4, p5) }
 }

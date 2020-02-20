@@ -1,3 +1,7 @@
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlin.reflect.KClass
 
 infix fun <T : Any> T?.shouldBeInstanceOf(other: KClass<T>) = asserts(other.isInstance(this)) {
@@ -14,6 +18,14 @@ infix fun <T : Any> T?.shouldNotBeSameReference(other: T) = asserts(this !== oth
 infix fun <T : Any> T?.shouldBeSameReference(other: T) = asserts(this === other) {
     """Values should be same reference but aren't;
     Expected:
+    $other
+    Actual:
+    $this"""
+}
+
+infix fun <T : Any> T?.shouldBeSameReferenceAsAnyOf(other: List<T>) = asserts(other.any { it === this }) {
+    """Value should be same reference but aren't;
+    Expected one of:
     $other
     Actual:
     $this"""
@@ -38,4 +50,18 @@ public inline fun asserts(value: Boolean, lazyMessage: () -> Any) {
         val message = lazyMessage()
         throw AssertionError(message)
     }
+}
+
+suspend fun testConcurrentSingletonGet(getInstance: () -> Any) = coroutineScope {
+    val goGetInstanceTrigger = CompletableDeferred<Unit>()
+    val instance1Async = async {
+        goGetInstanceTrigger.await()
+        getInstance()
+    }
+    val instance2Async = async {
+        goGetInstanceTrigger.await()
+        getInstance()
+    }
+    goGetInstanceTrigger.complete(Unit)
+    instance1Async.await() shouldBeSameReference instance2Async.await()
 }

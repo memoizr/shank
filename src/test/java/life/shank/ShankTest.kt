@@ -28,11 +28,6 @@ object MyModule : ShankModule {
 class ShankTest : Scoped {
     override val scope = Scope("myscope")
 
-    @Before
-    fun setUp() {
-        resetShank()
-    }
-
     @Test
     fun `provides new value`() {
         newFoo().value shouldBeEqualTo "my value"
