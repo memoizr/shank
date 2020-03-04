@@ -43,7 +43,7 @@ android {
 }
 
 dependencies {
-    api project(path: ':android')
+    api project(path: ':core')
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "androidx.compose:compose-runtime:$compose_version"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.2.0"
