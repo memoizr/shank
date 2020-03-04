@@ -52,7 +52,7 @@ fun RouteScope(createScope: () -> Scope = { Scope(UUID.randomUUID()) }, children
         })
 
         scope
-    }
+    }!!
 
     Providers(ScopeAmbient.provides(scope)) {
         children(InternalScoped(scope))

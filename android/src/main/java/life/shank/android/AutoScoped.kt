@@ -18,10 +18,16 @@ interface AutoScoped {
         when (this) {
             is Scoped -> block(scope)
             is LifecycleOwner -> LifecycleOwnerScopes.doOnScopeReady(this, block)
-            is View -> onScopeReady("", block)
+            is View -> onScopeReadyFor(this, "", block)
             else -> throw IllegalArgumentException()
         }
     }
+}
+
+internal fun onScopeReadyFor(view: View, id: Any, block: (Scope) -> Unit) {
+    val scopeOnAttachStateChangeListener = view.getTag(R.id.shank_view_tag) as? OnAttachListenerForScope ?: OnAttachListenerForScope(view)
+    scopeOnAttachStateChangeListener.put(id, block)
+    view.setTag(R.id.shank_view_tag, scopeOnAttachStateChangeListener)
 }
 
 fun <VIEW> VIEW.onScopeReady(id: Any, block: (Scope) -> Unit) where VIEW : View, VIEW : AutoScoped {
