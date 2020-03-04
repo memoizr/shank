@@ -1,0 +1,10 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+        package="life.shank.android">
+
+    <application>
+        <provider
+                android:name="life.shank.android.ShankContentProvider"
+                android:authorities="${applicationId}.shank.content.provider" />
+    </application>
+
+</manifest>

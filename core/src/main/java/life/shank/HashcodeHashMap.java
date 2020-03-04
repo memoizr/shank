@@ -1,6 +1,7 @@
 package life.shank;
 
 
+@SuppressWarnings("unchecked")
 public class HashcodeHashMap<V> {
     private static final int DEFAULT_CAPACITY = 128;
     private static final int MAXIMUM_CAPACITY = 1 << 29;
