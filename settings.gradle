@@ -1,4 +1,3 @@
-include ':android-compose-navigation'
 include ':core'
 include ':android'
-rootProject.name = 'shank'
+include ':android-compose-navigation'
