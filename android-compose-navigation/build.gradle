@@ -48,7 +48,7 @@ dependencies {
     implementation "androidx.compose:compose-runtime:$compose_version"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.2.0"
     implementation 'androidx.fragment:fragment-ktx:1.2.2'
-    implementation 'com.github.mvarnagiris.compose-navigation:navigation:0.1.1'
+    implementation 'com.github.mvarnagiris.compose-navigation:navigation:0.1.2'
 
     kapt "androidx.compose:compose-compiler:$compose_version"
 }
