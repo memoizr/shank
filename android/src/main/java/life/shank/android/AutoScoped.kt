@@ -31,9 +31,7 @@ internal fun onScopeReadyFor(view: View, id: Any, block: (Scope) -> Unit) {
 }
 
 fun <VIEW> VIEW.onScopeReady(id: Any, block: (Scope) -> Unit) where VIEW : View, VIEW : AutoScoped {
-    val scopeOnAttachStateChangeListener = getTag(R.id.shank_view_tag) as? OnAttachListenerForScope ?: OnAttachListenerForScope(this)
-    scopeOnAttachStateChangeListener.put(id, block)
-    setTag(R.id.shank_view_tag, scopeOnAttachStateChangeListener)
+    onScopeReadyFor(this, id, block)
 }
 
 private class OnAttachListenerForScope(view: View) : OnAttachStateChangeListener {
