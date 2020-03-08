@@ -30,37 +30,6 @@ internal fun onScopeReadyFor(view: View, block: (Scope) -> Unit) {
     view.setTag(R.id.shank_view_tag, scopeOnAttachStateChangeListener)
 }
 
-private class OnAttachListenerForScope(view: View) : OnAttachStateChangeListener {
-    private val blocks = mutableSetOf<(Scope) -> Unit>()
-    private var scope: Scope? = null
-
-    init {
-        if (view.isAttachedToWindow) onViewAttachedToWindow(view)
-    }
-
-    fun onScopeReady(block: (Scope) -> Unit) {
-        val scope = scope
-        if (scope != null) {
-            block(scope)
-        } else {
-            blocks.add(block)
-        }
-    }
-
-    override fun onViewAttachedToWindow(view: View) {
-        onViewDetachedFromWindow(view)
-        val scope = Scope(UUID.randomUUID())
-        this.scope = scope
-        blocks.forEach { it(scope) }
-        blocks.clear()
-    }
-
-    override fun onViewDetachedFromWindow(view: View) {
-        scope?.clear()
-        scope = null
-    }
-}
-
 fun <T> ScopedProvider0<T>.onReadyFor(autoScoped: AutoScoped, block: (T) -> Unit) =
     autoScoped.onScopeReady { block(invoke(it)) }
 
