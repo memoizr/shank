@@ -18,14 +18,14 @@ interface ParentScoped : AutoScoped {
     override fun onScopeReady(block: (Scope) -> Unit) {
         when (this) {
             is Scoped -> throw IllegalStateException("You cannot have Scoped and ParentScoped at the same time")
-            is Fragment -> onParentScopeReady(block)
-            is View -> onParentScopeReady(block)
+            is Fragment -> onParentScopeReadyForFragment(block)
+            is View -> onParentScopeReadyForView(block)
             else -> throw IllegalArgumentException("$this is not supported")
         }
     }
 }
 
-private inline fun Fragment.onParentScopeReady(noinline block: (Scope) -> Unit) {
+private inline fun Fragment.onParentScopeReadyForFragment(noinline block: (Scope) -> Unit) {
     val scoped: Scoped?
     val autoScoped: AutoScoped?
 
@@ -46,16 +46,18 @@ private inline fun Fragment.onParentScopeReady(noinline block: (Scope) -> Unit) 
     }
 }
 
-private inline fun View.onParentScopeReady(noinline block: (Scope) -> Unit) {
+private inline fun View.onParentScopeReadyForView(noinline block: (Scope) -> Unit) {
     if (id == View.NO_ID) throw IllegalArgumentException("$this must have an id")
     val activity = activity ?: throw IllegalArgumentException("$this does not have an Activity")
 
     var scoped: Scoped? = null
     var autoScoped: AutoScoped? = null
 
+    Log.d("SHANK", "ParentScoped - Looking for scope for $this")
+
     var parentView = parent as? View
     while (parentView != null && scoped == null && autoScoped == null) {
-        Log.d("SHANK", "ParentScoped - Checking $this")
+        Log.d("SHANK", "ParentScoped - Checking $parentView")
         when (parentView) {
             is Scoped -> scoped = parentView
             is AutoScoped -> autoScoped = parentView
@@ -94,11 +96,16 @@ private inline fun Fragment.findClosestScopedOrAutoScopedFragment(): Fragment? {
 
 private fun FragmentManager.findFragmentThatContains(view: View): Fragment? {
     return fragments.firstOrNull {
-        Log.d("SHANK", "ParentScoped - Checking $it")
         val fragment = it.childFragmentManager.findFragmentThatContains(view)
         if (fragment != null) return fragment
 
-        it.contains(view)
+        Log.d("SHANK", "ParentScoped - Checking $it")
+        val contains = it.contains(view)
+        if (contains)
+            Log.d("SHANK", "ParentScoped - $it contains $view")
+        else
+            Log.d("SHANK", "ParentScoped - $it does not contain $view")
+        contains
     }
 }
 
