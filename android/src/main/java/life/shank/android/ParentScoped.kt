@@ -5,7 +5,6 @@ package life.shank.android
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
-import android.util.Log
 import android.view.View
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.fragment.app.Fragment
@@ -53,11 +52,8 @@ private inline fun View.onParentScopeReadyForView(noinline block: (Scope) -> Uni
     var scoped: Scoped? = null
     var autoScoped: AutoScoped? = null
 
-    Log.d("SHANK", "ParentScoped - Looking for scope for $this")
-
     var parentView = parent as? View
     while (parentView != null && scoped == null && autoScoped == null) {
-        Log.d("SHANK", "ParentScoped - Checking $parentView")
         when (parentView) {
             is Scoped -> scoped = parentView
             is AutoScoped -> autoScoped = parentView
@@ -67,9 +63,8 @@ private inline fun View.onParentScopeReadyForView(noinline block: (Scope) -> Uni
 
     if (scoped == null && autoScoped == null && activity is FragmentActivity) {
         val fragment = activity.supportFragmentManager.findFragmentThatContains(this)
-        Log.d("SHANK", "ParentScoped - Contains this view $fragment")
         val scopedOrAutoScopedFragment = fragment?.findClosestScopedOrAutoScopedFragment()
-        Log.d("SHANK", "ParentScoped - Closest scoped $scopedOrAutoScopedFragment")
+
         scoped = scopedOrAutoScopedFragment as? Scoped
         autoScoped = scopedOrAutoScopedFragment as? AutoScoped
     }
@@ -98,14 +93,7 @@ private fun FragmentManager.findFragmentThatContains(view: View): Fragment? {
     return fragments.firstOrNull {
         val fragment = it.childFragmentManager.findFragmentThatContains(view)
         if (fragment != null) return fragment
-
-        Log.d("SHANK", "ParentScoped - Checking $it")
-        val contains = it.contains(view)
-        if (contains)
-            Log.d("SHANK", "ParentScoped - $it contains $view")
-        else
-            Log.d("SHANK", "ParentScoped - $it does not contain $view")
-        contains
+        it.contains(view)
     }
 }
 
