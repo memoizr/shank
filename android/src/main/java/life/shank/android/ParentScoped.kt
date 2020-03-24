@@ -65,7 +65,9 @@ private inline fun View.onParentScopeReady(noinline block: (Scope) -> Unit) {
 
     if (scoped == null && autoScoped == null && activity is FragmentActivity) {
         val fragment = activity.supportFragmentManager.findFragmentThatContains(this)
+        Log.d("SHANK", "ParentScoped - Contains this view $fragment")
         val scopedOrAutoScopedFragment = fragment?.findClosestScopedOrAutoScopedFragment()
+        Log.d("SHANK", "ParentScoped - Closest scoped $scopedOrAutoScopedFragment")
         scoped = scopedOrAutoScopedFragment as? Scoped
         autoScoped = scopedOrAutoScopedFragment as? AutoScoped
     }
