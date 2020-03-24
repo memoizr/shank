@@ -5,6 +5,7 @@ package life.shank.android
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
+import android.util.Log
 import android.view.View
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.fragment.app.Fragment
@@ -52,7 +53,17 @@ private inline fun View.onParentScopeReady(noinline block: (Scope) -> Unit) {
     var scoped: Scoped? = null
     var autoScoped: AutoScoped? = null
 
-    if (activity is FragmentActivity) {
+    var parentView = parent as? View
+    while (parentView != null && scoped == null && autoScoped == null) {
+        Log.d("SHANK", "ParentScoped - Checking $this")
+        when (parentView) {
+            is Scoped -> scoped = parentView
+            is AutoScoped -> autoScoped = parentView
+        }
+        parentView = parentView.parent as? View
+    }
+
+    if (scoped == null && autoScoped == null && activity is FragmentActivity) {
         val fragment = activity.supportFragmentManager.findFragmentThatContains(this)
         val scopedOrAutoScopedFragment = fragment?.findClosestScopedOrAutoScopedFragment()
         scoped = scopedOrAutoScopedFragment as? Scoped
@@ -81,6 +92,7 @@ private inline fun Fragment.findClosestScopedOrAutoScopedFragment(): Fragment? {
 
 private fun FragmentManager.findFragmentThatContains(view: View): Fragment? {
     return fragments.firstOrNull {
+        Log.d("SHANK", "ParentScoped - Checking $it")
         val fragment = it.childFragmentManager.findFragmentThatContains(view)
         if (fragment != null) return fragment
 
