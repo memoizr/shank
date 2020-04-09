@@ -31,7 +31,7 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
-        freeCompilerArgs += ["android", "shank.android"]
+        freeCompilerArgs += ["-module-name", "shank.android"]
     }
 }
 
