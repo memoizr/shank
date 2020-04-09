@@ -32,7 +32,7 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
-        freeCompilerArgs += ["-android-compose-navigation", "shank.android-compose-navigation"]
+        freeCompilerArgs += ["android-compose-navigation", "shank.android-compose-navigation"]
     }
     buildFeatures {
         compose true
