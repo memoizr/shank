@@ -31,9 +31,7 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
-    }
-    packagingOptions {
-        exclude 'META-INF/*.kotlin_module'
+        freeCompilerArgs += ["-android", "shank.android"]
     }
 }
 
@@ -42,5 +40,5 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.2.0"
     implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.fragment:fragment-ktx:1.2.2'
+    implementation 'androidx.fragment:fragment-ktx:1.2.4'
 }

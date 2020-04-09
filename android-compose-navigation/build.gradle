@@ -32,6 +32,7 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+        freeCompilerArgs += ["-android-compose-navigation", "shank.android-compose-navigation"]
     }
     buildFeatures {
         compose true
@@ -40,9 +41,6 @@ android {
         kotlinCompilerVersion "1.3.61-dev-withExperimentalGoogleExtensions-20200129"
         kotlinCompilerExtensionVersion "$compose_version"
     }
-    packagingOptions {
-        exclude 'META-INF/*.kotlin_module'
-    }
 }
 
 dependencies {
@@ -50,8 +48,8 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "androidx.compose:compose-runtime:$compose_version"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.2.0"
-    implementation 'androidx.fragment:fragment-ktx:1.2.2'
-    implementation 'com.github.mvarnagiris.compose-navigation:navigation:0.1.2'
+    implementation 'androidx.fragment:fragment-ktx:1.2.4'
+    implementation 'com.github.mvarnagiris.compose-navigation:navigation:0.1.3'
 
     kapt "androidx.compose:compose-compiler:$compose_version"
 }
