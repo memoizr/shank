@@ -26,10 +26,10 @@ import shouldNotBeEqualTo
 
 
 private object ParameterScopedModule : ShankModule {
-    val noParamScoped = scoped { -> ParamData() }
-    val oneParamScoped = scoped { a: Int -> ParamData(a) }
-    val twoParamScoped = scoped { a: Int, b: Int -> ParamData(a, b) }
-    val threeParamScoped = scoped { a: Int, b: Int, c: Int -> ParamData(a, b, c) }
+    val noParamScoped = scoped { -> DataForTest() }
+    val oneParamScoped = scoped { a: Int -> DataForTest(a) }
+    val twoParamScoped = scoped { a: Int, b: Int -> DataForTest(a, b) }
+    val threeParamScoped = scoped { a: Int, b: Int, c: Int -> DataForTest(a, b, c) }
 
     val noParamNonClassScoped = scoped { -> Any() }
 }
@@ -44,13 +44,13 @@ class ScopedTests : Scoped {
 
     @Test
     fun `supports parameters`() {
-        oneParamScoped(1) shouldBeEqualTo ParamData(1)
+        oneParamScoped(1) shouldBeEqualTo DataForTest(1)
         oneParamScoped(1) shouldBeSameReference oneParamScoped(1)
 
-        twoParamScoped(1, 2) shouldBeEqualTo ParamData(1, 2)
+        twoParamScoped(1, 2) shouldBeEqualTo DataForTest(1, 2)
         twoParamScoped(1, 2) shouldBeSameReference twoParamScoped(1, 2)
 
-        threeParamScoped(1, 2, 3) shouldBeEqualTo ParamData(1, 2, 3)
+        threeParamScoped(1, 2, 3) shouldBeEqualTo DataForTest(1, 2, 3)
         threeParamScoped(1, 2, 3) shouldBeSameReference threeParamScoped(1, 2, 3)
 
 //        fourParamScoped(1, 2, 3, 4) shouldBeEqualTo ParamData(1, 2, 3, 4)
@@ -63,24 +63,24 @@ class ScopedTests : Scoped {
     @Test
     @Ignore
     fun `allows override`() {
-        noParamScoped() shouldBeEqualTo ParamData()
-        noParamScoped.overrideFactory { -> ParamData(2) }
-        noParamScoped() shouldBeEqualTo ParamData(2)
+        noParamScoped() shouldBeEqualTo DataForTest()
+        noParamScoped.overrideFactory { -> DataForTest(2) }
+        noParamScoped() shouldBeEqualTo DataForTest(2)
         noParamScoped.restore()
 
-        oneParamScoped(1) shouldBeEqualTo ParamData(1)
-        oneParamScoped.overrideFactory { a: Int -> ParamData(a * 2) }
-        oneParamScoped(1) shouldBeEqualTo ParamData(2)
+        oneParamScoped(1) shouldBeEqualTo DataForTest(1)
+        oneParamScoped.overrideFactory { a: Int -> DataForTest(a * 2) }
+        oneParamScoped(1) shouldBeEqualTo DataForTest(2)
         oneParamScoped.restore()
 
-        twoParamScoped(1, 2) shouldBeEqualTo ParamData(1, 2)
-        twoParamScoped.overrideFactory { a: Int, b: Int -> ParamData(a * 2, b * 2) }
-        twoParamScoped(1, 2) shouldBeEqualTo ParamData(2, 4)
+        twoParamScoped(1, 2) shouldBeEqualTo DataForTest(1, 2)
+        twoParamScoped.overrideFactory { a: Int, b: Int -> DataForTest(a * 2, b * 2) }
+        twoParamScoped(1, 2) shouldBeEqualTo DataForTest(2, 4)
         twoParamScoped.restore()
 
-        threeParamScoped(1, 2, 3) shouldBeEqualTo ParamData(1, 2, 3)
-        threeParamScoped.overrideFactory { a: Int, b: Int, c: Int -> ParamData(a * 2, b * 2, c * 2) }
-        threeParamScoped(1, 2, 3) shouldBeEqualTo ParamData(2, 4, 6)
+        threeParamScoped(1, 2, 3) shouldBeEqualTo DataForTest(1, 2, 3)
+        threeParamScoped.overrideFactory { a: Int, b: Int, c: Int -> DataForTest(a * 2, b * 2, c * 2) }
+        threeParamScoped(1, 2, 3) shouldBeEqualTo DataForTest(2, 4, 6)
         threeParamScoped.restore()
 
 //        fourParamScoped(1, 2, 3, 4) shouldBeEqualTo ParamData(1, 2, 3, 4)
@@ -114,11 +114,11 @@ class ScopedTests : Scoped {
         oneParamScoped(1) shouldBeSameReference oneParamScoped(1)
         oneParamScoped(2).a shouldBeEqualTo 2
 
-        twoParamScoped(1, 2) shouldBeEqualTo ParamData(1, 2)
-        twoParamScoped(2, 3) shouldBeEqualTo ParamData(2, 3)
+        twoParamScoped(1, 2) shouldBeEqualTo DataForTest(1, 2)
+        twoParamScoped(2, 3) shouldBeEqualTo DataForTest(2, 3)
 
-        threeParamScoped(1, 2, 3) shouldBeEqualTo ParamData(1, 2, 3)
-        threeParamScoped(2, 3, 4) shouldBeEqualTo ParamData(2, 3, 4)
+        threeParamScoped(1, 2, 3) shouldBeEqualTo DataForTest(1, 2, 3)
+        threeParamScoped(2, 3, 4) shouldBeEqualTo DataForTest(2, 3, 4)
 
 //        fourParamScoped(1, 2, 3, 4) shouldBeEqualTo ParamData(1, 2, 3, 4)
 //        fourParamScoped(2, 3, 4, 5) shouldBeEqualTo ParamData(2, 3, 4, 5)
