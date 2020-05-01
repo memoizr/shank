@@ -1,2 +1,3 @@
-rootProject.name = 'Shank'
-
+include ':core'
+include ':android'
+include ':android-compose-navigation'
