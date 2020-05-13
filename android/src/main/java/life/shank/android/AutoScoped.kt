@@ -1,7 +1,6 @@
 package life.shank.android
 
 import android.view.View
-import android.view.View.OnAttachStateChangeListener
 import androidx.lifecycle.LifecycleOwner
 import life.shank.Scope
 import life.shank.Scoped
@@ -11,7 +10,6 @@ import life.shank.ScopedProvider2
 import life.shank.ScopedProvider3
 import life.shank.ScopedProvider4
 import life.shank.ScopedProvider5
-import java.util.UUID
 
 interface AutoScoped {
     fun onScopeReady(block: (Scope) -> Unit) {
@@ -25,9 +23,10 @@ interface AutoScoped {
 }
 
 internal fun onScopeReadyFor(view: View, block: (Scope) -> Unit) {
-    val scopeOnAttachStateChangeListener = view.getTag(R.id.shank_view_tag) as? OnAttachListenerForScope ?: OnAttachListenerForScope(view)
-    scopeOnAttachStateChangeListener.onScopeReady(block)
-    view.setTag(R.id.shank_view_tag, scopeOnAttachStateChangeListener)
+    val onAttachListenerForScope = view.getTag(R.id.shank_view_tag) as? OnAttachListenerForScope ?: OnAttachListenerForScope(view)
+    onAttachListenerForScope.onScopeReady(block)
+    view.setTag(R.id.shank_view_tag, onAttachListenerForScope)
+    view.addOnAttachStateChangeListener(onAttachListenerForScope)
 }
 
 fun <T> ScopedProvider0<T>.onReadyFor(autoScoped: AutoScoped, block: (T) -> Unit) =
