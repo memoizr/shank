@@ -111,9 +111,14 @@ private inline fun Fragment.contains(view: View) = view == this.view
     ?.findViewWithTag(R.id.shank_view_tag_to_find_in_parent, view.getTag(R.id.shank_view_tag_to_find_in_parent))
 
 fun View.findViewWithTag(@IdRes idRes: Int, tag: Any): View? {
-    if (this.getTag(idRes) == tag) return this
+    if (getTag(idRes) == tag) return this
     if (this !is ViewGroup) return null
-    return children.firstOrNull { it.findViewWithTag(idRes, tag) != null }
+    
+    return children.firstOrNull {
+        val view = it.findViewWithTag(idRes, tag)
+        if (view != null) return view
+        false
+    }
 }
 
 private val View.activity: Activity? get() = context.activity
