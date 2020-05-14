@@ -29,11 +29,6 @@ internal fun onScopeReadyFor(view: View, block: (Scope) -> Unit) {
     view.addOnAttachStateChangeListener(onAttachListenerForScope)
 }
 
-fun View.resetShank() {
-    val onAttachListenerForScope = getTag(R.id.shank_view_tag) as? OnAttachListenerForScope ?: return
-    onAttachListenerForScope.reset()
-}
-
 fun <T> ScopedProvider0<T>.onReadyFor(autoScoped: AutoScoped, block: (T) -> Unit) =
     autoScoped.onScopeReady { block(invoke(it)) }
 
