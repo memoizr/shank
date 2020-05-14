@@ -23,10 +23,15 @@ interface AutoScoped {
 }
 
 internal fun onScopeReadyFor(view: View, block: (Scope) -> Unit) {
-    val onAttachListenerForScope = view.getTag(R.id.shank_view_tag) as? OnAttachListenerForScope ?: OnAttachListenerForScope(view)
+    val currentOnAttachListenerForScope = view.getTag(R.id.shank_view_tag) as? OnAttachListenerForScope
+    val onAttachListenerForScope = currentOnAttachListenerForScope ?: OnAttachListenerForScope(view)
+
     onAttachListenerForScope.onScopeReady(block)
+
     view.setTag(R.id.shank_view_tag, onAttachListenerForScope)
-    view.addOnAttachStateChangeListener(onAttachListenerForScope)
+    if (currentOnAttachListenerForScope == null) {
+        view.addOnAttachStateChangeListener(onAttachListenerForScope)
+    }
 }
 
 fun <T> ScopedProvider0<T>.onReadyFor(autoScoped: AutoScoped, block: (T) -> Unit) =
