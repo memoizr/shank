@@ -14,12 +14,18 @@ internal class OnAttachListenerForScope(view: View) : OnAttachStateChangeListene
     }
 
     fun onScopeReady(block: (Scope) -> Unit) {
+        blocks.add(block)
+
         val scope = scope
         if (scope != null) {
             block(scope)
-        } else {
-            blocks.add(block)
         }
+    }
+
+    fun reset() {
+        scope?.clear()
+        scope = null
+        blocks.clear()
     }
 
     override fun onViewAttachedToWindow(view: View) {
@@ -27,7 +33,6 @@ internal class OnAttachListenerForScope(view: View) : OnAttachStateChangeListene
         val scope = Scope(UUID.randomUUID())
         this.scope = scope
         blocks.forEach { it(scope) }
-        blocks.clear()
     }
 
     override fun onViewDetachedFromWindow(view: View) {
