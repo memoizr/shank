@@ -72,7 +72,8 @@ fun Scope(createScope: () -> Scope = { Scope(UUID.randomUUID()) }, children: @Co
 }
 
 @Composable
-fun ParentScope(children: @Composable() Scoped.() -> Unit) {
-    val scoped = remember { InternalScoped(ScopeAmbient.current) }
+fun ParentScope(children: @Composable Scoped.() -> Unit) {
+    val scope = ScopeAmbient.current
+    val scoped = remember { InternalScoped(scope) }
     children(scoped)
 }
