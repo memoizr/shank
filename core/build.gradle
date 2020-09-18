@@ -14,8 +14,8 @@ java {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     testImplementation 'junit:junit:4.13'
-    testImplementation "org.jetbrains.kotlin:kotlin-reflect:1.4.0"
-    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.8-1.4.0-rc'
+    testImplementation "org.jetbrains.kotlin:kotlin-reflect:1.4.10"
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9'
 }
 
 compileKotlin.kotlinOptions.freeCompilerArgs += ["-module-name", "shank.core"]
