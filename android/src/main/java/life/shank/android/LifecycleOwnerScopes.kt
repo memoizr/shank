@@ -26,4 +26,6 @@ internal object LifecycleOwnerScopes {
         scopes.remove(lifecycleOwner)
         onScopeReadyActions.removeAll { it.first == lifecycleOwner }
     }
+
+    fun getScope(lifecycleOwner: LifecycleOwner): Scope? = scopes[lifecycleOwner]
 }

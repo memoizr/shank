@@ -7,7 +7,7 @@ import java.util.UUID
 
 internal class OnAttachListenerForScope(view: View) : OnAttachStateChangeListener {
     private val blocks = mutableSetOf<(Scope) -> Unit>()
-    private var scope: Scope? = null
+    var scope: Scope? = null
 
     init {
         if (view.isAttachedToWindow) onViewAttachedToWindow(view)
