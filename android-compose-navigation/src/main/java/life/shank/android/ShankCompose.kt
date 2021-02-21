@@ -12,7 +12,7 @@ import life.shank.Scope
 import life.shank.Scoped
 import java.util.UUID
 
-val ScopeAmbient = ambientOf<Scope> { throw IllegalStateException("Scope not defined") }
+val ScopeAmb = ambientOf<Scope> { throw IllegalStateException("Scope not defined") }
 private val scopesCache = mutableMapOf<ScopeKey, Scope>()
 
 private data class ScopeKey(val route: Route<*>)
@@ -54,7 +54,7 @@ fun RouteScope(createScope: () -> Scope = { Scope(UUID.randomUUID()) }, children
         scope
     }
 
-    Providers(ScopeAmbient.provides(scope)) {
+    Providers(ScopeAmb.provides(scope)) {
         children(InternalScoped(scope))
     }
 }
@@ -66,14 +66,14 @@ fun Scope(createScope: () -> Scope = { Scope(UUID.randomUUID()) }, children: @Co
         scope.clear()
     }
 
-    Providers(ScopeAmbient.provides(scope)) {
+    Providers(ScopeAmb.provides(scope)) {
         children(InternalScoped(scope))
     }
 }
 
 @Composable
 fun ParentScope(children: @Composable Scoped.() -> Unit) {
-    val scope = ScopeAmbient.current
+    val scope = ScopeAmb.current
     val scoped = remember { InternalScoped(scope) }
     children(scoped)
 }
