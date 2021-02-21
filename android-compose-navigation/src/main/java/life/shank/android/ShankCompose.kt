@@ -1,10 +1,10 @@
 package life.shank.android
 
-import androidx.compose.Composable
-import androidx.compose.Providers
-import androidx.compose.ambientOf
-import androidx.compose.onDispose
-import androidx.compose.remember
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Providers
+import androidx.compose.runtime.ambientOf
+import androidx.compose.runtime.onDispose
+import androidx.compose.runtime.remember
 import com.koduok.compose.navigation.BackStackAmbient
 import com.koduok.compose.navigation.core.BackStack.Listener
 import com.koduok.compose.navigation.core.Route
@@ -23,7 +23,7 @@ fun RouteScope(createScope: () -> Scope = { Scope(UUID.randomUUID()) }, children
     val backStack = BackStackAmbient.current
     var currentRoute = remember { backStack.current }
 
-    val scope = remember {
+    val scope: Scope = remember {
         val scopeKey = ScopeKey(currentRoute)
         val existingScope = scopesCache[scopeKey]
         if (existingScope != null) return@remember existingScope
@@ -52,7 +52,7 @@ fun RouteScope(createScope: () -> Scope = { Scope(UUID.randomUUID()) }, children
         })
 
         scope
-    }!!
+    }
 
     Providers(ScopeAmbient.provides(scope)) {
         children(InternalScoped(scope))
@@ -72,7 +72,8 @@ fun Scope(createScope: () -> Scope = { Scope(UUID.randomUUID()) }, children: @Co
 }
 
 @Composable
-fun ParentScope(children: @Composable() Scoped.() -> Unit) {
-    val scoped = remember { InternalScoped(ScopeAmbient.current) }
+fun ParentScope(children: @Composable Scoped.() -> Unit) {
+    val scope = ScopeAmbient.current
+    val scoped = remember { InternalScoped(scope) }
     children(scoped)
 }

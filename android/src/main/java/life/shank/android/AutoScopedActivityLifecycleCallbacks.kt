@@ -6,7 +6,7 @@ import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LifecycleOwner
 import life.shank.Scope
-import java.util.*
+import java.util.UUID
 
 internal object AutoScopedActivityLifecycleCallbacks : Application.ActivityLifecycleCallbacks {
     private const val activityScopeKey = "shank_activity_scope_key"
@@ -39,8 +39,8 @@ internal object AutoScopedActivityLifecycleCallbacks : Application.ActivityLifec
         }
     }
 
-    override fun onActivityPaused(activity: Activity?) = Unit
-    override fun onActivityResumed(activity: Activity?) = Unit
-    override fun onActivityStarted(activity: Activity?) = Unit
-    override fun onActivityStopped(activity: Activity?) = Unit
+    override fun onActivityPaused(activity: Activity) = Unit
+    override fun onActivityResumed(activity: Activity) = Unit
+    override fun onActivityStarted(activity: Activity) = Unit
+    override fun onActivityStopped(activity: Activity) = Unit
 }
